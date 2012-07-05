@@ -8,10 +8,7 @@ shared abstract class MonthOfYear(number)
 	doc "Returns number of days in this month"
 	shared default Integer numberOfDays(Boolean leapYear) {
 		switch(this)
-		case (february) { 
-			if (leapYear) { return 29; }
-			return 28;
-		}
+		case (february) { return leapYear then 29 else 28; }
 		case (april,june,september,november) { return 30; } 
 		case (january,march,may,july,august,october,december) { return 31; }
 	}
@@ -22,7 +19,19 @@ shared abstract class MonthOfYear(number)
 	}
 }
 
-shared MonthOfYear[] months = {january, february, march, april, may, june, july, august, september, october, november, december};
+Indexed<MonthOfYear>[] months = entries(january, february, march, april, may, june, july, august, september, october, december);
+
+doc "Returns a month of a year based on "
+throws (Exception, "provided number is not a valid month number")
+shared MonthOfYear month(Integer number){
+	value month = months[number - 1];
+	if (exists month) {
+		return month.item;
+	}
+	else {
+		throw;
+	}
+}
 
 shared object january extends MonthOfYear(1) {
 	shared actual String string = "january";

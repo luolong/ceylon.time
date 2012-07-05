@@ -15,19 +15,9 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
-		<buildCommand>
-			<name>org.eclipse.mylyn.docs.intent.client.ui.ide.intentBuilder</name>
-			<arguments>
-				<dictionary>
-					<key>type</key>
-					<value>org.eclipse.mylyn.docs.intent.collab.ide.repository</value>
-				</dictionary>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>com.redhat.ceylon.eclipse.ui.ceylonNature</nature>
-		<nature>org.eclipse.mylyn.docs.intent.client.ui.ide.intentNature</nature>
 	</natures>
 </projectDescription>
