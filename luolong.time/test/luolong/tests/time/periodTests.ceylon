@@ -42,4 +42,26 @@ shared void periodTests(){
 	assert( zero.withSeconds(1) == seconds(1), "zero.withSeconds(1) == seconds(1)");
 	assert( zero.withNanos(1) == nanos(1), "zero.withNanos(1) == nanos(1)");
 	
+	print("Period plus...");
+	assert( zero.plusYears(1) == years(1), "zero.plusYears(1) == years(1)");
+	assert( zero.plusMonths(1) == months(1), "zero.plusMonths(1) == months(1)");
+	assert( zero.plusDays(1) == days(1), "zero.plusDays(1) == days(1)");
+	assert( zero.plusHours(1) == hours(1), "zero.plusHours(1) == hours(1)");
+	assert( zero.plusMinutes(1) == minutes(1), "zero.plusMinutes(1) == minutes(1)");
+	assert( zero.plusSeconds(1) == seconds(1), "zero.plusSeconds(1) == seconds(1)");
+	assert( zero.plusNanos(1) == nanos(1), "zero.plusNanos(1) == nanos(1)");
+
+	print("Normalize, simple ");
+    assert( months(12).normalized() == years(1), "months(12).normalized() == years(1)");
+    assert( minutes(60).normalized() == hours(1), "minutes(60).normalized() == hours(1)");
+    assert( seconds(60).normalized() == minutes(1), "seconds(60).normalized() == minutes(1)");
+    assert( nanos(1000000000).normalized() == seconds(1), "nanos(1000000000).normalized() == seconds(1)");
+    
+	print( "Normalize, overflow" );
+    assert( months(13).normalized() == years(1).withMonths(1), "months(13).normalized() == years(1).withMonths(1)");
+    assert( minutes(70).normalized() == hours(1).withMinutes(10), "minutes(70).normalized() == hours(1).withMinutes(10)");
+    assert( seconds(70).normalized() == minutes(1).withSeconds(10), "seconds(70).normalized() == minutes(1).withSeconds(10)");
+    assert( nanos(1000000100).normalized() == seconds(1).withNanos(100), "nanos(1000000100).normalized() == seconds(1).withNanos(100)");  
+
 }
+
