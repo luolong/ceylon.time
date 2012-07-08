@@ -33,6 +33,9 @@ shared void periodTests(){
 	print("Period initialization, equality");
 	assert( nanos(1) == Period { nanos=1; }, "nanos(1) == Period { nanos=1; }" );
 	
+	print("Equality and normalization.");
+	assert( months(12) == years(1), "months(12) == years(1)"); // Should we expect this to be implicitly equal?
+	
 	print("Period with...");
 	assert( zero.withYears(1) == years(1), "zero.withYears(1) == years(1)");
 	assert( zero.withMonths(1) == months(1), "zero.withMonths(1) == months(1)");
@@ -61,7 +64,7 @@ shared void periodTests(){
     assert( months(13).normalized() == years(1).withMonths(1), "months(13).normalized() == years(1).withMonths(1)");
     assert( minutes(70).normalized() == hours(1).withMinutes(10), "minutes(70).normalized() == hours(1).withMinutes(10)");
     assert( seconds(70).normalized() == minutes(1).withSeconds(10), "seconds(70).normalized() == minutes(1).withSeconds(10)");
-    assert( nanos(1000000100).normalized() == seconds(1).withNanos(100), "nanos(1000000100).normalized() == seconds(1).withNanos(100)");  
-
+    assert( nanos(1000000100).normalized() == seconds(1).withNanos(100), "nanos(1000000100).normalized() == seconds(1).withNanos(100)");
+    
 }
 
