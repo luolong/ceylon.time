@@ -1,4 +1,5 @@
 import ceylon.math.whole{whole, Whole}
+import luolong.time { Duration, Instant, LocalDateTime }
 
 doc "Obtains a 'years' from a number of days."
 shared Period years(Integer years){
@@ -43,9 +44,9 @@ shared Period seconds(Integer seconds){
 }
 
 doc "Obtains a 'period' from a number of seconds"
-shared Period nanos(Integer nanos){
+shared Period milliseconds(Integer milliseconds){
 	return Period{ 
-		nanos=nanos;
+		milliseconds=milliseconds;
 	};
 }
 
@@ -55,7 +56,7 @@ doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      
      A period is a human-scale description of an amount of time.
      "
-shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, nanos=0)
+shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
 		satisfies Comparable<Period> & 
                   Summable<Period>{
 
@@ -77,8 +78,8 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 	doc "The number of seconds"
 	shared Integer seconds;
 	
-	doc "The number of nanoseconds"
-	shared Integer nanos;
+	doc "The number of milliseconds"
+	shared Integer milliseconds;
 	
 	doc "Checks if this period is equal to another period."
 	shared actual Boolean equals(Object that){
@@ -93,7 +94,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 			     && this.hours==that.hours
 			     && this.minutes==that.minutes
 			     && this.seconds==that.seconds
-			     && this.nanos==that.nanos);
+			     && this.milliseconds==that.milliseconds);
 		}
 		
 		return false;
@@ -113,7 +114,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		if (years == this.years){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified amount of months."
@@ -121,7 +122,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		if (months == this.months){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified amount of days."
@@ -129,7 +130,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		if (days == this.days){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified amount of hours."
@@ -137,7 +138,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		if (hours == this.hours){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified amount of minutes."
@@ -145,7 +146,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		if (minutes == this.minutes){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified amount of seconds."
@@ -153,15 +154,15 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		if (seconds == this.seconds){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified amount of nanos."
-	shared Period withNanos(Integer nanos){
-		if (nanos == this.nanos){
+	shared Period withMilliseconds(Integer milliseconds){
+		if (milliseconds == this.milliseconds){
 			return this;
 		}
-		return Period(years, months, days, hours, minutes, seconds, nanos);
+		return Period(years, months, days, hours, minutes, seconds, milliseconds);
 	}
 	
 	doc "Returns a copy of this period with the specified number of years added."
@@ -213,11 +214,11 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 	}
 	
 	doc "Returns a copy of this period with the specified number of nonoseconds added."
-	shared Period plusNanos(Integer nanos){
-		if (nanos == 0){
+	shared Period plusMilliseconds(Integer milliseconds){
+		if (milliseconds == 0){
 			return this;
 		}
-		return withNanos( this.nanos + nanos ).normalized();
+		return withMilliseconds( this.milliseconds + milliseconds ).normalized();
 	}
 	
 	doc "Returns a new period that is a sum of the two periods."
@@ -228,43 +229,48 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, na
 		value hours = this.hours + other.hours;
 		value minutes = this.minutes + other.minutes;
 		value seconds = this.seconds + other.seconds;
-		value nanos = this.nanos + other.nanos;
+		value nanos = this.milliseconds + other.milliseconds;
 		return Period(years, months, days, hours, minutes, seconds, nanos).normalized();
 	}
 
 	doc "Returns a copy of this period with all amounts normalized to the 
-	standard ranges for date-time fields.
-	
-	Two normalizations occur, one for years and months, and one for
-	hours, minutes, seconds and nanoseconds.
-	
-	Days are not normalized, as a day may vary in length at daylight savings cutover.
-	Neither is days normalized into months, as number of days per month varies from 
-	month to another and depending on the leap year.
-	"
+		standard ranges for date-time fields.
+		
+		Two normalizations occur, one for years and months, and one for
+		hours, minutes, seconds and nanoseconds.
+		
+		Days are not normalized, as a day may vary in length at daylight savings cutover.
+		Neither is days normalized into months, as number of days per month varies from 
+		month to another and depending on the leap year.
+		"
 	shared Period normalized(){
         if (this == zero) {
             return zero;
         }
         
         value years = this.years + this.months / 12;
-        value months = this.months % 12 ;
+        value months = this.months % 12;
         
         variable Whole total := whole(this.hours * 60 * 60)
                               + whole(this.minutes * 60)
                               + whole(this.seconds);
         
-        value nanos = whole(this.nanos).remainder( nanosPerSecond ).integer;
-        total += whole(this.nanos).divided( nanosPerSecond );
+        value milliseconds = whole(this.milliseconds).remainder( millisPerSecond ).integer;
+        total += whole(this.milliseconds).divided( millisPerSecond );
         value seconds = total.remainder( secondsPerMinute ).integer;
         total := total.divided( secondsPerMinute );
         value minutes = total.remainder( minutesPerHour ).integer;
         value hours = total.divided( minutesPerHour ).integer;
         
-        return Period(years, months, days, hours, minutes, seconds, nanos);
+        return Period(years, months, days, hours, minutes, seconds, milliseconds);
+	}
+	
+	shared Duration durationFrom(Instant instant){
+		LocalDateTime dateTime = instant.as<LocalDateTime>();
 	}
 }
 
-Whole nanosPerSecond = whole(1000000000);
+// Some local constants
+Whole millisPerSecond = whole(1000);
 Whole secondsPerMinute = whole( 60 );
 Whole minutesPerHour = secondsPerMinute;

@@ -54,18 +54,24 @@ class SystemClock() satisfies Clock{
 	}
 
 	shared actual Instant instant() {
-		return instantMillis( millis() );
+		return Instant( millis() );
 	}
 }
 
 doc "Gets a clock that always returns the same instant in the UTC time-zone."
-shared Clock fixedUTC(Instant instant) {
-	return FixedClock(instant);
+shared Clock fixedUTC(Instant|Integer instant) {
+	switch(instant)
+	case (is Instant){
+		return FixedInstant(instant);
+	}
+	case (is Integer){
+		return FixedMilliseconds(instant);
+	}
 }
 
 doc "Implementation of a clock that always returns the same instant.
      This is typically used for testing."
-class FixedClock(Instant fixedInstant) satisfies Clock{
+class FixedInstant(Instant fixedInstant) satisfies Clock{
 	
 	shared actual Integer millis() {
 		return fixedInstant.milliseconds;
@@ -73,5 +79,18 @@ class FixedClock(Instant fixedInstant) satisfies Clock{
 	
 	shared actual Instant instant() {
 		return fixedInstant;
+	}
+}
+
+doc "Implementation of a clock that always returns the same instant.
+     This is typically used for testing."
+class FixedMilliseconds(Integer fixedMilliseconds) satisfies Clock{
+	
+	shared actual Integer millis() {
+		return fixedMilliseconds;
+	}
+	
+	shared actual Instant instant() {
+		return Instant(fixedMilliseconds);
 	}
 }

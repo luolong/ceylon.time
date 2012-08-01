@@ -1,9 +1,9 @@
-shared abstract class MonthOfYear(number)
+shared abstract class MonthOfYear(integer)
    of january | february | march | april | may | june | july | august | september | october | november | december
    satisfies Ordinal<MonthOfYear> & Comparable<MonthOfYear>{
 	
 	doc "Ordinal number of the month of year."
-	shared Integer number;
+	shared Integer integer;
 	
 	doc "Returns number of days in this month"
 	shared default Integer numberOfDays(Boolean leapYear) {
@@ -15,22 +15,43 @@ shared abstract class MonthOfYear(number)
 	
 	doc "Compares ordinal numbers of two instances of `MonthOfYear`"
 	shared actual Comparison compare(MonthOfYear other) {
-		return number.compare(other.number);
+		return integer.compare(other.integer);
+	}
+	
+	doc "Returns month of year that comes specified number of months before or after this month."
+	shared MonthOfYear shift(Integer number) {
+		variable Integer s := number % 12;
+		variable MonthOfYear month := this;
+		while (s > 0) {
+			month := month.successor;
+			s -= 1;
+		}
+		while (s < 0) {
+			month := month.predecessor;
+			s += 1;
+		}
+		
+		return month;
 	}
 }
-
-Indexed<MonthOfYear>[] months = entries(january, february, march, april, may, june, july, august, september, october, december);
 
 doc "Returns a month of a year based on "
 throws (Exception, "provided number is not a valid month number")
 shared MonthOfYear month(Integer number){
-	value month = months[number - 1];
-	if (exists month) {
-		return month.item;
-	}
-	else {
-		throw;
-	}
+	if (number == 1) { return january; }
+	if (number == 2) { return february; }
+	if (number == 3) { return march; }
+	if (number == 4) { return april; }
+	if (number == 5) { return may; }
+	if (number == 6) { return june; }
+	if (number == 7) { return july; }
+	if (number == 8) { return august; }
+	if (number == 9) { return september; }
+	if (number == 10) { return october; }
+	if (number == 11) { return november; }
+	if (number == 12) { return december; }
+	
+	throw Exception("Not a valid month number: " number "." );
 }
 
 shared object january extends MonthOfYear(1) {
