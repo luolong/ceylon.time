@@ -21,7 +21,7 @@ Supporting data types:
 * Period, Duration
 * MonthOfYear, DayOfWeek
 * Clock
-
+* etc...
 
 
 Instant
@@ -49,13 +49,27 @@ Examples::
 Operations on Instant
 ---------------------
 
-- Difference of two Instants returning a Duration.
+- Difference of two Instants returns a Duration.
 - Adding and subtracting a Duration to/from an Instant returns another Instant.
-- Comparing two Instants returning an result of a Comparison.
-- Converting an instant to a DateTime or ZoneDateTime.
+- Comparing two Instants returns the result of a Comparison.
+- Converting an instant to a Date, Time, DateTime or ZoneDateTime.
 - Iterating over a range of Instants
+- etc...
 
-
+Examples::
+    shared Instant start = now();
+    // ... some expensive operation
+    shared Instant end = now();
+    
+    Duration duration = end.durationFrom(start);
+    for (Instant i in start.for(duration)){
+        ....
+    }
+    
+    for (Instant i2 in start .. end){
+    	...
+    }
+    
 
 Date
 ====
@@ -66,7 +80,8 @@ Date does not have time zone or locale specific information attached to it.
 
 Implementation detail:
     Current implementation of Date is encoded as a triple of year, monthOfYear and dayOfMonth values.
-    Alternate implementation would encode a date as a number of days since a well known date, known as "epoch". This would allow compiling Date as 'value objects', thus opening it up to the performance improvements this entails.
+    Alternate implementation would encode a date as a number of days since a well known date, known as "epoch".
+    This would allow compiling Date as 'value objects', thus opening it up to the performance improvements this entails.
 
 
 Creation of a Date
@@ -78,12 +93,12 @@ Date today()
 Date date(Integer year, MonthOfYear month, Integer day=1)
     Creates new instance of Date based on the provided triple of the values, validating the input values and (in future) returning a Julian or Gregorian calendar date depending on the provided date value and current locale.
 
+Date gregorian(Integer? year=null, MonthOfYear? month=null, Integer? day=null)
+    Creates new instance of a date of Gregorian calendar.
+
 Date julian(Integer? year=null, MonthOfYear? month=null, Integer? day=null)
     Creates new instance of a date of Julian calendar.
     (low priority - support for Julian and other calendar systems can be postponed until actual need arises)
-
-Date gregorian(Integer? year=null, MonthOfYear? month=null, Integer? day=null)
-    Creates new instance of a date of Gregorian calendar.
 
 
 Examples::
@@ -94,6 +109,10 @@ Examples::
 Operations on Date
 ------------------
 
-- Difference of two dates returns a Period
+- Difference of two dates returns a Period.
 - Adding and subtracting a Period (with precision of a day)
+- converting to DateTime, ZoneDateTime, etc.
 - 
+
+...
+
