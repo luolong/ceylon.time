@@ -74,7 +74,7 @@ doc "Implementation of a clock that always returns the same instant.
 class FixedInstant(Instant fixedInstant) satisfies Clock{
 	
 	shared actual Integer millis() {
-		return fixedInstant.milliseconds;
+		return fixedInstant.millis;
 	}
 	
 	shared actual Instant instant() {

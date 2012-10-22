@@ -1,0 +1,5 @@
+<project name="Ceylon Date/Time module" default="publish" basedir=".">
+	<target name="publish">
+		<fail message="Build is not implemented yet."/>
+	</target>
+</project>

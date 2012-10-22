@@ -1,5 +1,7 @@
-import ceylon.math.whole{whole, Whole}
-import luolong.time { Duration, Instant, LocalDateTime }
+import ceylon.math.whole{Whole, wholeNumber}
+import ceylon.time { 
+	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour, Instant 
+}
 
 doc "Obtains a 'years' from a number of days."
 shared Period years(Integer years){
@@ -223,14 +225,19 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	
 	doc "Returns a new period that is a sum of the two periods."
 	shared actual Period plus(Period other) {
-		value years = this.years + other.years;
-		value months = this.months + other.months;
-		value days = this.days + other.days;
-		value hours = this.hours + other.hours;
-		value minutes = this.minutes + other.minutes;
-		value seconds = this.seconds + other.seconds;
-		value nanos = this.milliseconds + other.milliseconds;
-		return Period(years, months, days, hours, minutes, seconds, nanos).normalized();
+		return Period {
+			years = this.years + other.years;
+			months = this.months + other.months;
+			days = this.days + other.days;
+			hours = this.hours + other.hours;
+			minutes = this.minutes + other.minutes;
+			seconds = this.seconds + other.seconds;
+		};
+	}
+
+	shared Instant from(Instant instant) {
+		//FIXME: implement this
+		return bottom;
 	}
 
 	doc "Returns a copy of this period with all amounts normalized to the 
@@ -251,26 +258,26 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value years = this.years + this.months / 12;
         value months = this.months % 12;
         
-        variable Whole total := whole(this.hours * 60 * 60)
-                              + whole(this.minutes * 60)
-                              + whole(this.seconds);
+        variable Whole total := wholeNumber(this.hours * secondsPerHour)
+                              + wholeNumber(this.minutes * secondsPerMinute)
+                              + wholeNumber(this.seconds);
         
-        value milliseconds = whole(this.milliseconds).remainder( millisPerSecond ).integer;
-        total += whole(this.milliseconds).divided( millisPerSecond );
-        value seconds = total.remainder( secondsPerMinute ).integer;
-        total := total.divided( secondsPerMinute );
-        value minutes = total.remainder( minutesPerHour ).integer;
-        value hours = total.divided( minutesPerHour ).integer;
+        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(millisPerSecond) ).integer;
+        total += wholeNumber(this.milliseconds) / wholeNumber(millisPerSecond);
+        value seconds = ( total % wholeNumber(secondsPerMinute) ).integer;
+        total := total / wholeNumber(secondsPerMinute);
+        value minutes = ( total % wholeNumber(minutesPerHour) ).integer;
+        value hours = ( total / wholeNumber(minutesPerHour) ).integer;
         
-        return Period(years, months, days, hours, minutes, seconds, milliseconds);
+        return Period {
+            years = years;
+            months = months;
+            days = this.days;
+            hours = hours;
+            minutes = minutes;
+            seconds = seconds;
+            milliseconds = millis;
+        };
 	}
 	
-	shared Duration durationFrom(Instant instant){
-		LocalDateTime dateTime = instant.as<LocalDateTime>();
-	}
 }
-
-// Some local constants
-Whole millisPerSecond = whole(1000);
-Whole secondsPerMinute = whole( 60 );
-Whole minutesPerHour = secondsPerMinute;

@@ -18,108 +18,122 @@ shared abstract class MonthOfYear(integer)
 		return integer.compare(other.integer);
 	}
 	
-	doc "Returns month of year that comes specified number of months before or after this month."
-	shared MonthOfYear shift(Integer number) {
-		variable Integer s := number % 12;
-		variable MonthOfYear month := this;
-		while (s > 0) {
-			month := month.successor;
-			s -= 1;
-		}
-		while (s < 0) {
-			month := month.predecessor;
-			s += 1;
-		}
-		
+	doc "Returns month of year that comes specified number of months after this month."
+	shared MonthOfYear plusMonths(Integer number) {
+		value m = (integer + number) % 12;
+		assert (exists month = months[m]); 
 		return month;
+	}
+	
+	doc "Returns month of year that comes specified number of months before this month."
+	shared MonthOfYear minusMonths(Integer number) {
+		return plusMonths(-number);
+	}
+	
+	doc "Returns number of months separating the other month from this one."
+	shared actual Integer distanceFrom(MonthOfYear other) {
+		return integer.distanceFrom(other.integer);
 	}
 }
 
-doc "Returns a month of a year based on "
-throws (Exception, "provided number is not a valid month number")
-shared MonthOfYear month(Integer number){
-	if (number == 1) { return january; }
-	if (number == 2) { return february; }
-	if (number == 3) { return march; }
-	if (number == 4) { return april; }
-	if (number == 5) { return may; }
-	if (number == 6) { return june; }
-	if (number == 7) { return july; }
-	if (number == 8) { return august; }
-	if (number == 9) { return september; }
-	if (number == 10) { return october; }
-	if (number == 11) { return november; }
-	if (number == 12) { return december; }
-	
-	throw Exception("Not a valid month number: " number "." );
+doc "Enumeration of months of Gregorian/Julian calendar system from January to December"
+shared MonthOfYear[] months = {january, february, march, april, may, june, july, august, september, october, november, december};
+
+doc "Returns month of year specified by the input argument.
+
+     If input is an Integer, this method returns a month according to the integer 
+     value of the [[MonthOfYear]] (i.e. 1=[[january]], 2=[[february]], ... 12=[[december]])
+     Any invalid values will throw an exception.
+    
+     If the imput value is a [[MonthOfYear]], the input value is returned as is."
+shared MonthOfYear monthOfYear(Integer|MonthOfYear month){
+	switch (month)
+	case (is MonthOfYear) { return month; }
+	case (is Integer) {
+		assert ( 1 <= january.integer && month <= december.integer );
+		assert ( exists m = months[month-1] );
+		return m;
+	}
 }
 
+doc "January. The first month of a Gregorian/Julian calendar system."
 shared object january extends MonthOfYear(1) {
 	shared actual String string = "january";
 	shared actual MonthOfYear predecessor = december;  
 	shared actual MonthOfYear successor = february;
 }
 
+doc "February. The second month of a gregorian calendar system."
 shared object february extends MonthOfYear(2) {
 	shared actual String string = "february";
 	shared actual MonthOfYear predecessor = january;  
 	shared actual MonthOfYear successor = march;
 }
 
+doc "March. The third month of a gregorian calendar system."
 shared object march extends MonthOfYear(3) {
 	shared actual String string = "march";
 	shared actual MonthOfYear predecessor = february;  
 	shared actual MonthOfYear successor = april;
 }
 
+doc "April. The fourth month of a gregorian calendar system."
 shared object april extends MonthOfYear(4) {
 	shared actual String string = "april";
 	shared actual MonthOfYear predecessor = march;  
 	shared actual MonthOfYear successor = may;
 }
 
+doc "May. The fifth month of a gregorian calendar system."
 shared object may extends MonthOfYear(5) {
 	shared actual String string = "may";
 	shared actual MonthOfYear predecessor = april;  
 	shared actual MonthOfYear successor = june;
 }
 
+doc "June. The sixth month of a gregorian calendar system."
 shared object june extends MonthOfYear(6) {
 	shared actual String string = "june";
 	shared actual MonthOfYear predecessor = may;
 	shared actual MonthOfYear successor = july;
 }
 
+doc "July. The seventh month of a gregorian calendar system."
 shared object july extends MonthOfYear(7) {
 	shared actual shared actual String string = "july";
 	shared actual MonthOfYear predecessor = june;  
 	shared actual MonthOfYear successor = august;
 }
 
+doc "August. The eigth month of a gregorian calendar system."
 shared object august extends MonthOfYear(8) {
 	shared actual shared actual String string = "august";
 	shared actual MonthOfYear predecessor = july;  
 	shared actual MonthOfYear successor = september;
 }
 
+doc "September. The nineth month of a gregorian calendar system."
 shared object september extends MonthOfYear(9) {
 	shared actual shared actual String string = "september";
 	shared actual MonthOfYear predecessor = august;  
 	shared actual MonthOfYear successor = october;
 }
 
+doc "October. The tenth month of a gregorian calendar system."
 shared object october extends MonthOfYear(10) {
 	shared actual shared actual String string = "october";
 	shared actual MonthOfYear predecessor = september;  
 	shared actual MonthOfYear successor = november;
 }
 
+doc "Nobember. The eleventh month of a gregorian calendar system."
 shared object november extends MonthOfYear(11) {
 	shared actual shared actual String string = "november";
 	shared actual MonthOfYear predecessor = october;  
 	shared actual MonthOfYear successor = december;
 }
 
+doc "December. The twelveth (last) month of a gregorian calendar system."
 shared object december extends MonthOfYear(12) {
 	shared actual shared actual String string = "december";
 	shared actual MonthOfYear predecessor = november;  
