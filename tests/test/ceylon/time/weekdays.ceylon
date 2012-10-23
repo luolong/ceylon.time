@@ -26,7 +26,7 @@ void testDayOfWeek(){
 	check( monday < thursday );
 	check( monday < friday );
 	check( monday < saturday );
-	check( monday < sunday );
+	check( monday > sunday );
 	
 	print("Comparing days of week: tuesday");
 	check( tuesday > monday );
@@ -34,7 +34,7 @@ void testDayOfWeek(){
 	check( tuesday < thursday );
 	check( tuesday < friday );
 	check( tuesday < saturday );
-	check( tuesday < sunday );
+	check( tuesday > sunday );
 	
 	print("Comparing days of week: wednesday");
 	check( wednesday > monday );
@@ -42,7 +42,7 @@ void testDayOfWeek(){
 	check( wednesday < thursday );
 	check( wednesday < friday );
 	check( wednesday < saturday );
-	check( wednesday < sunday );
+	check( wednesday > sunday );
 	
 	print("Comparing days of week: thursday");
 	check( thursday > monday );
@@ -50,7 +50,7 @@ void testDayOfWeek(){
 	check( thursday > wednesday );
 	check( thursday < friday );
 	check( thursday < saturday );
-	check( thursday < sunday );
+	check( thursday > sunday );
 	
 	print("Comparing days of week: friday");
 	check( friday > monday );
@@ -58,6 +58,6 @@ void testDayOfWeek(){
 	check( friday > wednesday );
 	check( friday > thursday );
 	check( friday < saturday );
-	check( friday < sunday );
+	check( friday > sunday );
 	
 }
