@@ -64,42 +64,42 @@ shared DayOfWeek parseDayOfWeek(String weekday){
 
 shared object sunday extends DayOfWeek(0) {
 	shared actual String string = "sunday";
-	shared actual DayOfWeek predecessor = saturday;
-	shared actual DayOfWeek successor = monday;
+	shared actual DayOfWeek predecessor { return  saturday; }
+	shared actual DayOfWeek successor { return monday; }
 }
 
 shared object monday extends DayOfWeek(1) {
 	shared actual String string = "monday";
-	shared actual DayOfWeek predecessor = sunday;
-	shared actual DayOfWeek successor = tuesday;
+	shared actual DayOfWeek predecessor { return sunday; }
+	shared actual DayOfWeek successor { return tuesday; }
 }
 
 shared object tuesday extends DayOfWeek(2) {
 	shared actual String string = "tuesday";
-	shared actual DayOfWeek predecessor = monday;
-	shared actual DayOfWeek successor = wednesday;
+	shared actual DayOfWeek predecessor { return monday; }
+	shared actual DayOfWeek successor { return wednesday; }
 }
 
 shared object wednesday extends DayOfWeek(3) {
 	shared actual String string = "wednesday";
-	shared actual DayOfWeek predecessor = tuesday;
-	shared actual DayOfWeek successor = thursday;
+	shared actual DayOfWeek predecessor { return tuesday; }
+	shared actual DayOfWeek successor { return thursday; }
 }
 
 shared object thursday extends DayOfWeek(4) {
 	shared actual String string = "thursday";
-	shared actual DayOfWeek predecessor = wednesday;
-	shared actual DayOfWeek successor = friday;
+	shared actual DayOfWeek predecessor { return wednesday; }
+	shared actual DayOfWeek successor { return friday; }
 }
 
 shared object friday extends DayOfWeek(5) {
 	shared actual String string = "friday";
-	shared actual DayOfWeek predecessor = thursday;
-	shared actual DayOfWeek successor = saturday;
+	shared actual DayOfWeek predecessor { return thursday; }
+	shared actual DayOfWeek successor { return saturday; }
 }
 
 shared object saturday extends DayOfWeek(6) {
 	shared actual String string = "saturday";
-	shared actual DayOfWeek predecessor = friday;
-	shared actual DayOfWeek successor = bottom;
+	shared actual DayOfWeek predecessor { return friday; }
+	shared actual DayOfWeek successor { return sunday; }
 }
