@@ -27,7 +27,8 @@ shared class Instant(millis)
 			return Instant(this.millis + other.millis);
 		}
 		case(is Period){
-			return other.from(this);
+			return bottom;
+			//return other.from(this);
 		}
 	}
 	

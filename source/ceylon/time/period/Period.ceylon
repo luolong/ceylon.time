@@ -1,6 +1,6 @@
 import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time { 
-	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour, Instant 
+	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour 
 }
 
 doc "Obtains a 'years' from a number of days."
@@ -85,14 +85,15 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	
 	doc "Checks if this period is equal to another period."
 	shared actual Boolean equals(Object that){
-		if (this == that){
-			return true;
-		}
+		//TODO: We need this?
+		//if (this == that){
+		//	return true;
+		//}
 		
 		if (is Period that) {
 			return (this.years==that.years
-			     && this.months==that.years
-			     && this.days==that.years
+			     && this.months==that.months
+			     && this.days==that.days
 			     && this.hours==that.hours
 			     && this.minutes==that.minutes
 			     && this.seconds==that.seconds
@@ -103,7 +104,44 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	}
 	
 	shared actual Comparison compare(Period other) {
-		return bottom;
+	//TODO: Should we always normalize or save the nanoseconds?
+		
+	//TODO: Should it work?
+		//return	         ( years.compare( other.years )   != equal ) then years.compare( other.years )
+		//				else ( months.compare( other.months ) != equal ) then months.compare(other.months)
+		//				else ( days.compare(other.days)       != equal ) then days.compare(other.days)
+		//				else ( hours.compare(other.hours)     != equal ) then hours.compare(other.hours)
+		//				else ( minutes.compare(other.minutes) != equal ) then minutes.compare(other.minutes)
+		//				else ( seconds.compare(other.seconds) != equal ) then seconds.compare(other.seconds)
+		//				else milliseconds.compare(other.milliseconds);
+
+		Period thisNormalized = this.normalized();
+		Period otherNormalized = other.normalized();
+
+		if ( thisNormalized.years.compare( otherNormalized.years )   != equal ) {
+			return thisNormalized.years.compare( otherNormalized.years );
+		} 
+		
+		if ( thisNormalized.months.compare( otherNormalized.months ) != equal ) {
+			return thisNormalized.months.compare(otherNormalized.months);
+		}
+
+		if ( thisNormalized.days.compare(otherNormalized.days) != equal ) {
+			return thisNormalized.days.compare(otherNormalized.days);
+		}
+
+		if ( thisNormalized.hours.compare(otherNormalized.hours) != equal ) {
+			return thisNormalized.hours.compare(otherNormalized.hours);
+		}
+
+		if ( thisNormalized.minutes.compare(otherNormalized.minutes) != equal ) {
+			return thisNormalized.minutes.compare(otherNormalized.minutes);
+		}
+
+		if ( thisNormalized.seconds.compare(otherNormalized.seconds) != equal ) {
+			return thisNormalized.seconds.compare(otherNormalized.seconds);
+		}
+		return thisNormalized.milliseconds.compare(otherNormalized.milliseconds);
 	}
 	
 	doc "Checks if this period is zero-length."
@@ -180,7 +218,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		if (months == 0){
 			return this;
 		}
-		return withMonths( this.months + months ).normalized();
+		return withMonths( this.months + months );
 	}
 	
 	doc "Returns a copy of this period with the specified number of days added."
@@ -204,7 +242,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		if (minutes == 0){
 			return this;
 		}
-		return withMinutes( this.minutes + minutes ).normalized();
+		return withMinutes( this.minutes + minutes );
 	}
 	
 	doc "Returns a copy of this period with the specified number of seconds added."
@@ -212,7 +250,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		if (seconds == 0){
 			return this;
 		}
-		return withSeconds( this.seconds + seconds ).normalized();
+		return withSeconds( this.seconds + seconds );
 	}
 	
 	doc "Returns a copy of this period with the specified number of nonoseconds added."
@@ -220,7 +258,42 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		if (milliseconds == 0){
 			return this;
 		}
-		return withMilliseconds( this.milliseconds + milliseconds ).normalized();
+		return withMilliseconds( this.milliseconds + milliseconds );
+	}
+
+doc "Returns a copy of this period with the specified number of years subtracted."
+	shared Period minusYears(Integer years){
+		return plusYears( - years );
+	}
+	
+	doc "Returns a copy of this period with the specified number of months subtracted."
+	shared Period minusMonths(Integer months){
+		return plusMonths( - months );
+	}
+	
+	doc "Returns a copy of this period with the specified number of days subtracted."
+	shared Period minusDays(Integer days){
+		return plusDays( - days );
+	}
+	
+	doc "Returns a copy of this period with the specified number of hours subtracted."
+	shared Period minusHours(Integer hours){
+		return plusHours( - hours );
+	}
+	
+	doc "Returns a copy of this period with the specified number of minutes subtracted."
+	shared Period minusMinutes(Integer minutes){
+		return plusMinutes( - minutes );
+	}
+	
+	doc "Returns a copy of this period with the specified number of seconds subtracted."
+	shared Period minusSeconds(Integer seconds){
+		return plusSeconds( - seconds );
+	}
+	
+	doc "Returns a copy of this period with the specified number of nonoseconds subtracted."
+	shared Period minusMilliseconds(Integer milliseconds){
+		return plusMilliseconds( - milliseconds );
 	}
 	
 	doc "Returns a new period that is a sum of the two periods."
@@ -232,13 +305,44 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 			hours = this.hours + other.hours;
 			minutes = this.minutes + other.minutes;
 			seconds = this.seconds + other.seconds;
+			milliseconds = this.milliseconds + other.milliseconds;
 		};
 	}
 
-	shared Instant from(Instant instant) {
-		//FIXME: implement this
-		return bottom;
-	}
+	//TODO: How can we know wich instant we should create? 
+	//shared Period from(Instant instant) {
+	//	return Period {
+	//		milliseconds = instant.millis;
+	//	}.normalized();
+	//}
+
+	shared Period toTimeOnly() {
+		//TODO: Wating unary operator
+        //if ((years | months | days) == 0) {
+		if (years == 0 && months == 0 && days == 0) {
+            return this;
+        }
+        return Period {
+			hours = hours;
+			minutes = minutes;
+			seconds = seconds;
+			milliseconds = milliseconds;
+		};
+    }
+
+	shared Period toDateOnly() {
+		//TODO: Should we have something similar?
+        //if ( nanos == 0) {
+		if( hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0 ) {
+            return this;
+        }
+        return Period {
+			years = years;
+			months = months;
+			days = days;
+		};
+    }
+	
 
 	doc "Returns a copy of this period with all amounts normalized to the 
 		standard ranges for date-time fields.
@@ -251,9 +355,10 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		month to another and depending on the leap year.
 		"
 	shared Period normalized(){
-        if (this == zero) {
-            return zero;
-        }
+		//TODO: Should we test equals?
+        //if (this == zero) {
+        //    return zero;
+        //}
         
         value years = this.years + this.months / 12;
         value months = this.months % 12;
@@ -280,4 +385,52 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         };
 	}
 	
+	shared actual String string {
+		if (this == zero) {
+            return "PT0S";
+        } else {
+            StringBuilder buf = StringBuilder();
+            buf.append('P');
+            if (years != 0) {
+                buf.append(years.string).append('Y');
+            }
+            if (months != 0) {
+                buf.append(months.string).append('M');
+            }
+            if (days != 0) {
+                buf.append(days.string).append('D');
+            }
+            if ( hours != 0 || minutes != 0 || seconds != 0 || milliseconds != 0 ) {
+                buf.append('T');
+                if (hours != 0) {
+                    buf.append(hours.string).append('H');
+                }
+                if (minutes != 0) {
+                    buf.append(minutes.string).append('M');
+                }
+                value secondPart = seconds;
+                value milliPart = milliseconds;
+				//TODO: Ceylon does not have it, yet. Also waiting TimeZone Impl
+                //value secsMillisOr = secondPart | milliPart;
+                //if (secsNanosOr != 0) {  // if either non-zero
+                //    if ((secsNanosOr | Integer.MIN_VALUE) != 0) {  // if either less than zero
+                //        buf.append('-');
+                //        secondPart = Math.abs(secondPart);
+                //        nanoPart = Math.abs(nanoPart);
+                //    }
+                //    buf.append(secondPart);
+                //    int dotPos = buf.length();
+                //    nanoPart += 1000_000_000;
+                //    while (nanoPart % 10 == 0) {
+                //        nanoPart /= 10;
+                //    }
+                //    buf.append(nanoPart);
+                //    buf.setCharAt(dotPos, '.');
+                //    buf.append('S');
+                //}
+            }
+            return buf.string;
+        }
+	}
+
 }
