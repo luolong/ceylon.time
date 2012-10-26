@@ -1,29 +1,5 @@
-doc "An interface of all date like objects. 
-     That is, this represents all objects that share date fields."
-shared interface DateLike{
-	
-	doc "The year of the date"
-	shared formal Integer year;
-	
-	doc "Month of the year field."
-	shared formal MonthOfYear month;
-	
-	doc "Day of month field."
-	shared formal Integer dayOfMonth;
-		
-	doc "True if this is a date in a leap year."
-	shared formal Boolean leapYear;
-	
-	doc "Day of the year."
-	shared formal Integer dayOfYear;
-	
-	doc "Week number of the year."
-	shared formal Integer weekOfYear;
-	
-	doc "Day of the week."
-	shared formal DayOfWeek dayOfWeek;
-	
-}
+
+import ceylon.time { asDayOfWeek = dayOfWeek }
 
 doc "An interface for date objects in the ISO-8601 calendar system,
 	
@@ -31,7 +7,7 @@ doc "An interface for date objects in the ISO-8601 calendar system,
 	This interface also defines access to other date fields such as 
 	day-of-year, day-of-week and week-of-year."
 shared interface Date
-		satisfies DateLike & Ordinal<Date> & Comparable<Date>{
+		satisfies ReadableDate & Ordinal<Date> & Comparable<Date>{
 		
 	doc "number of calendar days since ERA"
 	shared formal Integer dayOfEra;
@@ -62,6 +38,14 @@ abstract class AbstractDate(dayOfEra)
 doc "Default implementation of a gregorian calendar"
 class GregorianDate(Integer d) 
 	  extends AbstractDate(d){
+
+	Integer daysPerCycle = 146097;
+    /**
+     * The number of days from year zero to year 1970.
+     * There are five 400 year cycles from year zero to 2000.
+     * There are 7 leap years from 1970 to 2000.
+     */
+    Integer days_0000_TO_1970 = (daysPerCycle * 5) - (30 * 365 + 7);
 		
 	// Compute date values from the provided date
 	variable Integer y := (10000*d + 14780)/3652425;
@@ -80,9 +64,8 @@ class GregorianDate(Integer d)
 	shared actual MonthOfYear month = monthOfYear(mm);
 	shared actual Integer year = y;
 	
-	shared actual Integer dayOfYear = bottom;
-	shared actual Integer weekOfYear = bottom;
-	shared actual DayOfWeek dayOfWeek = bottom;
+	//TODO: Implement
+	shared actual Integer weekOfYear = 0;
 	
 	doc "True, if this date is a leap year according to gregorian clendar leap year rules."
 	shared actual Boolean leapYear {
@@ -100,6 +83,8 @@ class GregorianDate(Integer d)
 		
 		return false;
 	}
+
+	shared actual Integer dayOfYear = firstDayOfYear( month, leapYear ) + dayOfMonth -1;
 	
 	shared actual GregorianDate predecessor {
 		return GregorianDate( dayOfEra - 1 );
@@ -107,7 +92,34 @@ class GregorianDate(Integer d)
 	
 	shared actual GregorianDate successor {
 		return GregorianDate( dayOfEra + 1 );
-	}	
+	}
+
+	shared Integer toEpochDay() {
+        value y = year;
+        value m = month;
+        variable Integer total := 0;
+        total += 365 * y;
+        if (y >= 0) {
+            total += (y + 3) / 4 - (y + 99) / 100 + (y + 399) / 400;
+        } else {
+            total -= y / -4 - y / -100 + y / -400;
+        }
+        total += ((367 * m.integer - 362) / 12);
+        total += dayOfMonth - 1;
+        if (m.integer > 2) {
+            total--;
+            if ( leapYear == false) {
+                total--;
+            }
+        }
+        return total - days_0000_TO_1970;
+    }
+
+	shared actual DayOfWeek dayOfWeek {
+        value dow0 = floorMod(toEpochDay() + 3, 7);
+        return asDayOfWeek(dow0 + 1);
+    }
+
 }  
 
 /*
@@ -117,6 +129,51 @@ class JulianDate(Integer dayOfEra)
 	shared actual Algorithm calculated = Julian(dayofEra);
 }
 */
+
+Integer floorMod(Integer a, Integer b) {
+    return (((a % b) + b) % b);
+}
+
+shared Integer firstDayOfYear( MonthOfYear month, Boolean leapYear ) {
+        value leap = leapYear then 1 else 0;
+        switch (month)
+        case ( january) {
+            return 1;
+		}
+        case ( february ) {
+            return 32;
+		}
+        case ( march ) {
+            return 60 + leap;
+		}
+        case ( april ) {
+            return 91 + leap;
+		}
+        case ( may ) {
+            return 121 + leap;
+		}
+        case ( june ) {
+            return 152 + leap;
+		}
+        case ( july ) {
+            return 182 + leap;
+		}
+        case ( august ) {
+            return 213 + leap;
+		}
+        case ( september ) {
+            return 244 + leap;
+		}
+        case ( october ) {
+            return 274 + leap;
+		}
+        case ( november ) {
+            return 305 + leap;
+		}
+        case ( december ) {
+            return 335 + leap;
+		}
+    }
 
 doc "parses a Date from ISO date formatted string (YYYY-MM-DD)"
 shared Date parseDate(String string){

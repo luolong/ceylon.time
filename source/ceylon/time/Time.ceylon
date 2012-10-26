@@ -1,34 +1,8 @@
 import ceylon.math.float { log10 }
 
-doc "Common interface for all data types that contain fileds that represent time of day."
-shared interface TimeLike {
-	
-	doc "Number of full hours elapsed since last midnight."
-	shared formal Integer hours;
-	
-	doc "Number of minutes since last full hour."
-	shared formal Integer minutes;
-	
-	doc "Number of seconds since last full minute."
-	shared formal Integer seconds;
-	
-	doc "Number of milliseconds since last full second"
-	shared formal Integer millis;
-	
-	doc "Number of minutes since last midnight"
-	shared formal Integer minutesOfDay;
-	
-	doc "Number of seconds since last midnight"
-	shared formal Integer secondsOfDay;
-	
-	doc "Number of milliseconds since last midnight"
-	shared formal Integer millisOfDay;
-	
-}
-
 doc "An abstraction representing time of day like _6pm_ or _8.30am_."
 shared interface Time
-    satisfies TimeLike & Comparable<Time> & Ordinal<Time> {
+    satisfies ReadableTime & Comparable<Time> & Ordinal<Time> {
 	
 }
 

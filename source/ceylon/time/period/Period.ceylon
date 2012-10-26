@@ -1,6 +1,6 @@
 import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time { 
-	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour 
+	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour, ReadablePeriod 
 }
 
 doc "Obtains a 'years' from a number of days."
@@ -59,29 +59,28 @@ doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      A period is a human-scale description of an amount of time.
      "
 shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
-		satisfies Comparable<Period> & 
-                  Summable<Period>{
+		satisfies ReadablePeriod & Comparable<Period> & Summable<Period> {
 
 	doc "The number of years."
-	shared Integer years;
+	shared actual Integer years;
 	
 	doc "The number of months"
-	shared Integer months;
+	shared actual Integer months;
 	
 	doc "The number of days"
-	shared Integer days;
+	shared actual Integer days;
 	
 	doc "The number of hours"
-	shared Integer hours;
+	shared actual Integer hours;
 	
 	doc "The number of minutes"
-	shared Integer minutes;
+	shared actual Integer minutes;
 	
 	doc "The number of seconds"
-	shared Integer seconds;
+	shared actual Integer seconds;
 	
 	doc "The number of milliseconds"
-	shared Integer milliseconds;
+	shared actual Integer milliseconds;
 	
 	doc "Checks if this period is equal to another period."
 	shared actual Boolean equals(Object that){
