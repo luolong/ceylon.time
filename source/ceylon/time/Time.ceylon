@@ -1,34 +1,9 @@
 import ceylon.math.float { log10 }
-
-doc "Common interface for all data types that contain fileds that represent time of day."
-shared interface TimeLike {
-	
-	doc "Number of full hours elapsed since last midnight."
-	shared formal Integer hours;
-	
-	doc "Number of minutes since last full hour."
-	shared formal Integer minutes;
-	
-	doc "Number of seconds since last full minute."
-	shared formal Integer seconds;
-	
-	doc "Number of milliseconds since last full second"
-	shared formal Integer millis;
-	
-	doc "Number of minutes since last midnight"
-	shared formal Integer minutesOfDay;
-	
-	doc "Number of seconds since last midnight"
-	shared formal Integer secondsOfDay;
-	
-	doc "Number of milliseconds since last midnight"
-	shared formal Integer millisOfDay;
-	
-}
+import ceylon.time.base { ReadableTime, TimeBehavior }
 
 doc "An abstraction representing time of day like _6pm_ or _8.30am_."
 shared interface Time
-    satisfies TimeLike & Comparable<Time> & Ordinal<Time> {
+    satisfies ReadableTime & TimeBehavior<Time> & Comparable<Time> & Ordinal<Time> {
 	
 }
 
@@ -133,6 +108,45 @@ class TimeOfDay(millisOfDay)
 		return "" pad(hours) ":" pad(minutes) ":" pad(seconds) "." millis "";
 	}
 	shared actual Integer distanceFrom(Time other) {
+		return bottom;
+	}
+	shared actual Time minusHours(Integer hours) {
+		return bottom;
+	}
+	shared actual Time minusMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual Time minusMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual Time minusSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual Time normalized() {
+		return bottom;
+	}
+	shared actual Time plusHours(Integer hours) {
+		return bottom;
+	}
+	shared actual Time plusMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual Time plusMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual Time plusSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual Time withHours(Integer hours) {
+		return bottom;
+	}
+	shared actual Time withMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual Time withMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual Time withSeconds(Integer seconds) {
 		return bottom;
 	}
 }
