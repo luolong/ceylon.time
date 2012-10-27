@@ -1,4 +1,5 @@
 import ceylon.time { createDate = date }
+import ceylon.time.base { ReadableTime, ReadableDate, DayOfWeek, MonthOfYear, DateTimeBehavior }
 
 doc "Interface representing a time of day within a date (like _4pm, October 21. 2012_) 
 	 without a reference to a time zone.
@@ -8,10 +9,14 @@ doc "Interface representing a time of day within a date (like _4pm, October 21. 
 	
     "
 shared interface DateTime 
-	satisfies ReadableDate & ReadableTime & Ordinal<DateTime> & Comparable<DateTime> {
+	satisfies ReadableDate 
+			& ReadableTime
+			& DateTimeBehavior<DateTime> 
+			& Ordinal<DateTime> & Comparable<DateTime> {
 
 } 
 
+//TODO: Needs a better name... 
 shared class DateTimeImpl( date, time ) satisfies DateTime {
 	
 	shared Date date;
@@ -84,6 +89,81 @@ shared class DateTimeImpl( date, time ) satisfies DateTime {
 	shared actual DateTime predecessor = bottom;
 	
 	shared actual DateTime successor = bottom;
+	shared actual DateTime minusDays(Integer days) {
+		return bottom;
+	}
+	shared actual DateTime minusHours(Integer hours) {
+		return bottom;
+	}
+	shared actual DateTime minusMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual DateTime minusMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual DateTime minusMonths(Integer months) {
+		return bottom;
+	}
+	shared actual DateTime minusSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual DateTime minusYears(Integer years) {
+		return bottom;
+	}
+	shared actual DateTime normalized() {
+		return bottom;
+	}
+	shared actual DateTime plus(DateTime other) {
+		return bottom;
+	}
+	shared actual DateTime plusDays(Integer days) {
+		return bottom;
+	}
+	shared actual DateTime plusHours(Integer hours) {
+		return bottom;
+	}
+	shared actual DateTime plusMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual DateTime plusMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual DateTime plusMonths(Integer months) {
+		return bottom;
+	}
+	shared actual DateTime plusSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual DateTime plusYears(Integer years) {
+		return bottom;
+	}
+	shared actual DateTime toDateOnly() {
+		return bottom;
+	}
+	shared actual DateTime toTimeOnly() {
+		return bottom;
+	}
+	shared actual DateTime withDays(Integer days) {
+		return bottom;
+	}
+	shared actual DateTime withHours(Integer hours) {
+		return bottom;
+	}
+	shared actual DateTime withMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual DateTime withMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual DateTime withMonths(Integer months) {
+		return bottom;
+	}
+	shared actual DateTime withSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual DateTime withYears(Integer years) {
+		return bottom;
+	}
  
 }
 

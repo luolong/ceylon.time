@@ -1,5 +1,5 @@
 
-import ceylon.time { asDayOfWeek = dayOfWeek }
+import ceylon.time.base { ReadableDate, asDayOfWeek = dayOfWeek, MonthOfYear, DayOfWeek, january, monthOfYear, february, march, april, may, june, july, august, september, october, november, december, DateBehavior }
 
 doc "An interface for date objects in the ISO-8601 calendar system,
 	
@@ -7,13 +7,15 @@ doc "An interface for date objects in the ISO-8601 calendar system,
 	This interface also defines access to other date fields such as 
 	day-of-year, day-of-week and week-of-year."
 shared interface Date
-		satisfies ReadableDate & Ordinal<Date> & Comparable<Date>{
+		satisfies ReadableDate & DateBehavior<Date> & Ordinal<Date> & Comparable<Date>{
 		
+	//TODO: Should it go to ReadableDate? 
 	doc "number of calendar days since ERA"
 	shared formal Integer dayOfEra;
 	
 }
 
+//TODO: what?
 abstract class Algorithm() {
 	shared formal Integer year();
 	shared formal Integer month();
@@ -114,10 +116,44 @@ class GregorianDate(Integer d)
         }
         return total - days_0000_TO_1970;
     }
-
+ 
 	shared actual DayOfWeek dayOfWeek {
         value dow0 = floorMod(toEpochDay() + 3, 7);
         return asDayOfWeek(dow0 + 1);
+    }
+
+	shared actual Date minusDays(Integer days) {
+    	return bottom;
+    }
+    shared actual Date minusMonths(Integer months) {
+    	return bottom;
+    }
+    shared actual Date minusYears(Integer years) {
+    	return bottom;
+    }
+    shared actual Date normalized() {
+    	return bottom;
+    }
+    shared actual Date plus(Date other) {
+    	return bottom;
+    }
+    shared actual Date plusDays(Integer days) {
+    	return bottom;
+    }
+    shared actual Date plusMonths(Integer months) {
+    	return bottom;
+    }
+    shared actual Date plusYears(Integer years) {
+    	return bottom;
+    }
+    shared actual Date withDays(Integer days) {
+    	return bottom;
+    }
+    shared actual Date withMonths(Integer months) {
+    	return bottom;
+    }
+    shared actual Date withYears(Integer years) {
+    	return bottom;
     }
 
 }  

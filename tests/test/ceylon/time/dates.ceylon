@@ -1,5 +1,6 @@
-import ceylon.time { date, december, Date, monday }
 import com.redhat.ceylon.sdk.test { assertTrue }
+import ceylon.time { date, Date }
+import ceylon.time.base { december, monday }
 
 Date data_1982_12_13 = date( 1982, december, 13);
 

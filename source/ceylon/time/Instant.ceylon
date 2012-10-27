@@ -1,5 +1,4 @@
-import ceylon.time.period { Period }
-import ceylon.time.timezone { TimeZone }
+import ceylon.time.timezone { TimeZone, ZoneDateTime }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {

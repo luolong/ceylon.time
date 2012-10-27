@@ -1,8 +1,9 @@
 import ceylon.math.float { log10 }
+import ceylon.time.base { ReadableTime, TimeBehavior }
 
 doc "An abstraction representing time of day like _6pm_ or _8.30am_."
 shared interface Time
-    satisfies ReadableTime & Comparable<Time> & Ordinal<Time> {
+    satisfies ReadableTime & TimeBehavior<Time> & Comparable<Time> & Ordinal<Time> {
 	
 }
 
@@ -107,6 +108,45 @@ class TimeOfDay(millisOfDay)
 		return "" pad(hours) ":" pad(minutes) ":" pad(seconds) "." millis "";
 	}
 	shared actual Integer distanceFrom(Time other) {
+		return bottom;
+	}
+	shared actual Time minusHours(Integer hours) {
+		return bottom;
+	}
+	shared actual Time minusMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual Time minusMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual Time minusSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual Time normalized() {
+		return bottom;
+	}
+	shared actual Time plusHours(Integer hours) {
+		return bottom;
+	}
+	shared actual Time plusMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual Time plusMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual Time plusSeconds(Integer seconds) {
+		return bottom;
+	}
+	shared actual Time withHours(Integer hours) {
+		return bottom;
+	}
+	shared actual Time withMilliseconds(Integer milliseconds) {
+		return bottom;
+	}
+	shared actual Time withMinutes(Integer minutes) {
+		return bottom;
+	}
+	shared actual Time withSeconds(Integer seconds) {
 		return bottom;
 	}
 }

@@ -1,6 +1,5 @@
 import com.redhat.ceylon.sdk.test { assertTrue }
-import ceylon.time.period { Period, years }
-import ceylon.time.period { months }
+import ceylon.time { Period, years, months }
 
 Period oneYear = Period {
 	years = 1;
