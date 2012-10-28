@@ -28,8 +28,52 @@ shared abstract class DayOfWeek(integer)
 		return this.integer <=> other.integer;
 	}
 	
+	doc "Returns distance from the two days of week"
 	shared actual Integer distanceFrom(DayOfWeek other) {
 		return integer.distanceFrom(other.integer);
+	}
+	
+}
+
+abstract class WeekdayIterator() of ForwardIterator | BackwardIterator
+	satisfies Iterator<DayOfWeek> {}
+
+class ForwardIterator(DayOfWeek from, DayOfWeek to)
+		extends WeekdayIterator() {
+
+	variable DayOfWeek|Finished nextElement := from;
+		
+	shared actual DayOfWeek|Finished next() {
+		value current = nextElement;
+		if (is DayOfWeek current){
+			if (current === to){
+				nextElement := exhausted;
+			}
+			else {
+				nextElement := current.successor;
+			}
+		}
+		return current;
+	}
+
+}
+
+class BackwardIterator(DayOfWeek from, DayOfWeek to)
+		extends WeekdayIterator() {
+
+	variable DayOfWeek|Finished nextElement := from;
+		
+	shared actual DayOfWeek|Finished next() {
+		value current = nextElement;
+		if (is DayOfWeek current){
+			if (current === to){
+				nextElement := exhausted;
+			}
+			else {
+				nextElement := current.predecessor;
+			}
+		}
+		return current;
 	}
 }
 

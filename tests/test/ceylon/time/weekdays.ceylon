@@ -1,25 +1,19 @@
-import ceylon.time { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
-import com.redhat.ceylon.sdk.test { assertTrue }
+import ceylon.time { monday, tuesday, wednesday, thursday, friday, saturday, sunday, weekdays, DayOfWeek }
+import com.redhat.ceylon.sdk.test { assertTrue, assertEquals, fail, Suite }
 
+
+class WeekdaysSuite() extends Suite("Weekdays"){
+    shared actual Iterable<String->Void()> suite = {
+        "Weekdays" -> testDayOfWeekSuccessor,
+        "Predecessors" -> testDayOfWeekPredecessor,
+        "Iteration: sunday..saturday" -> testIterateMondayToSunday,
+        "Iteration: monday..sunday" -> testIterateMondayToSunday
+    };
+}
+ 
 void testDayOfWeek(){
 	
-	print("Testing successors");
-	assertTrue( monday.successor === tuesday, "monday.successor === tuesday" );
-	assertTrue( tuesday.successor === wednesday, "tuesday.successor === wednesday" );
-	assertTrue( wednesday.successor === thursday, "wednesday.successor === thursday" );
-	assertTrue( thursday.successor === friday, "thursday.successor === friday" );
-	assertTrue( friday.successor === saturday, "friday.successor === saturday" );
-	assertTrue( saturday.successor === sunday, "saturday.successor === sunday" );
-	assertTrue( sunday.successor === monday, "sunday.successor === monday" );
-	
-	print("Testing predecessors");
-	assertTrue( sunday.predecessor === saturday, "sunday.predecessor === saturday" );
-	assertTrue( saturday.predecessor === friday, "saturday.predecessor === friday" );
-	assertTrue( friday.predecessor === thursday, "friday.predecessor === thursday" );
-	assertTrue( thursday.predecessor === wednesday, "thursday.predecessor === wednesday" );
-	assertTrue( wednesday.predecessor === tuesday, "wednesday.predecessor === tuesday" );
-	assertTrue( tuesday.predecessor === monday, "tuesday.predecessor === monday" );
-	assertTrue( monday.predecessor === sunday, "monday.predecessor === sunday" );
+	WeekdaysSuite().run();
 	
 	print("Comparing days of week: monday");
 	assertTrue( monday < tuesday, "monday < tuesday" );
@@ -61,4 +55,45 @@ void testDayOfWeek(){
 	assertTrue( friday < saturday, "friday < saturday" );
 	assertTrue( friday > sunday, "friday > sunday" );
 	
+}
+
+void testDayOfWeekSuccessor(){
+	assertEquals( monday, sunday.successor );
+	assertEquals( tuesday,  monday.successor );
+	assertEquals( wednesday, tuesday.successor );
+	assertEquals( thursday, wednesday.successor );
+	assertEquals( friday, thursday.successor );
+	assertEquals( saturday, friday.successor );
+	assertEquals( sunday, saturday.successor );	
+}
+
+void testDayOfWeekPredecessor(){
+	assertEquals( saturday, sunday.predecessor );
+	assertEquals( friday, saturday.predecessor );
+	assertEquals( thursday, friday.predecessor );
+	assertEquals( wednesday, thursday.predecessor );
+	assertEquals( tuesday, wednesday.predecessor );
+	assertEquals( monday, tuesday.predecessor );
+	assertEquals( sunday, monday.predecessor );
+}
+
+void testIterateMondayToSunday(){
+	fail("Ceylon compiler can not handle covariant ranges.");
+	
+	variable StringBuilder sb := StringBuilder().append("|");
+	for (DayOfWeek wd in weekdays.from(monday).to(sunday)){
+	}
+	value actual = sb.string;
+	value expected = "|monday|tuesday|wednesday|thursday|friday|saturday|sunday|";
+	assertEquals(expected, actual, "Should be able to iterate over from monday to sunday.");
+}
+void testIterateSundayToSaturday(){
+	fail("Ceylon compiler can not handle covariant ranges.");
+	//value expected = "|monday|tuesday|wednesday|thursday|friday|saturday|sunday|";
+	//variable StringBuilder sb := StringBuilder().append("|");
+	//for (DayOfWeek dow in monday .. sunday){
+	//	sb := sb.append(dow.string).append("|");
+	//}
+	//value actual = sb.string;
+	//assertEquals(expected, actual, "Should be able to iterate over from monday to sunday.");
 }
