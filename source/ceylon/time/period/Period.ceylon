@@ -85,11 +85,11 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	
 	doc "Checks if this period is equal to another period."
 	shared actual Boolean equals(Object that){
-		if (this == that){
-			return true;
-		}
-		
 		if (is Period that) {
+			if (this === that){
+				return true;
+			}
+			
 			return (this.years==that.years
 			     && this.months==that.years
 			     && this.days==that.years
