@@ -7,42 +7,6 @@ shared interface Time
 	
 }
 
-doc "number of full hour per day"
-shared Integer hoursPerDay = 24;
-
-doc "Number of minutes in a typical day.
-     Not accounting for discrepancies around DST."
-shared Integer minutesPerHour = 60;
-
-doc "Number of minutes in a typical day.
-     Not accounting for discrepancies around DST."
-shared Integer minutesPerDay = 1440;
-
-doc "Number of seconds in a minute."
-shared Integer secondsPerMinute = 60;
-
-doc "Number of seconds in an hour"
-shared Integer secondsPerHour = 3600;
-
-doc "Number of seconds in an average day.
-     Not accounting for discrepancies around DST
-     or leap seconds."
-shared Integer secondsPerDay = 86400;
-
-doc "Number of milliseconds in a second."
-shared Integer millisPerSecond = 1000;
-
-doc "Number of milliseconds in a minute."
-shared Integer millisPerMinute = 60000;
-
-doc "Number of milliseconds in an hour."
-shared Integer millisPerHour = 3600000;
-
-doc "Number of milliseconds in an average day.
-     Not accounting for discrepancies around DST
-     or leap seconds."
-shared Integer millisPerDay = 86400000;
-
 doc "create new instance of Time"
 shared Time time(Integer hour, Integer minutes=0, Integer seconds=0, Integer millis=0){
 	value hh = (hour % hoursPerDay) * millisPerHour;

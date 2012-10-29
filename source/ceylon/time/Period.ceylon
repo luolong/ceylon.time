@@ -233,13 +233,11 @@ doc "Returns a copy of this period with the specified number of years subtracted
 		};
 	}
 
-	//TODO: How can we know wich instant we should create? 
-	//shared Period from(Instant instant) {
-	//	return Period {
-	//		milliseconds = instant.millis;
-	//	}.normalized();
+	//TODO:  
+	//shared Instant from( Instant instant ) {
 	//}
 
+	//TODO: Some options: Make it high order method, change it to builder, split interfaces for time and date...   
 	shared actual Period toTimeOnly() {
 		if (years == 0 && months == 0 && days == 0) {
             return this;
@@ -252,6 +250,7 @@ doc "Returns a copy of this period with the specified number of years subtracted
 		};
     }
 
+	//TODO: Some options: Make it high order method, change it to builder, split interfaces for time and date...
 	shared actual Period toDateOnly() {
 		if( hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0 ) {
             return this;

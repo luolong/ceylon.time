@@ -1,9 +1,5 @@
 import ceylon.language { Integer }
-doc "A day-of-week, such as 'Tuesday'."
-//literal {
-//	format = 'monday|tuesday|wednesday|thursday|friday|saturday|sunday';
-//	parser = parseDayOfWeek;
-//}
+doc "A day-of-week, such as 'tuesday'."
 shared abstract class DayOfWeek(integer) 
 	   of monday | tuesday | wednesday | thursday | friday | saturday | sunday 
        satisfies Ordinal<DayOfWeek> & Comparable<DayOfWeek> {

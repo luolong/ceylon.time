@@ -7,20 +7,8 @@ doc "An interface for date objects in the ISO-8601 calendar system,
 	This interface also defines access to other date fields such as 
 	day-of-year, day-of-week and week-of-year."
 shared interface Date
-		satisfies ReadableDate & DateBehavior<Date> & Ordinal<Date> & Comparable<Date>{
-		
-	//TODO: Should it go to ReadableDate? 
-	doc "number of calendar days since ERA"
-	shared formal Integer dayOfEra;
+	   satisfies ReadableDate & DateBehavior<Date> & Ordinal<Date> & Comparable<Date>{
 	
-}
-
-//TODO: what?
-abstract class Algorithm() {
-	shared formal Integer year();
-	shared formal Integer month();
-	shared formal Integer day();
-	shared formal Boolean leapYear();
 }
 
 abstract class AbstractDate(dayOfEra)
@@ -40,14 +28,6 @@ abstract class AbstractDate(dayOfEra)
 doc "Default implementation of a gregorian calendar"
 class GregorianDate(Integer d) 
 	  extends AbstractDate(d){
-
-	Integer daysPerCycle = 146097;
-    /**
-     * The number of days from year zero to year 1970.
-     * There are five 400 year cycles from year zero to 2000.
-     * There are 7 leap years from 1970 to 2000.
-     */
-    Integer days_0000_TO_1970 = (daysPerCycle * 5) - (30 * 365 + 7);
 		
 	// Compute date values from the provided date
 	variable Integer y := (10000*d + 14780)/3652425;
@@ -215,7 +195,6 @@ doc "parses a Date from ISO date formatted string (YYYY-MM-DD)"
 shared Date parseDate(String string){
 	return bottom;
 }
-
 
 doc "Returns a date based on the specified year, month and day-ofMonth values"
 shared Date date(Integer year, Integer|MonthOfYear month, Integer date){

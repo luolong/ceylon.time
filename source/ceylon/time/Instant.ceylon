@@ -1,4 +1,5 @@
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
+import ceylon.time.base { ReadableInstant }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -14,10 +15,10 @@ doc "A specific instant of time on a continuous time-scale.
      any time-zone offsets or geographical locations"
      
 shared class Instant(millis) 
-	satisfies Comparable<Instant> {
+	satisfies ReadableInstant & Comparable<Instant> {
 	
 	doc "Internal value of an instant as a number of milliseconds since january 1st 1974 UTC"
-	shared Integer millis;
+	shared actual Integer millis;
 	
 	doc "Adds a period to this instant"
 	shared Instant plus(Duration|Period other){

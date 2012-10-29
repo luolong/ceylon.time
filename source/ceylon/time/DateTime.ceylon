@@ -37,6 +37,10 @@ shared class DateTimeImpl( date, time ) satisfies DateTime {
 	shared actual Integer dayOfYear {
 		return date.dayOfYear;
 	}
+	
+	shared actual Integer dayOfEra {
+		return date.dayOfEra;
+	}
 
 	shared actual Integer year {
 		return date.year;

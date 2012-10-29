@@ -17,6 +17,9 @@ shared interface ReadableDate {
 	doc "Day of the year."
 	shared formal Integer dayOfYear;
 	
+	doc "number of calendar days since ERA"
+	shared formal Integer dayOfEra;
+	
 	doc "Week number of the year."
 	shared formal Integer weekOfYear;
 	
