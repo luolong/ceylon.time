@@ -2,82 +2,7 @@ import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time { 
 	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour 
 }
-import ceylon.time.base { ReadablePeriod, DateBehavior, TimeBehavior, DateTimeBehavior }
-
-doc "A constant for a period of zero."
-shared Period zero = Period(0, 0, 0, 0, 0, 0, 0);
-
-doc "A constant for a period of one second."
-shared Period oneSecond = seconds(1);
-
-doc "A constant for a period of one minute."
-shared Period oneMinute = minutes(1);
-
-doc "A constant for a period of one hour."
-shared Period oneHour = hours(1);
-
-doc "A constant for a period of one day."
-shared Period oneDay = days(1);
-
-doc "A constant for a period of one week (7 days)"
-shared Period oneWeek = days(7);
-
-doc "A constant for a period of one month"
-shared Period oneMonth = months(1);
-
-doc "A constant for a period of one year"
-shared Period oneYear = years(1);
-
-
-doc "Obtains a 'years' from a number of days."
-shared Period years(Integer years){
-	return Period{
-		years=years;
-	};
-}
-
-doc "Obtains a 'months' from a number of days."
-shared Period months(Integer months){
-	return Period{
-		months=months;
-	};
-}
-
-doc "Obtains a 'period' from a number of days."
-shared Period days(Integer days){
-	return Period{ 
-		days=days; 
-	};
-}
-
-doc "Obtains a 'period' from a number of hours"
-shared Period hours(Integer hours){
-	return Period{
-		hours=hours;
-	};
-}
-
-doc "Obtains a 'period' from a number of minutes"
-shared Period minutes(Integer minutes){
-	return Period{
-		minutes=minutes;
-	};
-}
-
-doc "Obtains a 'period' from a number of seconds"
-shared Period seconds(Integer seconds){
-	return Period{
-		seconds=seconds;
-	};
-}
-
-doc "Obtains a 'period' from a number of seconds"
-shared Period milliseconds(Integer milliseconds){
-	return Period{ 
-		milliseconds=milliseconds;
-	};
-}
-
+import ceylon.time.base { ReadablePeriod, DateTimeBehavior }
 
 doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      minute, second and nanosecond units, such as '3 Months, 4 Days and 7 Hours'.
@@ -113,12 +38,11 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	
 	doc "Checks if this period is equal to another period."
 	shared actual Boolean equals(Object that){
-		//TODO: We need this?
-		//if (this == that){
-		//	return true;
-		//}
-		
 		if (is Period that) {
+			if (this === that){
+				return true;
+			}
+
 			return (this.years==that.years
 			     && this.months==that.months
 			     && this.days==that.days
@@ -132,46 +56,18 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	}
 	
 	shared actual Comparison compare(Period other) {
-	//TODO: Should we always normalize or save the nanoseconds?
-		
-	//TODO: Should it work?
-		//return	         ( years.compare( other.years )   != equal ) then years.compare( other.years )
-		//				else ( months.compare( other.months ) != equal ) then months.compare(other.months)
-		//				else ( days.compare(other.days)       != equal ) then days.compare(other.days)
-		//				else ( hours.compare(other.hours)     != equal ) then hours.compare(other.hours)
-		//				else ( minutes.compare(other.minutes) != equal ) then minutes.compare(other.minutes)
-		//				else ( seconds.compare(other.seconds) != equal ) then seconds.compare(other.seconds)
-		//				else milliseconds.compare(other.milliseconds);
-
 		Period thisNormalized = this.normalized();
 		Period otherNormalized = other.normalized();
-
-		if ( thisNormalized.years.compare( otherNormalized.years )   != equal ) {
-			return thisNormalized.years.compare( otherNormalized.years );
-		} 
 		
-		if ( thisNormalized.months.compare( otherNormalized.months ) != equal ) {
-			return thisNormalized.months.compare(otherNormalized.months);
-		}
+		return     thisNormalized.years != otherNormalized.years      then thisNormalized.years   <=> otherNormalized.years 
+			else ( thisNormalized.months != otherNormalized.months    then thisNormalized.months  <=> otherNormalized.months
+			else ( thisNormalized.days != otherNormalized.days        then thisNormalized.days    <=> otherNormalized.days
+			else ( thisNormalized.hours != otherNormalized.hours      then thisNormalized.hours   <=> otherNormalized.hours
+			else ( thisNormalized.minutes != otherNormalized.minutes  then thisNormalized.minutes <=> otherNormalized.minutes
+			else ( thisNormalized.seconds != otherNormalized.seconds  then thisNormalized.seconds <=> otherNormalized.seconds
+			else   thisNormalized.milliseconds <=> otherNormalized.milliseconds ) ) ) ) );
+	}	
 
-		if ( thisNormalized.days.compare(otherNormalized.days) != equal ) {
-			return thisNormalized.days.compare(otherNormalized.days);
-		}
-
-		if ( thisNormalized.hours.compare(otherNormalized.hours) != equal ) {
-			return thisNormalized.hours.compare(otherNormalized.hours);
-		}
-
-		if ( thisNormalized.minutes.compare(otherNormalized.minutes) != equal ) {
-			return thisNormalized.minutes.compare(otherNormalized.minutes);
-		}
-
-		if ( thisNormalized.seconds.compare(otherNormalized.seconds) != equal ) {
-			return thisNormalized.seconds.compare(otherNormalized.seconds);
-		}
-		return thisNormalized.milliseconds.compare(otherNormalized.milliseconds);
-	}
-	
 	doc "Checks if this period is zero-length."
 	shared Boolean isZero(){
 		return this == zero;
@@ -345,8 +241,6 @@ doc "Returns a copy of this period with the specified number of years subtracted
 	//}
 
 	shared actual Period toTimeOnly() {
-		//TODO: Wating unary operator
-        //if ((years | months | days) == 0) {
 		if (years == 0 && months == 0 && days == 0) {
             return this;
         }
@@ -359,8 +253,6 @@ doc "Returns a copy of this period with the specified number of years subtracted
     }
 
 	shared actual Period toDateOnly() {
-		//TODO: Should we have something similar?
-        //if ( nanos == 0) {
 		if( hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0 ) {
             return this;
         }
@@ -383,10 +275,9 @@ doc "Returns a copy of this period with the specified number of years subtracted
 		month to another and depending on the leap year.
 		"
 	shared actual Period normalized(){
-		//TODO: Should we test equals?
-        //if (this == zero) {
-        //    return zero;
-        //}
+        if (this == zero) {
+            return zero;
+        }
         
         value years = this.years + this.months / 12;
         value months = this.months % 12;
@@ -405,7 +296,7 @@ doc "Returns a copy of this period with the specified number of years subtracted
         return Period {
             years = years;
             months = months;
-            days = this.days;
+            days = days;
             hours = hours;
             minutes = minutes;
             seconds = seconds;
