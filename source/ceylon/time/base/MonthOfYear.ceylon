@@ -59,83 +59,83 @@ shared MonthOfYear monthOfYear(Integer|MonthOfYear month){
 doc "January. The first month of a Gregorian/Julian calendar system."
 shared object january extends MonthOfYear(1) {
 	shared actual String string = "january";
-	shared actual MonthOfYear predecessor = december;  
-	shared actual MonthOfYear successor = february;
+	shared actual MonthOfYear predecessor { return december; }  
+	shared actual MonthOfYear successor { return february; }
 }
 
 doc "February. The second month of a gregorian calendar system."
 shared object february extends MonthOfYear(2) {
 	shared actual String string = "february";
-	shared actual MonthOfYear predecessor = january;  
-	shared actual MonthOfYear successor = march;
+	shared actual MonthOfYear predecessor { return january; }  
+	shared actual MonthOfYear successor { return march; }
 }
 
 doc "March. The third month of a gregorian calendar system."
 shared object march extends MonthOfYear(3) {
 	shared actual String string = "march";
-	shared actual MonthOfYear predecessor = february;  
-	shared actual MonthOfYear successor = april;
+	shared actual MonthOfYear predecessor { return february; }  
+	shared actual MonthOfYear successor { return april; }
 }
 
 doc "April. The fourth month of a gregorian calendar system."
 shared object april extends MonthOfYear(4) {
 	shared actual String string = "april";
-	shared actual MonthOfYear predecessor = march;  
-	shared actual MonthOfYear successor = may;
+	shared actual MonthOfYear predecessor { return march; }  
+	shared actual MonthOfYear successor { return may; }
 }
 
 doc "May. The fifth month of a gregorian calendar system."
 shared object may extends MonthOfYear(5) {
 	shared actual String string = "may";
-	shared actual MonthOfYear predecessor = april;  
-	shared actual MonthOfYear successor = june;
+	shared actual MonthOfYear predecessor { return april; }  
+	shared actual MonthOfYear successor { return june; }
 }
 
 doc "June. The sixth month of a gregorian calendar system."
 shared object june extends MonthOfYear(6) {
 	shared actual String string = "june";
-	shared actual MonthOfYear predecessor = may;
-	shared actual MonthOfYear successor = july;
+	shared actual MonthOfYear predecessor { return may; }
+	shared actual MonthOfYear successor { return july; }
 }
 
 doc "July. The seventh month of a gregorian calendar system."
 shared object july extends MonthOfYear(7) {
 	shared actual shared actual String string = "july";
-	shared actual MonthOfYear predecessor = june;  
-	shared actual MonthOfYear successor = august;
+	shared actual MonthOfYear predecessor { return june; }  
+	shared actual MonthOfYear successor { return august; }
 }
 
 doc "August. The eigth month of a gregorian calendar system."
 shared object august extends MonthOfYear(8) {
 	shared actual shared actual String string = "august";
-	shared actual MonthOfYear predecessor = july;  
-	shared actual MonthOfYear successor = september;
+	shared actual MonthOfYear predecessor { return july; }  
+	shared actual MonthOfYear successor { return september; }
 }
 
 doc "September. The nineth month of a gregorian calendar system."
 shared object september extends MonthOfYear(9) {
 	shared actual shared actual String string = "september";
-	shared actual MonthOfYear predecessor = august;  
-	shared actual MonthOfYear successor = october;
+	shared actual MonthOfYear predecessor { return august; }  
+	shared actual MonthOfYear successor { return october; }
 }
 
 doc "October. The tenth month of a gregorian calendar system."
 shared object october extends MonthOfYear(10) {
 	shared actual shared actual String string = "october";
-	shared actual MonthOfYear predecessor = september;  
-	shared actual MonthOfYear successor = november;
+	shared actual MonthOfYear predecessor { return september; }  
+	shared actual MonthOfYear successor { return november; }
 }
 
 doc "Nobember. The eleventh month of a gregorian calendar system."
 shared object november extends MonthOfYear(11) {
 	shared actual shared actual String string = "november";
-	shared actual MonthOfYear predecessor = october;  
-	shared actual MonthOfYear successor = december;
+	shared actual MonthOfYear predecessor { return october; }  
+	shared actual MonthOfYear successor { return december; }
 }
 
 doc "December. The twelveth (last) month of a gregorian calendar system."
 shared object december extends MonthOfYear(12) {
 	shared actual shared actual String string = "december";
-	shared actual MonthOfYear predecessor = november;  
-	shared actual MonthOfYear successor = january;
+	shared actual MonthOfYear predecessor { return november; }  
+	shared actual MonthOfYear successor { return january; }
 }
