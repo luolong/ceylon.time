@@ -12,7 +12,7 @@ shared void testDates() {
 	assertTrue( data_1982_12_13.dayOfEra == 724197 );
 	
 	assertTrue( data_1982_12_13.dayOfWeek == monday );
- 
+
  	//TODO: Waiting fix from ceylon language
  	//for ( DayOfWeek day in  monday..sunday ) {
  	//	
