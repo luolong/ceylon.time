@@ -1,14 +1,25 @@
 import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek }
 import ceylon.time { Date }
 doc "Default implementation of a gregorian calendar"
-shared class GregorianDate(Integer yearParameter, Integer|MonthOfYear monthParameter, Integer dateParameter) 
-	  extends AbstractDate( yearParameter, monthParameter, dateParameter ) {
+shared class GregorianDate( Integer dayOfEra ) 
+	  extends AbstractDate( dayOfEra ) {
 	
-	shared actual Integer dayOfMonth = dateParameter;
-	shared actual MonthOfYear month = monthOfYear(monthParameter);
-	shared actual Integer year = yearParameter;
-	
-	shared actual Integer dayOfEra = calculateDaysEra( year, month.integer, dayOfMonth); 
+	// Compute date values from the provided date
+	variable Integer y := (10000*dayOfEra + 14780)/3652425;
+	variable Integer ddd := dayOfEra - (365*y + y/4 - y/100 + y/400);
+	if (ddd < 0) {
+		y -= 1;
+		ddd := dayOfEra - (365*y + y/4 - y/100 + y/400);
+	}
+
+	value mi = (100*ddd + 52)/3060;
+	value mm = (mi + 2)%12 + 1;
+	y += (mi + 2)/12;
+	value dd = ddd - (mi*306 + 5)/10 + 1;
+
+	shared actual Integer dayOfMonth = dd;
+	shared actual MonthOfYear month = monthOfYear(mm);
+	shared actual Integer year = y;
 	
 	doc " The number of days in a 400 year cycle."
 	shared Integer daysPerCycle = 146097;
@@ -109,10 +120,3 @@ shared class GregorianDate(Integer yearParameter, Integer|MonthOfYear monthParam
     }
 
 } 
-
-doc "Calculates the number of days according to gregorian calendar rules"
-Integer calculateDaysEra(Integer yyyy, Integer mm, Integer d) {
-	value m = (mm + 9) % 12;
-	value y = yyyy - m/10;
-	return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
-}

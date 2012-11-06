@@ -377,10 +377,10 @@ shared object monthOfYear extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
-			minimalSmallest = 0;
-			minimalLargest = 0;
-			maximumSmallest = 11;
-			maximumLargest = 11;
+			minimalSmallest = 1;
+			minimalLargest = 1;
+			maximumSmallest = 12;
+			maximumLargest = 12;
 		};
 	}
 

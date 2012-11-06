@@ -1,4 +1,4 @@
-import ceylon.time.impl { GregorianDate }
+import ceylon.time.impl { GregorianDate, yearField = year, monthField = monthOfYear, dayOfMonthField = dayOfMonth }
 import ceylon.time.base { ReadableDate, MonthOfYear, monthOfYear, DateBehavior }
 
 doc "An interface for date objects in the ISO-8601 calendar system,
@@ -31,11 +31,27 @@ shared Date date(Integer year, Integer|MonthOfYear month, Integer date){
 	//if (year > 1582 || (year == 1582 && m <= march)){
 	//	return JulianDate()
 	//}
-	return GregorianDate(year, m.integer, date);
+	return GregorianDate(g(year, m.integer, date));
 } 
 
 doc "Calculates the number of days according to julian calendar rules"
 Integer j(Integer yyyy, Integer mm, Integer d) {
+	value m = (mm + 9) % 12;
+	value y = yyyy - m/10;
+	return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
+}
+
+doc "Calculates the number of days according to gregorian calendar rules"
+Integer g(Integer yyyy, Integer mm, Integer d) {
+
+	yearField.checkValidValue( yyyy );
+		
+	value mo = monthOfYear(mm);
+	monthField.checkValidValue( mo.integer );
+			
+	dayOfMonthField.checkValidValue(d);
+
+
 	value m = (mm + 9) % 12;
 	value y = yyyy - m/10;
 	return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );

@@ -1,17 +1,8 @@
 import ceylon.time { Date }
-import ceylon.time.base { MonthOfYear, getMonthOfYear = monthOfYear }
-import ceylon.time.impl { yearField = year, monthField = monthOfYear, dayOfMonthField = dayOfMonth } 
-shared abstract class AbstractDate( Integer yearParameter, Integer|MonthOfYear monthParameter, Integer dateParameter )
+shared abstract class AbstractDate( dayOfEra )
 	satisfies Date {
 
-	if ( is GregorianDate this ) {
-		yearField.checkValidValue( yearParameter );
-		
-		value m = getMonthOfYear(monthParameter);
-		monthField.checkValidValue( m.integer );
-		
-        dayOfMonthField.checkValidValue(dateParameter);
-	}
+	shared actual Integer dayOfEra;
 	
 	shared actual Comparison compare(Date other) {
 		return dayOfEra <=> other.dayOfEra;
