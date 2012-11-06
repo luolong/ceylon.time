@@ -86,36 +86,45 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
 	shared actual GregorianDate minusDays(Integer days) {
-    	return bottom;
+    	return plusDays(-days);
     }
     shared actual GregorianDate minusMonths(Integer months) {
-    	return bottom;
+    	return plusMonths(-months);
     }
     shared actual GregorianDate minusYears(Integer years) {
-    	return bottom;
+    	return plusYears(-years);
     }
+
+	//TODO: We need this?
     shared actual GregorianDate normalized() {
     	return bottom;
     }
+
+	//TODO: We need this?
     shared actual GregorianDate plus(Date other) {
-    	return bottom;
+    	return GregorianDate( dayOfEra + other.dayOfEra );
     }
     shared actual GregorianDate plusDays(Integer days) {
-    	return bottom;
+    	return GregorianDate( dayOfEra + days );
     }
     shared actual GregorianDate plusMonths(Integer months) {
-    	return bottom;
+		//TODO: Should we calc max days in each month added?
+    	return GregorianDate( dayOfEra + ( months * 30 ) );
     }
     shared actual GregorianDate plusYears(Integer years) {
-    	return bottom;
+		//TODO: Should we calc leap years?
+    	return GregorianDate( dayOfEra + ( years * 365 ) );
     }
     shared actual GregorianDate withDays(Integer days) {
-    	return bottom;
+		//TODO: Should we check validDay? or normalize?
+    	return GregorianDate( dayOfEra - dayOfMonth + days );
     }
     shared actual GregorianDate withMonths(Integer months) {
+		//TODO: Should we check validMonth? or normalize?
     	return bottom;
     }
     shared actual GregorianDate withYears(Integer years) {
+		//TODO: Should we check validYear? or normalize?
     	return bottom;
     }
 
