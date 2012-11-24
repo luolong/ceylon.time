@@ -1,4 +1,4 @@
-import ceylon.time.base { monday, tuesday, wednesday, thursday, friday, saturday, sunday, DayOfWeek }
+import ceylon.time.base { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
 import com.redhat.ceylon.sdk.test { assertTrue }
 
 void testDayOfWeek(){
