@@ -70,9 +70,6 @@ shared class TimeOfDay(millisOfDay)
 	shared actual Time minusSeconds(Integer seconds) {
 		return bottom;
 	}
-	shared actual Time normalized() {
-		return bottom;
-	}
 	shared actual Time plusHours(Integer hours) {
 		return bottom;
 	}

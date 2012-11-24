@@ -2,7 +2,15 @@ shared abstract class MonthOfYear(integer)
    of january | february | march | april | may | june | july | august | september | october | november | december
    satisfies Ordinal<MonthOfYear> & Comparable<MonthOfYear>{
 	
-	doc "Ordinal number of the month of year."
+	doc "Ordinal number of the month of year.
+			Where:
+				january  = 1
+				february = 2
+					.
+					.
+					.
+				december = 12
+		"
 	shared Integer integer;
 	
 	doc "Returns number of days in this month"

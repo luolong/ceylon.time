@@ -2,7 +2,7 @@ import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time.impl { 
 	minuteOfHour, secondOfMinute, secondOfHour, milliOfSecond 
 }
-import ceylon.time.base { ReadablePeriod, DateTimeBehavior }
+import ceylon.time.base { ReadablePeriod, PeriodBehavior }
 
 doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      minute, second and nanosecond units, such as '3 Months, 4 Days and 7 Hours'.
@@ -11,7 +11,7 @@ doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      "
 shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
 		satisfies 		ReadablePeriod
-					&	DateTimeBehavior<Period>
+					&	PeriodBehavior<Period>
 					& 	Comparable<Period> 
 					& 	Summable<Period> {
 
@@ -90,7 +90,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	}
 	
 	doc "Returns a copy of this period with the specified amount of days."
-	shared actual Period withDays(Integer days){
+	shared actual Period withDaysOfMonth(Integer days){
 		if (days == this.days){
 			return this;
 		}
@@ -150,7 +150,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		if (days == 0){
 			return this;
 		}
-		return withDays( this.days + days );
+		return withDaysOfMonth( this.days + days );
 	}
 	
 	doc "Returns a copy of this period with the specified number of hours added."
@@ -236,32 +236,6 @@ doc "Returns a copy of this period with the specified number of years subtracted
 	//TODO:  
 	//shared Instant from( Instant instant ) {
 	//}
-
-	//TODO: Some options: Make it high order method, change it to builder, split interfaces for time and date...   
-	shared actual Period toTimeOnly() {
-		if (years == 0 && months == 0 && days == 0) {
-            return this;
-        }
-        return Period {
-			hours = hours;
-			minutes = minutes;
-			seconds = seconds;
-			milliseconds = milliseconds;
-		};
-    }
-
-	//TODO: Some options: Make it high order method, change it to builder, split interfaces for time and date...
-	shared actual Period toDateOnly() {
-		if( hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0 ) {
-            return this;
-        }
-        return Period {
-			years = years;
-			months = months;
-			days = days;
-		};
-    }
-	
 
 	doc "Returns a copy of this period with all amounts normalized to the 
 		standard ranges for date-time fields.

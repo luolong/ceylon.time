@@ -114,12 +114,6 @@ shared class DateTimeImpl( date, time ) satisfies DateTime {
 	shared actual DateTime minusYears(Integer years) {
 		return bottom;
 	}
-	shared actual DateTime normalized() {
-		return bottom;
-	}
-	shared actual DateTime plus(DateTime other) {
-		return bottom;
-	}
 	shared actual DateTime plusDays(Integer days) {
 		return bottom;
 	}
@@ -147,7 +141,7 @@ shared class DateTimeImpl( date, time ) satisfies DateTime {
 	shared actual DateTime toTimeOnly() {
 		return bottom;
 	}
-	shared actual DateTime withDays(Integer days) {
+	shared actual DateTime withDayOfMonth(Integer dayOfMonth) {
 		return bottom;
 	}
 	shared actual DateTime withHours(Integer hours) {
@@ -159,16 +153,21 @@ shared class DateTimeImpl( date, time ) satisfies DateTime {
 	shared actual DateTime withMinutes(Integer minutes) {
 		return bottom;
 	}
-	shared actual DateTime withMonths(Integer months) {
+	shared actual DateTime withMonth(Integer|MonthOfYear month) {
 		return bottom;
 	}
 	shared actual DateTime withSeconds(Integer seconds) {
 		return bottom;
 	}
-	shared actual DateTime withYears(Integer years) {
+	shared actual DateTime withYear(Integer year) {
 		return bottom;
 	}
- 
+	shared actual DateTime plusWeeks(Integer weeks) {
+		return bottom;
+	}
+ 	shared actual DateTime minusWeeks(Integer weeks) {
+		return bottom;
+	}
 }
 
 doc "Returns a date based on the specified year, month and day-ofMonth values"

@@ -31,7 +31,7 @@ shared Date date(Integer year, Integer|MonthOfYear month, Integer date){
 	//if (year > 1582 || (year == 1582 && m <= march)){
 	//	return JulianDate()
 	//}
-	return GregorianDate(g(year, m.integer, date));
+	return GregorianDate(gregorian(year, m.integer, date));
 } 
 
 doc "Calculates the number of days according to julian calendar rules"
@@ -41,8 +41,9 @@ Integer j(Integer yyyy, Integer mm, Integer d) {
 	return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
 }
 
+//TODO: We need it like a high order method... something like dayOfEra.from( Chrono, yyyy, mm, d)
 doc "Calculates the number of days according to gregorian calendar rules"
-Integer g(Integer yyyy, Integer mm, Integer d) {
+shared Integer gregorian(Integer yyyy, Integer mm, Integer d) {
 
 	yearField.checkValidValue( yyyy );
 		

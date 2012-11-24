@@ -1,5 +1,6 @@
 import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek }
-import ceylon.time { Date }
+import ceylon.time { gregorian }
+import ceylon.time.impl { calcLeapYear = leapYear }
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
 	  extends AbstractDate( dayOfEra ) {
@@ -35,21 +36,7 @@ shared class GregorianDate( Integer dayOfEra )
 	shared actual Integer weekOfYear = 0;
 	
 	doc "True, if this date is a leap year according to gregorian clendar leap year rules."
-	shared actual Boolean leapYear {
-		if (year % 400 == 0){
-			return true;
-		}
-		
-		if (year % 100 == 0){
-			return false;
-		}
-		
-		if (year % 4 == 0){
-			return true;
-		}
-		
-		return false;
-	}
+	shared actual Boolean leapYear = calcLeapYear( year );
 
 	shared actual Integer dayOfYear = firstDayOfYear( month, leapYear ) + dayOfMonth -1;
 	
@@ -95,37 +82,84 @@ shared class GregorianDate( Integer dayOfEra )
     	return plusYears(-years);
     }
 
-	//TODO: We need this?
-    shared actual GregorianDate normalized() {
-    	return bottom;
-    }
-
-	//TODO: We need this?
-    shared actual GregorianDate plus(Date other) {
-    	return GregorianDate( dayOfEra + other.dayOfEra );
-    }
     shared actual GregorianDate plusDays(Integer days) {
+		if ( days == 0 ) {
+			return this;
+		}
     	return GregorianDate( dayOfEra + days );
     }
     shared actual GregorianDate plusMonths(Integer months) {
-		//TODO: Should we calc max days in each month added?
-    	return GregorianDate( dayOfEra + ( months * 30 ) );
+		if ( months == 0 ) {
+			return this;
+		}
+
+		Integer totalMonths = year * 12 + ( month.integer - 1);
+		Integer calculedMonths = totalMonths + months;
+
+		Integer newYear = calculedMonths / 12; 
+		Integer newMonth = floorMod(calculedMonths, 12) + 1;
+
+    	return GregorianDate( gregorian(newYear, newMonth, resolveLastValidDay(newMonth, dayOfMonth, leapYear) ));
     }
+    
     shared actual GregorianDate plusYears(Integer years) {
-		//TODO: Should we calc leap years?
-    	return GregorianDate( dayOfEra + ( years * 365 ) );
+    	if ( years == 0 ) {
+    		return this;    	}
+    	
+    	Integer newYear = year + years;
+    	return GregorianDate( gregorian(newYear, month.integer, resolveLastValidDay(month, dayOfMonth, calcLeapYear(newYear) )));
     }
-    shared actual GregorianDate withDays(Integer days) {
-		//TODO: Should we check validDay? or normalize?
-    	return GregorianDate( dayOfEra - dayOfMonth + days );
+    
+    shared actual GregorianDate plusWeeks(Integer weeks) {
+    	if ( weeks == 0 ) {
+    		return this;
+    	}
+    	return plusDays( weeks * 7 );
     }
-    shared actual GregorianDate withMonths(Integer months) {
-		//TODO: Should we check validMonth? or normalize?
-    	return bottom;
+    
+    shared actual GregorianDate minusWeeks(Integer weeks) {
+    	if ( weeks == 0 ) {
+    		return this;
+    	}
+    	return minusDays( weeks * 7 );
     }
-    shared actual GregorianDate withYears(Integer years) {
-		//TODO: Should we check validYear? or normalize?
-    	return bottom;
+    
+    shared actual GregorianDate withDayOfMonth(Integer day) {
+        if ( day == dayOfMonth ) {
+            return this;
+        }
+    	return GregorianDate( dayOfEra - dayOfMonth + resolveLastValidDay(month, day, leapYear));
     }
+    shared actual GregorianDate withMonth(Integer|MonthOfYear month) {
+        MonthOfYear newMonth = monthOfYear(month);
+        if ( month == this.month ) {
+            return this;
+        }
+        
+    	return GregorianDate( gregorian(year, newMonth.integer, resolveLastValidDay(newMonth, dayOfMonth, leapYear) ));
+    }
+    shared actual GregorianDate withYear(Integer year) {
+    	if ( year == this.year ) {
+    		return this;
+    	}
+		return GregorianDate( gregorian(year, month.integer, resolveLastValidDay(month, dayOfMonth, calcLeapYear(year)) ));
+    }
+    
+    shared actual Boolean equals( Object other ) {
+        if (is GregorianDate other) {
+			if (this === other){
+				return true;
+			}
+			
+			return (this.year == other.year
+			     && this.month==other.month
+			     && this.dayOfMonth==other.dayOfMonth );
+		}
+		return false;
+    }
+
+	shared actual String string {
+		return "" year "-" pad(month.integer) "-" pad( dayOfMonth ) "";
+	}
 
 } 

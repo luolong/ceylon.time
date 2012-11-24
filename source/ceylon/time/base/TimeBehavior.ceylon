@@ -37,15 +37,4 @@ shared interface TimeBehavior<Element>
 	doc "Returns a copy of this period with the specified number of nonoseconds subtracted."
 	shared formal Element minusMilliseconds(Integer milliseconds);
 	
-	doc "Returns a copy of this period with all amounts normalized to the 
-		standard ranges for date-time fields.
-		
-		Two normalizations occur, one for years and months, and one for
-		hours, minutes, seconds and nanoseconds.
-		
-		Days are not normalized, as a day may vary in length at daylight savings cutover.
-		Neither is days normalized into months, as number of days per month varies from 
-		month to another and depending on the leap year.
-		"
-	shared formal Element normalized();
 }
