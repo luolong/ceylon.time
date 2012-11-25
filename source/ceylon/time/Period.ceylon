@@ -1,8 +1,8 @@
 import ceylon.math.whole{Whole, wholeNumber}
-import ceylon.time { 
-	secondsPerHour, secondsPerMinute, millisPerSecond, minutesPerHour 
+import ceylon.time.impl { 
+	minuteOfHour, secondOfMinute, secondOfHour, milliOfSecond 
 }
-import ceylon.time.base { ReadablePeriod, DateTimeBehavior }
+import ceylon.time.base { ReadablePeriod, PeriodBehavior }
 
 doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      minute, second and nanosecond units, such as '3 Months, 4 Days and 7 Hours'.
@@ -11,7 +11,7 @@ doc "An immutable period consisting of the ISO-8601 year, month, day, hour,
      "
 shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
 		satisfies 		ReadablePeriod
-					&	DateTimeBehavior<Period>
+					&	PeriodBehavior<Period>
 					& 	Comparable<Period> 
 					& 	Summable<Period> {
 
@@ -90,7 +90,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 	}
 	
 	doc "Returns a copy of this period with the specified amount of days."
-	shared actual Period withDays(Integer days){
+	shared actual Period withDaysOfMonth(Integer days){
 		if (days == this.days){
 			return this;
 		}
@@ -150,7 +150,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 		if (days == 0){
 			return this;
 		}
-		return withDays( this.days + days );
+		return withDaysOfMonth( this.days + days );
 	}
 	
 	doc "Returns a copy of this period with the specified number of hours added."
@@ -237,32 +237,6 @@ doc "Returns a copy of this period with the specified number of years subtracted
 	//shared Instant from( Instant instant ) {
 	//}
 
-	//TODO: Some options: Make it high order method, change it to builder, split interfaces for time and date...   
-	shared actual Period toTimeOnly() {
-		if (years == 0 && months == 0 && days == 0) {
-            return this;
-        }
-        return Period {
-			hours = hours;
-			minutes = minutes;
-			seconds = seconds;
-			milliseconds = milliseconds;
-		};
-    }
-
-	//TODO: Some options: Make it high order method, change it to builder, split interfaces for time and date...
-	shared actual Period toDateOnly() {
-		if( hours == 0 && minutes == 0 && seconds == 0 && milliseconds == 0 ) {
-            return this;
-        }
-        return Period {
-			years = years;
-			months = months;
-			days = days;
-		};
-    }
-	
-
 	doc "Returns a copy of this period with all amounts normalized to the 
 		standard ranges for date-time fields.
 		
@@ -281,16 +255,16 @@ doc "Returns a copy of this period with the specified number of years subtracted
         value years = this.years + this.months / 12;
         value months = this.months % 12;
         
-        variable Whole total := wholeNumber(this.hours * secondsPerHour)
-                              + wholeNumber(this.minutes * secondsPerMinute)
+        variable Whole total := wholeNumber(this.hours * (secondOfHour.range().getMaximum() + 1 ))
+                              + wholeNumber(this.minutes * ( secondOfMinute.range().getMaximum() + 1 ))
                               + wholeNumber(this.seconds);
         
-        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(millisPerSecond) ).integer;
-        total += wholeNumber(this.milliseconds) / wholeNumber(millisPerSecond);
-        value seconds = ( total % wholeNumber(secondsPerMinute) ).integer;
-        total := total / wholeNumber(secondsPerMinute);
-        value minutes = ( total % wholeNumber(minutesPerHour) ).integer;
-        value hours = ( total / wholeNumber(minutesPerHour) ).integer;
+        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( milliOfSecond.range().getMaximum() + 1 )) ).integer;
+        total += wholeNumber(this.milliseconds) / wholeNumber(( milliOfSecond.range().getMaximum() + 1 ));
+        value seconds = ( total % wholeNumber(( secondOfMinute.range().getMaximum() + 1 )) ).integer;
+        total := total / wholeNumber(( secondOfMinute.range().getMaximum() + 1 ));
+        value minutes = ( total % wholeNumber(minuteOfHour.range().getMaximum() + 1) ).integer;
+        value hours = ( total / wholeNumber(minuteOfHour.range().getMaximum() + 1) ).integer;
         
         return Period {
             years = years;
@@ -326,8 +300,8 @@ doc "Returns a copy of this period with the specified number of years subtracted
                 if (minutes != 0) {
                     buf.append(minutes.string).append('M');
                 }
-                value secondPart = seconds;
-                value milliPart = milliseconds;
+                //value secondPart = seconds;
+                //value milliPart = milliseconds;
 				//TODO: Ceylon does not have it, yet. Also waiting TimeZone Impl
                 //value secsMillisOr = secondPart | milliPart;
                 //if (secsNanosOr != 0) {  // if either non-zero
@@ -352,3 +326,5 @@ doc "Returns a copy of this period with the specified number of years subtracted
 	}
 
 }
+
+shared Period zero = Period();

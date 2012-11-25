@@ -3,7 +3,7 @@ shared interface DateTimeBehavior<Element>
 					given Element satisfies DateTimeBehavior<Element> {
 
 	shared formal Element toTimeOnly();
- 
+  
 	shared formal Element toDateOnly();
 
 }

@@ -1,9 +1,8 @@
-import ceylon.language { Integer }
 doc "A day-of-week, such as 'tuesday'."
 shared abstract class DayOfWeek(integer) 
 	   of monday | tuesday | wednesday | thursday | friday | saturday | sunday 
        satisfies Ordinal<DayOfWeek> & Comparable<DayOfWeek> {
-	
+	 
 	doc "Numeric value of the weekday"
 	shared Integer integer;
 
