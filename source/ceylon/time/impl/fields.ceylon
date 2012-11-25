@@ -1,6 +1,7 @@
 doc "Should have all informations about each field"
 shared abstract class Field(  ) 
-				of milliOfSecond | milliOfMinute | milliOfHour | milliOfDay | secondOfMinute | secondOfHour |secondOfDay | minuteOfHour | minuteOfDay | hourOfAmPm | hourOfDay | amPmOfDay | dayOfWeek | dayOfMonth | dayOfYear | epochOfDay | weekOfMonth | weekOfYear | monthOfYear | epochOfMonth | yearOfEra | year | era 
+				of milliPerSecond | milliPerMinute | milliPerHour | milliPerDay | secondPerMinute | secondPerHour |secondPerDay | minutePerHour | minutePerDay | hourPerAmPm | hourPerDay | amPmPerDay 
+								 | dayPerWeek | dayPerMonth | dayPerYear | epochPerDay | weekPerMonth | weekPerYear | monthPerYear | epochPerMonth | yearPerEra | year | era 
 				satisfies DateTimeField {
 
 	doc "
@@ -25,7 +26,7 @@ doc
 	This counts the millisecond within the second, from 0 to 999.
 	This field has the same meaning for all calendar systems.
 "
-shared object milliOfSecond extends Field() {
+shared object milliPerSecond extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -36,10 +37,13 @@ shared object milliOfSecond extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 1000;
+	}
+
 }
 
-
-shared object milliOfMinute extends Field() {
+shared object milliPerMinute extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -50,9 +54,13 @@ shared object milliOfMinute extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 60000;
+	}
+
 }
 
-shared object milliOfHour extends Field() {
+shared object milliPerHour extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -63,6 +71,10 @@ shared object milliOfHour extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 3600000;
+	}
+
 }
 
 doc
@@ -71,7 +83,7 @@ doc
 	This counts the millisecond within the day, from 0 to (24 * 60 * 60 * 1,000) - 1.
 	This field has the same meaning for all calendar systems.
 "
-shared object milliOfDay extends Field() {
+shared object milliPerDay extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -82,6 +94,10 @@ shared object milliOfDay extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 86400 * 1000;
+	}
+
 }
 
 doc
@@ -90,7 +106,7 @@ doc
 	This counts the second within the minute, from 0 to 59.
 	This field has the same meaning for all calendar systems.
 "
-shared object secondOfMinute extends Field() {
+shared object secondPerMinute extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -101,17 +117,25 @@ shared object secondOfMinute extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 60;
+	}
+
 }
 
-shared object secondOfHour extends Field() {
+shared object secondPerHour extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
 			minimalSmallest = 0;
 			minimalLargest = 0;
-			maximumSmallest = 3559;
-			maximumLargest = 3559;
+			maximumSmallest = 3599;
+			maximumLargest = 3599;
 		};
+	}
+
+	shared Integer getMaximumRepresentation() {
+		return 3600;
 	}
 
 }
@@ -122,7 +146,7 @@ doc
 	This counts the second within the day, from 0 to (24 * 60 * 60) - 1.
 	This field has the same meaning for all calendar systems.
 "
-shared object secondOfDay extends Field() {
+shared object secondPerDay extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -131,6 +155,10 @@ shared object secondOfDay extends Field() {
 			maximumSmallest = 86400 - 1;
 			maximumLargest = 86400 - 1;
 		};
+	}
+	
+	shared Integer getMaximumRepresentation() {
+		return 86400;
 	}
 
 }
@@ -141,7 +169,7 @@ doc
 	This counts the minute within the hour, from 0 to 59.
 	This field has the same meaning for all calendar systems.
 "
-shared object minuteOfHour extends Field() {
+shared object minutePerHour extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -152,6 +180,10 @@ shared object minuteOfHour extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 60;
+	}
+
 }
 
 doc 
@@ -160,7 +192,7 @@ doc
 	This counts the minute within the day, from 0 to (24 * 60) - 1.
 	This field has the same meaning for all calendar systems.
 "
-shared object minuteOfDay extends Field() {
+shared object minutePerDay extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -171,6 +203,10 @@ shared object minuteOfDay extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return (24 * 60);
+	}
+
 }
 
 doc
@@ -179,7 +215,7 @@ doc
 	This counts the hour within the AM/PM, from 0 to 11.
 	This field has the same meaning for all calendar systems.
 "
-shared object hourOfAmPm extends Field() {
+shared object hourPerAmPm extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -190,6 +226,10 @@ shared object hourOfAmPm extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 12;
+	}
+
 }
 
 doc
@@ -198,7 +238,7 @@ doc
 	This counts the hour within the day, from 0 to 23.
 	This field has the same meaning for all calendar systems.
 "
-shared object hourOfDay extends Field() {
+shared object hourPerDay extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -209,6 +249,10 @@ shared object hourOfDay extends Field() {
 		};
 	}
 
+	shared Integer getMaximumRepresentation() {
+		return 24;
+	}
+
 }
 
 doc 
@@ -217,7 +261,7 @@ doc
 	This counts the AM/PM within the day, from 0 (AM) to 1 (PM).
 	This field has the same meaning for all calendar systems.
 "
-shared object amPmOfDay extends Field() {
+shared object amPmPerDay extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -236,7 +280,7 @@ doc
 	For ISO-8601, the days are numbered from Monday (1) to Sunday (7).
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object dayOfWeek extends Field() {
+shared object dayPerWeek extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -257,7 +301,7 @@ doc
 	February has days from 1 to 28, or 29 in a leap year.
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object dayOfMonth extends Field() {
+shared object dayPerMonth extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -276,7 +320,7 @@ doc
 	For ISO-8601, the days are numbered from 1 to 365 in standard years and 1 to 366 in leap years.
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object dayOfYear extends Field() {
+shared object dayPerYear extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -297,7 +341,7 @@ doc
 	All other date fields in this enum can have a different meaning in a non-ISO calendar system.
 	By contrast, this field always has the same meaning, permitting interoperation between calendars.
 "
-shared object epochOfDay extends Field() {
+shared object epochPerDay extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -325,7 +369,7 @@ doc
 		- if the 5th day of the month is a Monday, week two starts on the 5th and the 1st to 4th is in week one<br />
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object weekOfMonth extends Field() {
+shared object weekPerMonth extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -354,7 +398,7 @@ doc
 	This field typically used with {@link #DAY_OF_WEEK}.
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object weekOfYear extends Field() {
+shared object weekPerYear extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -373,7 +417,7 @@ doc
 	For ISO-8601, the months are numbered from 1 to 12.
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object monthOfYear extends Field() {
+shared object monthPerYear extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -393,7 +437,7 @@ doc
 	Note that this uses the <i>local</i> time-line, ignoring offset and time-zone.
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object epochOfMonth extends Field() {
+shared object epochPerMonth extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
@@ -413,7 +457,7 @@ doc
 	The year-of-era is always positive.
 	This field may have a different meaning in a non-ISO calendar system.
 "
-shared object yearOfEra extends Field() {
+shared object yearPerEra extends Field() {
 
 	shared actual DateTimeValueRange range() {
 		return DateTimeValueRange {
