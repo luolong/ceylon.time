@@ -1,4 +1,4 @@
-import ceylon.time.impl { GregorianDate, yearField = year, monthField = monthOfYear, dayOfMonthField = dayOfMonth }
+import ceylon.time.impl { GregorianDate, yearField = year, dayOfMonthField = dayPerMonth, monthPerYear }
 import ceylon.time.base { ReadableDate, MonthOfYear, monthOfYear, DateBehavior }
 
 doc "An interface for date objects in the ISO-8601 calendar system,
@@ -48,7 +48,7 @@ shared Integer gregorian(Integer yyyy, Integer mm, Integer d) {
 	yearField.checkValidValue( yyyy );
 		
 	value mo = monthOfYear(mm);
-	monthField.checkValidValue( mo.integer );
+	monthPerYear.checkValidValue( mo.integer );
 			
 	dayOfMonthField.checkValidValue(d);
 

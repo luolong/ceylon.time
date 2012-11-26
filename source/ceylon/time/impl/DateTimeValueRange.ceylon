@@ -129,19 +129,6 @@ shared class DateTimeValueRange( minimalSmallest, minimalLargest, maximumSmalles
         return (valor >= getMinimum() && valor <= getMaximum());
     }
 
-    ///**
-    // * Checks if the value is within the valid range and that all values
-    // * in the range fit in an {@code int}.
-    // * <p>
-    // * This method combines {@link #isIntValue()} and {@link #isValidValue(long)}.
-    // *
-    // * @param value  the value to check
-    // * @return true if the value is valid and fits in an {@code int}
-    // */
-    //public boolean isValidIntValue(long value) {
-    //    return isIntValue() && isValidValue(value);
-    //}
-
     /**
      * Checks that the specified value is valid.
      * <p>
@@ -159,25 +146,6 @@ shared class DateTimeValueRange( minimalSmallest, minimalLargest, maximumSmalles
         }
         return valor;
     }
-
-    ///**
-    // * Checks that the specified value is valid and fits in an {@code int}.
-    // * <p>
-    // * This validates that the value is within the valid range of values and that
-    // * all valid values are within the bounds of an {@code int}.
-    // * The field is only used to improve the error message.
-    // * 
-    // * @param value  the value to check
-    // * @param field  the field being checked, may be null
-    // * @return the value that was passed in
-    // * @see #isValidIntValue(long)
-    // */
-    //public int checkValidIntValue(long value, DateTimeField field) {
-    //    if (isValidIntValue(value) == false) {
-    //        throw new DateTimeException("Invalid int value for " + field.getName() + ": " + value);
-    //    }
-    //    return (int) value;
-    //}
 
     //-----------------------------------------------------------------------
     shared actual Boolean equals(Object obj) {
