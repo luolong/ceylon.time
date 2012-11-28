@@ -4,7 +4,7 @@ import ceylon.time { time, Time }
 Time midnight = time();
 
 Time time_14h_20m_07s_59ms = time {
-	hour = 14;
+	hours = 14;
 	minutes = 20;
 	seconds = 07;
 	millis = 59;

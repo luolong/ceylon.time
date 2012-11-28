@@ -15,27 +15,27 @@ doc "
  */
 "
 shared class DateTimeValueRange( minimalSmallest, minimalLargest, maximumSmallest, maximumLargest ) {
-    
+
     doc "The smallest minimum value."
     Integer minimalSmallest;
-    
-	doc "The largest minimum value."
+
+    doc "The largest minimum value."
     Integer minimalLargest;
-    
-	doc "The smallest maximum value."
-	Integer maximumSmallest;
-	
+
+    doc "The smallest maximum value."
+    Integer maximumSmallest;
+
     doc "The largest maximum value."
     Integer maximumLargest;
 
-	doc "Smallest minimum value must be less than largest minimum value"
-	assert( minimalSmallest <= minimalLargest );	
-	
-	doc "Smallest maximum value must be less than largest maximum value"
-	assert( maximumSmallest <= maximumLargest );
-	
-	doc "Minimum value must be less than maximum value"
-	assert( minimalSmallest <= maximumLargest );
+    doc "Smallest minimum value must be less than largest minimum value"
+    assert( minimalSmallest <= minimalLargest );	
+
+    doc "Smallest maximum value must be less than largest maximum value"
+    assert( maximumSmallest <= maximumLargest );
+
+    doc "Minimum value must be less than maximum value"
+    assert( minimalSmallest <= maximumLargest );
 
     //-----------------------------------------------------------------------
     /**

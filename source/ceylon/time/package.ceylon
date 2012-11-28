@@ -1,3 +1,3 @@
 doc "Ceylon Date and Time library"
-by "Roland Tepp"
+by ('Diego Coronel', 'Roland Tepp')
 shared package ceylon.time;

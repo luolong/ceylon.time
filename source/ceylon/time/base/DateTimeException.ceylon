@@ -1,2 +1,2 @@
-shared class DateTimeException(String message) extends Exception(message, null){
-} 
+shared class DateTimeException(String message)
+       extends Exception(message, null) {}

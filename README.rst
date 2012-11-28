@@ -1,4 +1,4 @@
-========================
+
 Ceylon Date/Time library
 ========================
 
@@ -12,16 +12,16 @@ As most business line application mostly dal with Gregorian calendar, the data t
 This business needs orientation is also basis for omitting such features as leap seconds, limiting the precision of time related operations to a length of a millisecond, no initial support for alternate calendaring systems, etc.
 
 Main data types are followig:
-* Instant
-* LocalDate, LocalTime, LocalDateTime
-* ZoneDateTime
+- Instant
+- LocalDate, LocalTime, LocalDateTime
+- ZoneDateTime
 
 Supporting data types:
-* TimeZone
-* Period, Duration
-* MonthOfYear, DayOfWeek
-* Clock
-* etc...
+- TimeZone
+- Period, Duration
+- MonthOfYear, DayOfWeek
+- Clock
+- etc...
 
 
 Instant
