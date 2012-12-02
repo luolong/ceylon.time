@@ -30,10 +30,18 @@ shared void testTimes() {
 	print( "Testing plusHours");
 	assertEquals( midnight.plusHours(15), time( 15 ) );
 	assertEquals( time_14h_20m_07s_59ms.plusHours(20), time( 10, 20, 7, 59 ) );
+
+	value time_13 = time(09, 08, 07, 0050).plusHours(28); 
+    assertEquals( 13, time_13.hours);
 	
 	print( "Testing minusHours");
 	assertEquals( midnight.minusHours(15), time( 9 ) );
 	assertEquals( time_14h_20m_07s_59ms.minusHours(20), time( 18, 20, 7, 59 ) );
+
+    assertEquals( time( 9, 0, 0, 0 ).minusHours(28), time( 5, 0, 0, 0 ) );
+
+    value time_5 = time(09, 08, 07, 0050).minusHours(28); 
+    assertEquals( 5, time_5.hours);
 	
 	print( "Testing plusMinutes");
 	assertEquals( midnight.plusMinutes(15), time( 0, 15, 0, 0 ) );

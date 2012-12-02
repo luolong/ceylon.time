@@ -4,7 +4,8 @@ class TimeSuite() extends Suite("ceylon.time") {
     shared actual Iterable<String->Void()> suite = {
         "Weekdays" -> testDayOfWeek,
         "Date" -> testDates,
-        "Times" -> testTimes
+        "Time" -> testTimes,
+        "DateTime" -> testDateTime
     };
 }
 
