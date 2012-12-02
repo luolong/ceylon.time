@@ -1,12 +1,14 @@
-shared interface DateTimeBehavior<Element>
-       satisfies DateBehavior<Element> 
-               & TimeBehavior<Element>
-       given Element satisfies DateTimeBehavior<Element>
+import ceylon.time { Date, Time }
+shared interface DateTimeBehavior<Element, out DateType, out TimeType>
+    satisfies DateBehavior<Element> & TimeBehavior<Element>
+    given Element satisfies DateTimeBehavior<Element, DateType, TimeType>
                              & ReadableDate
-                             & ReadableTime {
+                             & ReadableTime
+    given DateType satisfies Date
+    given TimeType satisfies Time {
 
-	shared formal Element toTimeOnly();
+    shared formal TimeType time;
 
-	shared formal Element toDateOnly();
+    shared formal DateType date;
 
 }

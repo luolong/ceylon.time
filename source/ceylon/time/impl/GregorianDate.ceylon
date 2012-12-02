@@ -47,7 +47,8 @@ shared class GregorianDate( Integer dayOfEra )
         return plusDays(1);
     }
 
-    shared Integer epochDay {
+//TODO: We need to add it to ReadableDate?
+    shared Integer dayOfEpoch {
         variable Integer total := 0;
         total += 365 * year;
         if (year >= 0) {
@@ -67,7 +68,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual DayOfWeek dayOfWeek {
-        value dow0 = floorMod( epochDay + 3, 7);
+        value dow0 = floorMod( dayOfEpoch + 3, 7);
         return asDayOfWeek(dow0 + 1);
     }
 
