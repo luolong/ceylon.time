@@ -48,6 +48,26 @@ shared void assertEquals(Object? expected, Object? got, String? message=null,
     }
 }
 
+Boolean nullSafeSame(Object? expected, Object? got) {
+    if (is Identifiable expected, is Identifiable got){
+        return expected === got;
+    }
+    return false;
+}
+
+doc "Fails the test if the two objects are not same"
+shared void assertSame(Object? expected, Object? got, String? message=null,
+        Boolean same(Object? expected, Object? got) = nullSafeSame) {
+    if (!same(expected,got)) {
+        if (exists message) {
+            throw AssertionFailed("assertion failed: " str(expected) " !== " str(got) ": \"" message "\"");
+        }
+        else {
+            throw AssertionFailed("assertion failed: " str(expected) " !== " str(got) "");
+        }
+    }
+}
+
 doc "Fails the test if the given result is not null"
 shared void assertNull(Object? got, String message = "") {
     if (exists got) {
