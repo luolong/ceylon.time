@@ -1,43 +1,33 @@
-import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek }
-import ceylon.time { gregorian }
-import ceylon.time.impl { calcLeapYear = leapYear }
+import ceylon.time.base { Month, DayOfWeek }
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
       extends AbstractDate( dayOfEra ) {
 
-    // Compute date values from the provided date
-    variable Integer y := (10000*dayOfEra + 14780)/3652425;
-    variable Integer ddd := dayOfEra - (365*y + y/4 - y/100 + y/400);
-    if (ddd < 0) {
-        y -= 1;
-        ddd := dayOfEra - (365*y + y/4 - y/100 + y/400);
+    shared actual Integer year{
+        return bottom;
     }
 
-    value mi = (100*ddd + 52)/3060;
-    value mm = (mi + 2)%12 + 1;
-    y += (mi + 2)/12;
-    value dd = ddd - (mi*306 + 5)/10 + 1;
+    shared actual Month month {
+        return bottom;
+    }
 
-    shared actual Integer dayOfMonth = dd;
-    shared actual MonthOfYear month = monthOfYear(mm);
-    shared actual Integer year = y;
+    shared actual Integer day {
+        return bottom;
+    }
 
-    doc " The number of days in a 400 year cycle."
-    shared Integer daysPerCycle = 146097;
-
-    doc "The number of days from year zero to year 1970.
-         There are five 400 year cycles from year zero to 2000.
-         There are 7 leap years from 1970 to 2000."
-    shared Integer days_0000_TO_1970 = (daysPerCycle * 5) - (30 * 365 + 7);
-
-    //TODO: Implement
-    shared actual Integer weekOfYear = 0;
+    shared actual Integer weekOfYear {
+        return bottom;
+    }
 
     doc "True, if this date is a leap year according to gregorian clendar leap year rules."
-    shared actual Boolean leapYear = calcLeapYear( year );
+    shared actual Boolean leapYear {
+        return gregorianRules.leapYear(year);
+    }
 
-    shared actual Integer dayOfYear = firstDayOfYear( month, leapYear ) + dayOfMonth -1;
+    shared actual Integer dayOfYear {
+        return month.fisrtDayOfYear( leapYear ) + day - 1;
+    }
 
     shared actual GregorianDate predecessor {
         return minusDays( 1 );
@@ -47,41 +37,8 @@ shared class GregorianDate( Integer dayOfEra )
         return plusDays(1);
     }
 
-//TODO: We need to add it to ReadableDate?
-    shared Integer dayOfEpoch {
-        variable Integer total := 0;
-        total += 365 * year;
-        if (year >= 0) {
-            total += (year + 3) / 4 - (year + 99) / 100 + (year + 399) / 400;
-        } else {
-            total -= year / -4 - year / -100 + year / -400;
-        }
-        total += ((367 * month.integer - 362) / 12);
-        total += dayOfMonth - 1;
-        if (month.integer > 2) {
-            total--;
-            if ( leapYear == false) {
-                total--;
-            }
-        }
-        return total - days_0000_TO_1970;
-    }
-
-    shared actual DayOfWeek dayOfWeek {
-        value dow0 = floorMod( dayOfEpoch + 3, 7);
-        return asDayOfWeek(dow0 + 1);
-    }
-
-    shared actual GregorianDate minusDays(Integer days) {
-        return plusDays(-days);
-    }
-
-    shared actual GregorianDate minusMonths(Integer months) {
-        return plusMonths(-months);
-    }
-
-    shared actual GregorianDate minusYears(Integer years) {
-        return plusYears(-years);
+    shared actual DayOfWeek weekday {
+        return bottom;
     }
 
     shared actual GregorianDate plusDays(Integer days) {
@@ -93,77 +50,101 @@ shared class GregorianDate( Integer dayOfEra )
 
     shared actual GregorianDate plusMonths(Integer months) {
         if ( months == 0 ) {
-                return this;
+            return this;
         }
 
-        Integer totalMonths = year * 12 + ( month.integer - 1);
-        Integer calculedMonths = totalMonths + months;
-
-        Integer newYear = calculedMonths / 12; 
-        Integer newMonth = floorMod(calculedMonths, 12) + 1;
-
-        return GregorianDate( gregorian(newYear, newMonth, resolveLastValidDay(newMonth, dayOfMonth, leapYear) ));
+        return bottom;
     }
 
     shared actual GregorianDate plusYears(Integer years) {
         if ( years == 0 ) {
             return this;        }
 
-        Integer newYear = year + years;
-        return GregorianDate( gregorian(newYear, month.integer, resolveLastValidDay(month, dayOfMonth, calcLeapYear(newYear) )));
+        return withYear( year + years );
     }
 
     shared actual GregorianDate plusWeeks(Integer weeks) {
-        if ( weeks == 0 ) {
-            return this;
-        }
         return plusDays( weeks * 7 );
     }
 
+    shared actual GregorianDate minusDays(Integer days) {
+        return plusDays(-days);
+    }
+
     shared actual GregorianDate minusWeeks(Integer weeks) {
-        if ( weeks == 0 ) {
-            return this;
-        }
-        return minusDays( weeks * 7 );
+        return plusWeeks( -weeks );
     }
 
-    shared actual GregorianDate withDayOfMonth(Integer day) {
-        if ( day == dayOfMonth ) {
-            return this;
-        }
-        return GregorianDate( dayOfEra - dayOfMonth + resolveLastValidDay(month, day, leapYear));
+    shared actual GregorianDate minusMonths(Integer months) {
+        return plusMonths(-months);
     }
 
-    shared actual GregorianDate withMonth(Integer|MonthOfYear month) {
-        MonthOfYear newMonth = monthOfYear(month);
-        if ( month == this.month ) {
-            return this;
-        }
+    shared actual GregorianDate minusYears(Integer years) {
+        return plusYears(-years);
+    }
 
-        return GregorianDate( gregorian(year, newMonth.integer, resolveLastValidDay(newMonth, dayOfMonth, leapYear) ));
+    shared actual GregorianDate withDay(Integer day) {
+        return bottom;
+    }
+
+    shared actual GregorianDate withMonth(Month month) {
+        return bottom;
     }
 
     shared actual GregorianDate withYear(Integer year) {
-        if ( year == this.year ) {
-            return this;
-        }
-        return GregorianDate( gregorian(year, month.integer, resolveLastValidDay(month, dayOfMonth, calcLeapYear(year)) ));
-    }
-
-    shared actual Boolean equals( Object other ) {
-        if (is GregorianDate other) {
-        if (this === other){
-            return true;
-        }
-
-        return (this.year == other.year
-             && this.month==other.month
-             && this.dayOfMonth==other.dayOfMonth );
-        }
-        return false;
+        return bottom;
     }
 
     shared actual String string {
-        return "" year "-" pad(month.integer) "-" pad( dayOfMonth ) "";
+        return "" year "-" pad(month.integer) "-" pad(day) "";
+    }
+}
+
+shared object gregorianRules extends CalendarMath() {
+    doc "Computes [Julian Day Number] of the provided gregorian calendar date
+         according to the [formula] provided in Wikipedia article.
+
+         [Julian Day Number]: http://en.wikipedia.org/wiki/Julian_day
+         [formula]: http://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
+         "
+    shared Integer jdn(year, month, day){
+
+        doc "Year of the gregorian date"
+        Integer year;
+        doc "Month of the gregorian date"
+        Integer month;
+        doc "Day of month of the gregorian date"
+        Integer day;
+
+        value a = (14-month)/12;
+        value y = year + 4800 - a;
+        value m = month + 12*a - 3;
+
+        return day + (153*m + 2)/5 + 365*y + y/4 - y/100 + y/400 - 32045;
+    }
+
+    doc "Calculates epoch date from the provided Julian Day Number."
+    shared Integer epoch( jdn ){
+
+        doc "Julian Day Number"
+        Integer jdn;
+
+        return jdn - 2440587;
+    }
+
+    doc "Calculates if the given year is a leap year"
+    shared Boolean leapYear( Integer year ) {
+        if (year % 400 == 0) {
+            return true;
+        }
+        if (year % 100 == 0) {
+            return false;
+        }
+        return (year % 4 == 0);
+    }
+
+    doc "Calculates the day of era of the given date value." 
+    shared Integer dayOfEra(Integer yyyy, Integer mm, Integer dd){
+        return epoch(jdn(yyyy, mm, dd));
     }
 }

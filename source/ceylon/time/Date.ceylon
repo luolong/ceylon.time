@@ -1,5 +1,6 @@
-import ceylon.time.impl { GregorianDate, yearField = year, dayOfMonthField = dayPerMonth, monthPerYear }
-import ceylon.time.base { ReadableDate, MonthOfYear, monthOfYear, DateBehavior }
+import ceylon.time.base { ReadableDate, Month, monthOf = month, DateBehavior }
+import ceylon.time.impl { GregorianDate, gregorianRules }
+import ceylon.time.timezone { TimeZone }
 
 doc "An interface for date objects in the ISO-8601 calendar system.
 
@@ -10,13 +11,10 @@ shared interface Date
        satisfies ReadableDate & DateBehavior<Date>
                & Ordinal<Date> & Comparable<Date> { }
 
-/*
-class JulianDate(Integer dayOfEra) 
-        extends DateImpl(dayOfEra) {
-
-    shared actual Algorithm calculated = Julian(dayofEra);
+doc "Returns current date according to the provided system clock and time zone."
+shared Date today(Clock clock = systemTime, TimeZone? zone = null){
+    return clock.instant().date(zone);
 }
-*/
 
 doc "parses a Date from ISO date formatted string (YYYY-MM-DD)"
 shared Date parseDate(String string){
@@ -24,13 +22,42 @@ shared Date parseDate(String string){
 }
 
 doc "Returns a date based on the specified year, month and day-ofMonth values"
-shared Date date(Integer year, Integer|MonthOfYear month, Integer date){
-    value m = monthOfYear(month);
+shared Date date(Integer year, Integer|Month month, Integer date){
+    value m = monthOf(month);
     //if (year > 1582 || (year == 1582 && m <= march)){
     //	return JulianDate()
     //}
-    return GregorianDate(gregorian(year, m.integer, date));
+    return gregorian(year, m, date);
 } 
+
+doc "Returns a gregorian calendar date according to the specified year, month and date values"
+shared Date gregorian(year, month, date){
+        doc "Year number of the date"
+        Integer year;
+        
+        doc "Month of the year"
+        Integer|Month month; 
+        
+        doc "Date of month"
+        Integer date;
+        
+    return GregorianDate( gregorianRules.dayOfEra(year, monthOf(month).integer, date) );
+}
+
+
+doc "Returns a julian calendar date according to the specified year, month and date values"
+shared Date julian(year, month, date){
+        doc "Year number of the calendar date"
+        Integer year;
+        
+        doc "Month of the year"
+        Integer|Month month; 
+        
+        doc "Date of month"
+        Integer date;
+        
+    return bottom;
+}
 
 doc "Calculates the number of days according to julian calendar rules"
 Integer j(Integer yyyy, Integer mm, Integer d) {
@@ -39,18 +66,3 @@ Integer j(Integer yyyy, Integer mm, Integer d) {
     return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
 }
 
-//TODO: We need it like a high order method... something like dayOfEra.from( Chrono, yyyy, mm, d)
-doc "Calculates the number of days according to gregorian calendar rules"
-shared Integer gregorian(Integer yyyy, Integer mm, Integer d) {
-
-    yearField.checkValidValue( yyyy );
-
-    value mo = monthOfYear(mm);
-    monthPerYear.checkValidValue( mo.integer );
-
-    dayOfMonthField.checkValidValue(d);
-
-    value m = (mm + 9) % 12;
-    value y = yyyy - m/10;
-    return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
-}

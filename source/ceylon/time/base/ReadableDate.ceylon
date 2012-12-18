@@ -13,25 +13,25 @@ shared interface ReadableDate {
     doc "The year of the date"
     shared formal Integer year;
 
-    doc "Month of the year field."
-    shared formal MonthOfYear month;
+    doc "Month of the year value of the date"
+    shared formal Month month;
 
-    doc "Day of month field." 
-    shared formal Integer dayOfMonth;
-
-    doc "True if this is a date in a leap year."
-    shared formal Boolean leapYear;
-
-    doc "Day of the year."
-    shared formal Integer dayOfYear;
-
-    doc "number of calendar days since ERA"
-    shared formal Integer dayOfEra;
-
-    doc "Week number of the year."
-    shared formal Integer weekOfYear;
+    doc "Day of month value of the date" 
+    shared formal Integer day;
 
     doc "Day of the week."
-    shared formal DayOfWeek dayOfWeek;
+    shared formal DayOfWeek weekday;
 
-} 
+    doc "Number of the week of the date"
+    shared formal Integer weekOfYear;
+
+    doc "Number of the day in year"
+    shared formal Integer dayOfYear;
+
+    doc "Number of calendar days since ERA"
+    shared formal Integer dayOfEra;
+
+    doc "True if the year of the date is a leap year."
+    shared formal Boolean leapYear;
+
+}

@@ -1,16 +1,28 @@
-import com.redhat.ceylon.sdk.test { assertTrue }
-import ceylon.time { date, Date }
+import ceylon.time { Date, date, today, now }
 import ceylon.time.base { december, monday, january, november, february }
+
+import com.redhat.ceylon.sdk.test { assertTrue, assertNotNull }
 
 Date data_1982_12_13 = date( 1982, december, 13);
 
-shared void testDates() {
+doc "Testing the common usage scenarios for Date data type"
+void testDateCommonUsage(){
+    
+    value millis = now().millis;
+    print( "systemTime = " millis "; dateOfEra = " millis "");
+    
+    print("Testing common date usage scenarios");
+    assertNotNull( today(), "today() should return a date" );
+    
+}
 
+shared void testDates() {
+    
     print("Testing GregorianCalendar Instances");
+    assertTrue( data_1982_12_13.day == 13 );
+    assertTrue( data_1982_12_13.weekday == monday );
     assertTrue( data_1982_12_13.dayOfYear == 347 );
-    assertTrue( data_1982_12_13.dayOfMonth == 13 );
-    assertTrue( data_1982_12_13.dayOfEra == 724197 ); // i dont know if its correct
-    assertTrue( data_1982_12_13.dayOfWeek == monday );
+    assertTrue( data_1982_12_13.dayOfEra == 724197 ); // i dont know if its correct (or useful as a public api)
 
     print("Testing leapYear");
     assertTrue( date(2012, january, 1 ).leapYear == true );
@@ -51,14 +63,12 @@ shared void testDates() {
     assertTrue( data_1982_12_13.minusWeeks(1) <=> date( 1982, december, 6) == equal );
     assertTrue( data_1982_12_13.minusWeeks(3) <=> date( 1982, november, 22) == equal );
 
-    print( "Testing withDayOfMonth");
-    assertTrue( data_1982_12_13.withDayOfMonth(17) <=> date( 1982, december, 17) == equal);
-    assertTrue( data_1982_12_13.withDayOfMonth(40) <=> date( 1982, december, 31) == equal);
+    print( "Testing withDay");
+    assertTrue( data_1982_12_13.withDay(17) <=> date( 1982, december, 17) == equal);
+    assertTrue( data_1982_12_13.withDay(40) <=> date( 1982, december, 31) == equal);
 
     print( "Testing withMonth");
-    assertTrue( data_1982_12_13.withMonth(1) <=> date( 1982, january, 13) == equal);
     assertTrue( data_1982_12_13.withMonth(january) <=> date( 1982, january, 13) == equal);
-    assertTrue( date(2012, december, 31).withMonth(2) <=> date( 2012, february, 29) == equal);
     assertTrue( date(2012, december, 31).withMonth(february) <=> date( 2012, february, 29) == equal);
 
     print( "Testing withYear");

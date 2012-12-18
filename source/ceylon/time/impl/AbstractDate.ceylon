@@ -1,4 +1,5 @@
 import ceylon.time { Date }
+
 shared abstract class AbstractDate( dayOfEra )
        satisfies Date {
 
@@ -11,4 +12,12 @@ shared abstract class AbstractDate( dayOfEra )
     shared actual Integer distanceFrom(Date other) {
         return dayOfEra.distanceFrom(other.dayOfEra);
     }
+
+    shared actual Boolean equals( Object other ) {
+        if (is AbstractDate other) {
+            return dayOfEra.equals(other.dayOfEra);
+        }
+        return false;
+    }
+
 }

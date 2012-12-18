@@ -16,7 +16,7 @@ shared void testDateTime() {
     print("Testing instance");
     assertEquals( 1982, data_1982_12_13_09_08_07_0050.year);
     assertEquals( december, data_1982_12_13_09_08_07_0050.month);
-    assertEquals( 13, data_1982_12_13_09_08_07_0050.dayOfMonth);
+    assertEquals( 13, data_1982_12_13_09_08_07_0050.day);
     assertEquals( 9, data_1982_12_13_09_08_07_0050.hours);
     assertEquals( 8, data_1982_12_13_09_08_07_0050.minutes);
     assertEquals( 7, data_1982_12_13_09_08_07_0050.seconds);
@@ -39,24 +39,24 @@ shared void testDateTime() {
     assertEquals( november, data_1982_12_13_09_08_07_0050.minusMonths(1).month);
     
     print("Testing plusDays");
-    assertEquals( 15, data_1982_12_13_09_08_07_0050.plusDays(2).dayOfMonth);
+    assertEquals( 15, data_1982_12_13_09_08_07_0050.plusDays(2).day);
     
     print("Testing minusDays");
-    assertEquals( 9, data_1982_12_13_09_08_07_0050.minusDays(4).dayOfMonth);
+    assertEquals( 9, data_1982_12_13_09_08_07_0050.minusDays(4).day);
     
     print("Testing plusHours");
     assertEquals( 18, data_1982_12_13_09_08_07_0050.plusHours(9).hours);
     
     value data_1982_12_14_13 = data_1982_12_13_09_08_07_0050.plusHours(28); 
     assertEquals( 13, data_1982_12_14_13.hours);
-    assertEquals( 14, data_1982_12_14_13.dayOfMonth);
+    assertEquals( 14, data_1982_12_14_13.day);
     
     print("Testing minusHours");
     assertEquals( 2, data_1982_12_13_09_08_07_0050.minusHours(7).hours);
     
     value data_1982_12_12_5 = data_1982_12_13_09_08_07_0050.minusHours(28);
     assertEquals( 5, data_1982_12_12_5.hours);
-    assertEquals( 12, data_1982_12_12_5.dayOfMonth);
+    assertEquals( 12, data_1982_12_12_5.day);
     
     print("Testing plusMinutes");
     assertEquals( 15, data_1982_12_13_09_08_07_0050.plusMinutes(7).minutes);

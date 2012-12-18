@@ -1,25 +1,25 @@
 import ceylon.time.base { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
-import com.redhat.ceylon.sdk.test { assertTrue }
+import com.redhat.ceylon.sdk.test { assertTrue, assertSame }
 
 void testDayOfWeek(){
 
     print("Testing successors");
-    assertTrue( monday.successor === tuesday, "monday.successor === tuesday" );
-    assertTrue( tuesday.successor === wednesday, "tuesday.successor === wednesday" );
-    assertTrue( wednesday.successor === thursday, "wednesday.successor === thursday" );
-    assertTrue( thursday.successor === friday, "thursday.successor === friday" );
-    assertTrue( friday.successor === saturday, "friday.successor === saturday" );
-    assertTrue( saturday.successor === sunday, "saturday.successor === sunday" );
-    assertTrue( sunday.successor === monday, "sunday.successor === monday" );
+    assertSame( tuesday, monday.successor );
+    assertSame( wednesday, tuesday.successor );
+    assertSame( thursday, wednesday.successor );
+    assertSame( friday, thursday.successor );
+    assertSame( saturday, friday.successor );
+    assertSame( sunday, saturday.successor );
+    assertSame( monday, sunday.successor );
 
     print("Testing predecessors");
-    assertTrue( sunday.predecessor === saturday, "sunday.predecessor === saturday" );
-    assertTrue( saturday.predecessor === friday, "saturday.predecessor === friday" );
-    assertTrue( friday.predecessor === thursday, "friday.predecessor === thursday" );
-    assertTrue( thursday.predecessor === wednesday, "thursday.predecessor === wednesday" );
-    assertTrue( wednesday.predecessor === tuesday, "wednesday.predecessor === tuesday" );
-    assertTrue( tuesday.predecessor === monday, "tuesday.predecessor === monday" );
-    assertTrue( monday.predecessor === sunday, "monday.predecessor === sunday" );
+    assertSame( saturday, sunday.predecessor );
+    assertSame( friday, saturday.predecessor );
+    assertSame( thursday, friday.predecessor );
+    assertSame( wednesday, thursday.predecessor );
+    assertSame( tuesday, wednesday.predecessor );
+    assertSame( monday, tuesday.predecessor );
+    assertSame( sunday, monday.predecessor );
 
     print("Comparing days of week: monday");
     assertTrue( monday < tuesday, "monday < tuesday" );

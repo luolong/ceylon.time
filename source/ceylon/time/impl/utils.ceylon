@@ -1,17 +1,10 @@
 import ceylon.math.float { log10 }
 import ceylon.math.integer { smallest }
-import ceylon.time.base { MonthOfYear, january, february, march, april, may, june, july, august, september, october, november, december, monthOfYear }
+import ceylon.time.base { Month, february, april, june, september, november, ms=milliseconds, sec=seconds, min=minutes, h=hours, monthOf = month }
 
-Integer floorMod(Integer a, Integer b) {
-    return (((a % b) + b) % b);
-}
 
-Integer floorDiv(Integer a, Integer b) {
-    return (a >= 0 then a / b else ((a + 1) / b) - 1);
-}
-
-Integer resolveLastValidDay(Integer|MonthOfYear month, Integer day, Boolean leapYear ) {
-    MonthOfYear actualMonth = monthOfYear(month);
+Integer resolveLastValidDay(Integer|Month month, Integer day, Boolean leapYear ) {
+    Month actualMonth = monthOf(month);
 
     variable Integer newDay := day;
 
@@ -31,42 +24,19 @@ Integer resolveLastValidDay(Integer|MonthOfYear month, Integer day, Boolean leap
     return newDay;
 }
 
-shared Integer firstDayOfYear( MonthOfYear month, Boolean leapYear ) {
-    value leap = leapYear then 1 else 0;
-    switch (month)
-    case ( january)    { return 1; }
-    case ( february )  { return 32; }
-    case ( march )     { return 60 + leap; }
-    case ( april )     { return 91 + leap; }
-    case ( may )       { return 121 + leap; }
-    case ( july )      { return 182 + leap; }
-    case ( june )      { return 152 + leap; }
-    case ( august )    { return 213 + leap; }
-    case ( september ) { return 244 + leap; }
-    case ( october )   { return 274 + leap; }
-    case ( november )  { return 305 + leap; }
-    case ( december )  { return 335 + leap; }
-}
-
-shared Boolean leapYear( Integer year ) {
-    if (year % 400 == 0){ return true; }
-    if (year % 100 == 0){ return false; }
-    if (year % 4 == 0){ return true; }
-    return false;
-}
 
 shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-    return millis / milliPerDay.getMaximumRepresentation() +
-                seconds / secondPerDay.getMaximumRepresentation() +
-                minutes / minutePerDay.getMaximumRepresentation() +
-                hours / hourPerDay.getMaximumRepresentation();  
+    return millis / ms.perDay +
+           seconds / sec.perDay +
+           minutes / min.perDay +
+           hours / h.perDay;
 }
 
 shared Integer restOfMillisPerDay( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-	return millis % milliPerDay.getMaximumRepresentation() +
-                (seconds % secondPerDay.getMaximumRepresentation()) * milliPerSecond.getMaximumRepresentation() +
-                (minutes % minutePerDay.getMaximumRepresentation()) * milliPerMinute.getMaximumRepresentation() +
-                (hours % hourPerDay.getMaximumRepresentation()) * milliPerHour.getMaximumRepresentation();
+	return millis % ms.perDay +
+                (seconds % sec.perDay) * ms.perSecond +
+                (minutes % min.perDay) * ms.perMinute +
+                (hours % h.perDay) * ms.perHour;
 }
 
 doc "return padded value"
@@ -84,4 +54,36 @@ String pad(Integer number, String padding = "00"){
     }
 
     return number.string;
+}
+
+doc "Utility class for common functions for calendar related calculations"
+shared class CalendarMath(){
+    
+    doc "Returns the floor modulus.
+         
+         - This returns `0` for  `floorMod(0, 4)`.
+         - This returns `-1` for `floorMod(-1, 4)`.
+         - This returns `-2` for `floorMod(-2, 4)`.
+         - This returns `-3` for `floorMod(-3, 4)`.
+         - This returns `-0` for `floorMod(-4, 4)`.
+         "
+    shared Integer floorMod(a, b) {
+        doc "the dividend"
+        Integer a;
+        doc "the divisor"
+        Integer b;
+        
+        return (((a % b) + b) % b);
+    }
+    
+    doc "Returns floor division."
+    shared Integer floorDiv(a, b) {
+        doc "the dividend"
+        Integer a;
+        doc "the divisor"
+        Integer b;
+
+        return (a >= 0 then a / b else ((a + 1) / b) - 1);
+    }
+
 }

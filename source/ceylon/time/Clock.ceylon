@@ -42,12 +42,7 @@ shared interface Clock {
 }
 
 doc "Gets a clock that obtains the current instant using the best available system clock."
-shared Clock systemUTC(){
-    return SystemClock();
-}
-
-doc "Implementation of a clock that always returns the latest time from the best available system clock."
-class SystemClock() satisfies Clock{
+shared object systemTime satisfies Clock{
     shared actual Integer millis() {
         return process.milliseconds;
     }
@@ -57,8 +52,9 @@ class SystemClock() satisfies Clock{
     }
 }
 
+
 doc "Gets a clock that always returns the same instant in the UTC time-zone."
-shared Clock fixedUTC(Instant|Integer instant) {
+shared Clock fixedTime(Instant|Integer instant) {
     switch(instant)
     case (is Instant){
         return FixedInstant(instant);
