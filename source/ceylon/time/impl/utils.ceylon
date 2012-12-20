@@ -10,6 +10,11 @@ Integer floorDiv(Integer a, Integer b) {
     return (a >= 0 then a / b else ((a + 1) / b) - 1);
 }
 
+Integer floor(Integer a, Integer b) {
+    return (a >= 0 then a / b else ((a + 1) / b) - 1);
+}
+
+
 Integer resolveLastValidDay(Integer|MonthOfYear month, Integer day, Boolean leapYear ) {
     MonthOfYear actualMonth = monthOfYear(month);
 
