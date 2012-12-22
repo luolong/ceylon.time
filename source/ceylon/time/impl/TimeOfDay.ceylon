@@ -9,31 +9,31 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Number of milliseconds since last full second"
     shared actual Integer millis {
-        return millisOfDay % ( milliPerSecond.getMaximumRepresentation() );
+        return millisOfDay % milliPerSecond.maximumRepresentation;
     }
 
     doc "Number of seconds since last midnight"
     shared actual Integer secondsOfDay {
-        return millisOfDay / ( milliPerSecond.getMaximumRepresentation() );
+        return millisOfDay / milliPerSecond.maximumRepresentation;
     }
 
     shared actual Integer seconds {
-        return secondsOfDay % ( secondPerMinute.getMaximumRepresentation() );
+        return secondsOfDay % secondPerMinute.maximumRepresentation;
     }
 
     doc "Number of minutes since last midnight"
     shared actual Integer minutesOfDay {
-        return secondsOfDay / ( secondPerMinute.getMaximumRepresentation() );
+        return secondsOfDay / secondPerMinute.maximumRepresentation;
     }
 
     doc "Number of minutes since last full hour."
     shared actual Integer minutes {
-        return minutesOfDay % ( minutePerHour.getMaximumRepresentation() ); 
+        return minutesOfDay % minutePerHour.maximumRepresentation; 
     }
 
     doc "Number of full hours elapsed since last midnight."
     shared actual Integer hours {
-        return minutesOfDay / ( minutePerHour.getMaximumRepresentation() );
+        return minutesOfDay / minutePerHour.maximumRepresentation;
     }
 
     doc "Compare two instants of time"
@@ -61,19 +61,19 @@ shared class TimeOfDay(millisOfDay)
     }
 
     shared actual Time minusHours(Integer hours) {
-        return plusHours(-(hours % hourPerDay.getMaximumRepresentation()));
+        return plusHours(-(hours % hourPerDay.maximumRepresentation));
     }
 
     shared actual Time minusMilliseconds(Integer milliseconds) {
-        return plusMilliseconds( -( milliseconds % milliPerDay.getMaximumRepresentation() ) );
+        return plusMilliseconds( -( milliseconds % milliPerDay.maximumRepresentation ) );
     }
 
     shared actual Time minusMinutes(Integer minutes) {
-        return plusMinutes(-(minutes % minutePerDay.getMaximumRepresentation() ));
+        return plusMinutes(-(minutes % minutePerDay.maximumRepresentation ));
     }
 
     shared actual Time minusSeconds(Integer seconds) {
-        return plusSeconds(-(seconds % secondPerDay.getMaximumRepresentation()));
+        return plusSeconds(-(seconds % secondPerDay.maximumRepresentation));
     }
 
     shared actual Time plusHours(Integer hours) {
@@ -81,7 +81,7 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer hoursPerDay = hourPerDay.getMaximumRepresentation();
+        Integer hoursPerDay = hourPerDay.maximumRepresentation;
         Integer newHour = ((hours % hoursPerDay) + this.hours + hoursPerDay) % hoursPerDay;
         return time(newHour, minutes, seconds, millis);
     }
@@ -98,16 +98,16 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer minutesPerHour = minutePerHour.getMaximumRepresentation();
-        Integer minutesPerDay = minutePerDay.getMaximumRepresentation();
+        Integer minutesPerHour = minutePerHour.maximumRepresentation;
+        Integer minutesPerDay = minutePerDay.maximumRepresentation;
 
-        Integer mofd = hours * minutesPerHour + this.minutes;
-        Integer newMofd = ((minutes % minutesPerDay) + mofd + minutesPerDay) % minutesPerDay;
-        if (mofd == newMofd) {
+        Integer minutesOfDay = hours * minutesPerHour + this.minutes;
+        Integer newMinutesOfDay = ((minutes % minutesPerDay) + minutesOfDay + minutesPerDay) % minutesPerDay;
+        if (minutesOfDay == newMinutesOfDay) {
             return this;
         }
-        Integer newHour = newMofd / minutesPerHour;
-        Integer newMinute = newMofd % minutesPerHour;
+        Integer newHour = newMinutesOfDay / minutesPerHour;
+        Integer newMinute = newMinutesOfDay % minutesPerHour;
         return time(newHour, newMinute, seconds, millis);
     }
 
@@ -116,15 +116,15 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer secondsPerHour = secondPerHour.getMaximumRepresentation();
-        Integer secondsPerDay = secondPerDay.getMaximumRepresentation();
-        Integer secondsPerMinute = secondPerMinute.getMaximumRepresentation();
-        Integer minutesPerHour = minutePerHour.getMaximumRepresentation();
+        Integer secondsPerHour = secondPerHour.maximumRepresentation;
+        Integer secondsPerDay = secondPerDay.maximumRepresentation;
+        Integer secondsPerMinute = secondPerMinute.maximumRepresentation;
+        Integer minutesPerHour = minutePerHour.maximumRepresentation;
 
-        Integer sofd = hours * secondsPerHour +
+        Integer secondsOfDay = hours * secondsPerHour +
                     minutes * secondsPerMinute + this.seconds;
-        Integer newSofd = ((seconds % secondsPerDay) + sofd + secondsPerDay) % secondsPerDay;
-        if (sofd == newSofd) {
+        Integer newSofd = ((seconds % secondsPerDay) + secondsOfDay + secondsPerDay) % secondsPerDay;
+        if (secondsOfDay == newSofd) {
             return this;
         }
 

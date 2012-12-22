@@ -47,7 +47,7 @@ shared object milliPerSecond extends Field() {
             maximumLargest = 999;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 1000;
     }
 }
@@ -61,7 +61,7 @@ shared object milliPerMinute extends Field() {
             maximumLargest = 60000 -1;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 60000;
     }
 }
@@ -75,7 +75,7 @@ shared object milliPerHour extends Field() {
             maximumLargest = 3600000 -1;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 3600000;
     }
 }
@@ -93,7 +93,7 @@ shared object milliPerDay extends Field() {
             maximumLargest = 86400 * 1000 - 1;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 86400 * 1000;
     }
 }
@@ -111,7 +111,7 @@ shared object secondPerMinute extends Field() {
             maximumLargest = 59;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 60;
     }
 }
@@ -125,7 +125,7 @@ shared object secondPerHour extends Field() {
             maximumLargest = 3599;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 3600;
     }
 }
@@ -143,7 +143,7 @@ shared object secondPerDay extends Field() {
             maximumLargest = 86400 - 1;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 86400;
     }
 }
@@ -161,7 +161,7 @@ shared object minutePerHour extends Field() {
             maximumLargest = 59;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 60;
     }
 }
@@ -179,7 +179,7 @@ shared object minutePerDay extends Field() {
             maximumLargest = (24 * 60) - 1;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return (24 * 60);
     }
 }
@@ -197,7 +197,7 @@ shared object hourPerAmPm extends Field() {
             maximumLargest = 11;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 12;
     }
 }
@@ -215,7 +215,7 @@ shared object hourPerDay extends Field() {
             maximumLargest = 23;
         };
     }
-    shared Integer getMaximumRepresentation() {
+    shared Integer maximumRepresentation {
         return 24;
     }
 }
