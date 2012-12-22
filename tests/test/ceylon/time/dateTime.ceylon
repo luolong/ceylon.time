@@ -1,5 +1,5 @@
-import ceylon.time { DateTime, dateTime }
-import ceylon.time.base { december, january, november }
+import ceylon.time { DateTime, dateTime, Period }
+import ceylon.time.base { december, january, november, september }
 import com.redhat.ceylon.sdk.test { assertEquals }
 
 DateTime data_1982_12_13_09_08_07_0050 = dateTime { year = 1982;  
@@ -99,5 +99,24 @@ shared void testDateTime() {
     value data_1982_12_13_9_8_4_100 = data_1982_12_13_09_08_07_0050.minusMilliseconds(50+2900);
     assertEquals( 100, data_1982_12_13_9_8_4_100.millis);
     assertEquals( 4, data_1982_12_13_9_8_4_100.seconds);
+
+    print("Testing plus");
+    value period = Period { 
+        years = 1; 
+        months = 20; 
+        days = 30; 
+        hours = 40; 
+        minutes = 50; 
+        seconds = 60; 
+        milliseconds = 700; 
+    };
+    value newDataAmount = data_1982_12_13_9_8_4_100.plus(period);
+    assertEquals( 1985, newDataAmount.year);
+    assertEquals( september, newDataAmount.month);
+    assertEquals( 14, newDataAmount.dayOfMonth);
+    assertEquals( 1, newDataAmount.hours);
+    assertEquals( 59, newDataAmount.minutes);
+    assertEquals( 4, newDataAmount.seconds);
+    assertEquals( 800, newDataAmount.millis);
 
 }

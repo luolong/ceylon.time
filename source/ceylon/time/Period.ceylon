@@ -233,11 +233,11 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         };
     }
 
-    shared actual ReadableDatePeriod toDateOnly() {
+    shared actual ReadableDatePeriod date {
         return this;
     }
 
-    shared actual ReadableTimePeriod toTimeOnly() {
+    shared actual ReadableTimePeriod time {
         return this;
     }
 
@@ -261,19 +261,19 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 
         value years = this.years + this.months / 12;
         value months = this.months % 12;
-
-        variable Whole total := wholeNumber(this.hours * secondPerHour.getMaximumRepresentation())
-                              + wholeNumber(this.minutes * secondPerMinute.getMaximumRepresentation())
+        //TODO: We need to remove ceylon.math reference because it only compile to JVM
+        variable Whole total := wholeNumber(this.hours * secondPerHour.maximumRepresentation)
+                              + wholeNumber(this.minutes * secondPerMinute.maximumRepresentation)
                               + wholeNumber(this.seconds);
 
-        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( milliPerSecond.getMaximumRepresentation()  )) ).integer;
-        total += wholeNumber(this.milliseconds) / wholeNumber(( milliPerSecond.getMaximumRepresentation() ));
+        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( milliPerSecond.maximumRepresentation  )) ).integer;
+        total += wholeNumber(this.milliseconds) / wholeNumber(( milliPerSecond.maximumRepresentation ));
 
-        value seconds = ( total % wholeNumber(( secondPerMinute.getMaximumRepresentation() )) ).integer;
-        total := total / wholeNumber(( secondPerMinute.getMaximumRepresentation() ));
+        value seconds = ( total % wholeNumber(( secondPerMinute.maximumRepresentation )) ).integer;
+        total := total / wholeNumber(( secondPerMinute.maximumRepresentation ));
 
-        value minutes = ( total % wholeNumber(minutePerHour.getMaximumRepresentation()) ).integer;
-        value hours = ( total / wholeNumber(minutePerHour.getMaximumRepresentation() ) ).integer;
+        value minutes = ( total % wholeNumber(minutePerHour.maximumRepresentation) ).integer;
+        value hours = ( total / wholeNumber(minutePerHour.maximumRepresentation ) ).integer;
 
         return Period {
             years = years;
