@@ -1,4 +1,4 @@
-import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek, january, sunday }
+import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek, january, sunday, ReadablePeriod }
 import ceylon.time { gregorian, Date }
 import ceylon.time.impl { calcLeapYear = leapYear }
 
@@ -195,18 +195,22 @@ shared class GregorianDate( Integer dayOfEra )
 
     shared actual Boolean equals( Object other ) {
         if (is GregorianDate other) {
-        if (this === other){
-            return true;
-        }
+            if (this === other){
+                return true;
+            }
 
-        return (this.year == other.year
-             && this.month==other.month
-             && this.dayOfMonth==other.dayOfMonth );
+            return (this.year == other.year
+                 && this.month==other.month
+                 && this.dayOfMonth==other.dayOfMonth );
         }
         return false;
     }
 
+    shared actual GregorianDate plus( ReadablePeriod amount ) {
+        return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
+    }
+
     shared actual String string {
-        return "" year "-" pad(month.integer) "-" pad( dayOfMonth ) "";
+        return "" year "-" pad( month.integer ) "-" pad( dayOfMonth ) "";
     }
 }

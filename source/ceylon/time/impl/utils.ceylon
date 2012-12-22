@@ -61,17 +61,17 @@ shared Boolean leapYear( Integer year ) {
 }
 
 shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-    return millis / milliPerDay.getMaximumRepresentation() +
-                seconds / secondPerDay.getMaximumRepresentation() +
-                minutes / minutePerDay.getMaximumRepresentation() +
-                hours / hourPerDay.getMaximumRepresentation();  
+    return millis / milliPerDay.maximumRepresentation +
+                seconds / secondPerDay.maximumRepresentation +
+                minutes / minutePerDay.maximumRepresentation +
+                hours / hourPerDay.maximumRepresentation;  
 }
 
 shared Integer restOfMillisPerDay( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-	return millis % milliPerDay.getMaximumRepresentation() +
-                (seconds % secondPerDay.getMaximumRepresentation()) * milliPerSecond.getMaximumRepresentation() +
-                (minutes % minutePerDay.getMaximumRepresentation()) * milliPerMinute.getMaximumRepresentation() +
-                (hours % hourPerDay.getMaximumRepresentation()) * milliPerHour.getMaximumRepresentation();
+	return millis % milliPerDay.maximumRepresentation +
+                (seconds % secondPerDay.maximumRepresentation) * milliPerSecond.maximumRepresentation +
+                (minutes % minutePerDay.maximumRepresentation) * milliPerMinute.maximumRepresentation +
+                (hours % hourPerDay.maximumRepresentation) * milliPerHour.maximumRepresentation;
 }
 
 doc "return padded value"

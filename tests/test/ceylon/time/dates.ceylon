@@ -1,5 +1,5 @@
 import com.redhat.ceylon.sdk.test { assertEquals }
-import ceylon.time { date, Date }
+import ceylon.time { date, Date, Period }
 import ceylon.time.base { december, monday, january, november, february, march, april }
 
 shared void testDates() {
@@ -128,7 +128,6 @@ shared void testDates() {
     print( "Testing withYear");
     assertEquals( data_1982_12_13.withYear(1982), data_1982_12_13 );
     assertEquals( data_1982_12_13.withYear(2000), date( 2000, december, 13) );
-
     assertEquals( data_1982_12_13.withYear(1800), date( 1800, december, 13) );
 
     print( "Testing Ordinal");
@@ -137,6 +136,17 @@ shared void testDates() {
     for ( Date date in data_1982_12_13..data_1983_01_01 ) {
         assertEquals( date, data_1982_12_13.plusDays(cont++) );
     }
+
+    print( "Testing plus" );
+    value period_0001_02_03 = Period {
+        years = 1;
+        months = 2;
+        days = 3;
+    };
+    value newDataAmount = data_1982_12_13.plus( period_0001_02_03 );
+    assertEquals( newDataAmount.year, 1984 );
+    assertEquals( newDataAmount.month, february );
+    assertEquals( newDataAmount.dayOfMonth, 16 );
 
     print( "Testing string");
     assertEquals( data_1982_12_13.string, "1982-12-13" );
