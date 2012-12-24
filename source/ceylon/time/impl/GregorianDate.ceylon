@@ -1,5 +1,5 @@
-import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek }
-import ceylon.time { gregorian }
+import ceylon.time.base { monthOfYear, MonthOfYear, DayOfWeek, asDayOfWeek = dayOfWeek, january, sunday, ReadablePeriod }
+import ceylon.time { gregorian, Date }
 import ceylon.time.impl { calcLeapYear = leapYear }
 
 doc "Default implementation of a gregorian calendar"
@@ -31,13 +31,56 @@ shared class GregorianDate( Integer dayOfEra )
          There are 7 leap years from 1970 to 2000."
     shared Integer days_0000_TO_1970 = (daysPerCycle * 5) - (30 * 365 + 7);
 
-    //TODO: Implement
-    shared actual Integer weekOfYear = 0;
-
     doc "True, if this date is a leap year according to gregorian clendar leap year rules."
     shared actual Boolean leapYear = calcLeapYear( year );
 
     shared actual Integer dayOfYear = firstDayOfYear( month, leapYear ) + dayOfMonth -1;
+
+
+    doc "From: http://en.wikipedia.org/wiki/ISO_week_date#Calculation"
+    shared actual Integer weekOfYear {
+        value weekFromYearBefore = 0;
+        value possibleNextYearWeek = 53;
+        function normalizeFirstWeek( Integer weekNumber ) {
+            variable value result := weekNumber;
+            if ( weekNumber == 0 ) {
+                value jan1 = withDayOfMonth(1).withMonth(january);
+                value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
+
+                if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
+                    if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
+                        result := 53;
+                    } else {
+                        result := 52;
+                    }
+                }
+            }
+            return result;
+        }
+
+        function normalizeLastWeek( Integer weekNumber ) {
+            variable value result := weekNumber;
+            if ( weekNumber == 53 ) {
+                value weekDay = dayOfWeek == sunday then 7 else dayOfWeek.integer; 
+                value totalDaysInYear = leapYear then 366 else 365;
+                if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
+                    result := 1;
+                }
+            }
+            return result;
+        }
+
+        value dayOfWeekNumber = dayOfWeek == sunday then 7 else dayOfWeek.integer;
+        variable value weekNumber := ( dayOfYear - dayOfWeekNumber + 10 ) / 7;
+
+        if ( weekNumber == weekFromYearBefore ) {
+            weekNumber := normalizeFirstWeek( weekNumber );
+        } else if ( weekNumber == possibleNextYearWeek ) {
+            weekNumber := normalizeLastWeek( weekNumber );
+        }
+
+        return weekNumber;
+    }
 
     shared actual GregorianDate predecessor {
         return minusDays( 1 );
@@ -69,7 +112,7 @@ shared class GregorianDate( Integer dayOfEra )
 
     shared actual DayOfWeek dayOfWeek {
         value dow0 = floorMod( dayOfEpoch + 3, 7);
-        return asDayOfWeek(dow0 + 1);
+        return asDayOfWeek( ( dow0 + 1 ) % 7);
     }
 
     shared actual GregorianDate minusDays(Integer days) {
@@ -93,7 +136,7 @@ shared class GregorianDate( Integer dayOfEra )
 
     shared actual GregorianDate plusMonths(Integer months) {
         if ( months == 0 ) {
-                return this;
+            return this;
         }
 
         Integer totalMonths = year * 12 + ( month.integer - 1);
@@ -120,7 +163,7 @@ shared class GregorianDate( Integer dayOfEra )
         return plusDays( weeks * 7 );
     }
 
-    shared actual GregorianDate minusWeeks(Integer weeks) {
+    shared actual Date minusWeeks(Integer weeks) {
         if ( weeks == 0 ) {
             return this;
         }
@@ -152,18 +195,22 @@ shared class GregorianDate( Integer dayOfEra )
 
     shared actual Boolean equals( Object other ) {
         if (is GregorianDate other) {
-        if (this === other){
-            return true;
-        }
+            if (this === other){
+                return true;
+            }
 
-        return (this.year == other.year
-             && this.month==other.month
-             && this.dayOfMonth==other.dayOfMonth );
+            return (this.year == other.year
+                 && this.month==other.month
+                 && this.dayOfMonth==other.dayOfMonth );
         }
         return false;
     }
 
+    shared actual GregorianDate plus( ReadablePeriod amount ) {
+        return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
+    }
+
     shared actual String string {
-        return "" year "-" pad(month.integer) "-" pad( dayOfMonth ) "";
+        return "" year "-" pad( month.integer ) "-" pad( dayOfMonth ) "";
     }
 }

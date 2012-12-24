@@ -4,10 +4,10 @@ shared interface ReadablePeriod
                & ReadableTimePeriod {
 
     doc "Returns a copy of this period with time values truncated."
-    shared formal ReadableDatePeriod toDateOnly();
+    shared formal ReadableDatePeriod date;
 
     doc "Returns a copy of this period without days, months and years fields."
-    shared formal ReadableTimePeriod toTimeOnly();
+    shared formal ReadableTimePeriod time;
 
 }
 

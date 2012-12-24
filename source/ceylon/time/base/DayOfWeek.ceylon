@@ -24,8 +24,18 @@ shared abstract class DayOfWeek(integer)
     }
 
     shared actual Integer distanceFrom(DayOfWeek other) {
-        return integer.distanceFrom(other.integer);
+        if ( other == this ) {
+            return 0;
+        }
+        variable value cont := 0;
+        variable value next := this; 
+        while ( next != other ) {
+            cont++;
+            next++;
+        }
+        return cont;
     }
+
 }
 
 doc "List of all available weekdays"
