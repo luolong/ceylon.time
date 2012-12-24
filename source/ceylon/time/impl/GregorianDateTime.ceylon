@@ -1,5 +1,6 @@
 import ceylon.time { Date, Time, DateTime, dateTime }
 import ceylon.time.base { DayOfWeek, MonthOfYear, ReadablePeriod }
+import ceylon.time.field { milliseconds }
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDateTime( date, time ) 
     satisfies  DateTime {
@@ -236,8 +237,8 @@ shared class GregorianDateTime( date, time )
 
         Integer actualMillisOfDay = time.millisOfDay;
         value totalMillis = restOfMillis * signal + actualMillisOfDay;
-        value totalDays = days + floorDiv(totalMillis, milliPerDay.maximumRepresentation);
-        value newMillis = floorMod(totalMillis, milliPerDay.maximumRepresentation);
+        value totalDays = days + floorDiv(totalMillis, milliseconds.perDay );
+        value newMillis = floorMod(totalMillis, milliseconds.perDay );
         
         Time newTime = (newMillis == actualMillisOfDay) then time else TimeOfDay(newMillis);
 

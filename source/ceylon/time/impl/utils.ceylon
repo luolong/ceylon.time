@@ -1,6 +1,7 @@
 import ceylon.math.float { log10 }
 import ceylon.math.integer { smallest }
 import ceylon.time.base { MonthOfYear, january, february, march, april, may, june, july, august, september, october, november, december, monthOfYear }
+import ceylon.time.field { milliseconds, secondsField = seconds, minutesField = minutes, hoursField = hours }
 
 Integer floorMod(Integer a, Integer b) {
     return (((a % b) + b) % b);
@@ -13,7 +14,6 @@ Integer floorDiv(Integer a, Integer b) {
 Integer floor(Integer a, Integer b) {
     return (a >= 0 then a / b else ((a + 1) / b) - 1);
 }
-
 
 Integer resolveLastValidDay(Integer|MonthOfYear month, Integer day, Boolean leapYear ) {
     MonthOfYear actualMonth = monthOfYear(month);
@@ -61,17 +61,17 @@ shared Boolean leapYear( Integer year ) {
 }
 
 shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-    return millis / milliPerDay.maximumRepresentation +
-                seconds / secondPerDay.maximumRepresentation +
-                minutes / minutePerDay.maximumRepresentation +
-                hours / hourPerDay.maximumRepresentation;  
+    return millis / milliseconds.perDay +
+                seconds / secondsField.perDay +
+                minutes / minutesField.integer +
+                hours / hoursField.integer;  
 }
 
 shared Integer restOfMillisPerDay( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-	return millis % milliPerDay.maximumRepresentation +
-                (seconds % secondPerDay.maximumRepresentation) * milliPerSecond.maximumRepresentation +
-                (minutes % minutePerDay.maximumRepresentation) * milliPerMinute.maximumRepresentation +
-                (hours % hourPerDay.maximumRepresentation) * milliPerHour.maximumRepresentation;
+	return millis % milliseconds.perDay +
+                (seconds % secondsField.perDay) * milliseconds.integer +
+                (minutes % minutesField.perDay) * milliseconds.perMinute +
+                (hours % hoursField.integer) * milliseconds.perHour;
 }
 
 doc "return padded value"

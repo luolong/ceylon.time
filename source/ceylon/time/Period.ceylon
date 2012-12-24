@@ -1,7 +1,5 @@
 import ceylon.math.whole{Whole, wholeNumber}
-import ceylon.time.impl { 
-    minutePerHour, secondPerMinute, secondPerHour, milliPerSecond 
-}
+import ceylon.time.field { secondsField = seconds, minutesField = minutes }
 import ceylon.time.base { ReadablePeriod, PeriodBehavior, ReadableDatePeriod, ReadableTimePeriod }
 
 doc "An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
@@ -262,18 +260,18 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value years = this.years + this.months / 12;
         value months = this.months % 12;
         //TODO: We need to remove ceylon.math reference because it only compile to JVM
-        variable Whole total := wholeNumber(this.hours * secondPerHour.maximumRepresentation)
-                              + wholeNumber(this.minutes * secondPerMinute.maximumRepresentation)
+        variable Whole total := wholeNumber(this.hours * secondsField.perHour)
+                              + wholeNumber(this.minutes * secondsField.integer)
                               + wholeNumber(this.seconds);
 
-        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( milliPerSecond.maximumRepresentation  )) ).integer;
-        total += wholeNumber(this.milliseconds) / wholeNumber(( milliPerSecond.maximumRepresentation ));
+        value millis = ( wholeNumber(this.milliseconds) % wholeNumber( milliseconds.integer ) ).integer;
+        total += wholeNumber(this.milliseconds) / wholeNumber( milliseconds );
 
-        value seconds = ( total % wholeNumber(( secondPerMinute.maximumRepresentation )) ).integer;
-        total := total / wholeNumber(( secondPerMinute.maximumRepresentation ));
+        value seconds = ( total % wholeNumber( secondsField.integer ) ).integer;
+        total := total / wholeNumber( secondsField.integer );
 
-        value minutes = ( total % wholeNumber(minutePerHour.maximumRepresentation) ).integer;
-        value hours = ( total / wholeNumber(minutePerHour.maximumRepresentation ) ).integer;
+        value minutes = ( total % wholeNumber(minutesField.integer) ).integer;
+        value hours = ( total / wholeNumber(minutesField.integer) ).integer;
 
         return Period {
             years = years;
