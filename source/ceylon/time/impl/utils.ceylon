@@ -1,6 +1,6 @@
 import ceylon.math.float { log10 }
 import ceylon.math.integer { smallest }
-import ceylon.time.base { Month, february, april, june, september, november, ms=milliseconds, sec=seconds, min=minutes, h=hours, monthOf = month }
+import ceylon.time.base { Month, february, april, june, september, november, ms=milliseconds, sec=seconds, min=minutes, h=hours, monthOf = monthOf }
 
 
 Integer resolveLastValidDay(Integer|Month month, Integer day, Boolean leapYear ) {

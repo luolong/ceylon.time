@@ -1,3 +1,21 @@
+shared object years {
+    doc "The minimum supported year for instances of `Date`, -999,999,999."
+    shared Integer minimum = -999_999_999;
+
+    doc "The maximum supported year for instances of `Date`, 999,999,999."
+    shared Integer maximum = 999_999_999;
+}
+
+shared object months {
+
+    doc "Ordered list of all months of Gregorian and Julian calendar system from January to December"
+    shared Month[] all = {january, february, march, april, may, june, july, august, september, october, november, december};
+
+    doc "Number of months per year"
+    shared Integer perYear = all.size;
+
+}
+
 doc "Common properties of days"
 shared object days {
 
@@ -15,6 +33,17 @@ shared object days {
     shared Integer toMonth(Month month, Boolean leapYear=false){
         return month.fisrtDayOfYear(leapYear) - 1;
     }
+
+    doc "Number of days per week (7)"
+    shared Integer perWeek = 7;
+
+    doc "The number of days in a 400 year cycle."
+    shared Integer perCycle = 146097;
+
+    doc "The number of days from year zero to year 1970.
+         There are five 400 year cycles from year zero to 2000.
+         There are 7 leap years from 1970 to 2000."
+    shared Integer toEpoch = (perCycle * 5) - (30 * 365 + 7);
 
 }
 

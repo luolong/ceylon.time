@@ -37,7 +37,7 @@ shared abstract class Month(integer)
     doc "Returns month of year that comes specified number of months after this month."
     shared Month plusMonths(Integer number) {
         value m = (integer + number) % 12;
-        assert (exists month = months[m]); 
+        assert (exists month = months.all[m]); 
         return month;
     }
 
@@ -55,9 +55,6 @@ shared abstract class Month(integer)
 doc "Table of _day of year_ values for the first day of each month"
 Integer[] firstDayOfMonth = {1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335};
 
-doc "Enumeration of months of Gregorian/Julian calendar system from January to December"
-shared Month[] months = {january, february, march, april, may, june, july, august, september, october, november, december};
-
 doc "Returns month of year specified by the input argument.
 
      If input is an Integer, this method returns a month according to the integer 
@@ -65,12 +62,12 @@ doc "Returns month of year specified by the input argument.
      Any invalid values will throw an exception.
 
      If the imput value is a [[MonthOfYear]], the input value is returned as is."
-shared Month month(Integer|Month month){
+shared Month monthOf(Integer|Month month){
     switch (month)
     case (is Month) { return month; }
     case (is Integer) {
         assert ( january.integer <= month && month <= december.integer );
-        assert ( exists m = months[month-1] );
+        assert ( exists m = months.all[month-1] );
         return m;
     }
 }

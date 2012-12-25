@@ -1,19 +1,20 @@
-import ceylon.time.base { Month, DayOfWeek }
+import ceylon.time { Date }
+import ceylon.time.base { monthOf=monthOf, Month, DayOfWeek, days, years, dayOfWeek }
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
       extends AbstractDate( dayOfEra ) {
 
     shared actual Integer year{
-        return bottom;
+        return math.yearFrom( dayOfEra );
     }
 
     shared actual Month month {
-        return bottom;
+        return math.monthFrom( dayOfEra );
     }
 
     shared actual Integer day {
-        return bottom;
+        return math.dayFrom( dayOfEra );
     }
 
     shared actual Integer weekOfYear {
@@ -22,7 +23,7 @@ shared class GregorianDate( Integer dayOfEra )
 
     doc "True, if this date is a leap year according to gregorian clendar leap year rules."
     shared actual Boolean leapYear {
-        return gregorianRules.leapYear(year);
+        return math.leapYear(year);
     }
 
     shared actual Integer dayOfYear {
@@ -38,7 +39,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual DayOfWeek weekday {
-        return bottom;
+        return math.weekdayFrom( dayOfEra );
     }
 
     shared actual GregorianDate plusDays(Integer days) {
@@ -48,12 +49,20 @@ shared class GregorianDate( Integer dayOfEra )
         return GregorianDate( dayOfEra + days );
     }
 
-    shared actual GregorianDate plusMonths(Integer months) {
-        if ( months == 0 ) {
+    shared actual GregorianDate plusMonths(Integer monthsToAdd) {
+        if ( monthsToAdd == 0 ) {
             return this;
         }
 
-        return bottom;
+        value monthCount = year * 12 + (month.integer - 1);
+        value calcMonths = monthCount + monthsToAdd;  // safe overflow
+        value newYear = math.floorDiv(calcMonths, 12);
+        value newMonth = monthOf(math.floorMod(calcMonths, 12) + 1);
+        value newDay = min({day, newMonth.numberOfDays(math.leapYear(newYear))});
+        return GregorianDate(math.dayOfEra(
+                newYear, 
+                newMonth.integer, 
+                newDay));
     }
 
     shared actual GregorianDate plusYears(Integer years) {
@@ -100,36 +109,92 @@ shared class GregorianDate( Integer dayOfEra )
     }
 }
 
-shared object gregorianRules extends CalendarMath() {
-    doc "Computes [Julian Day Number] of the provided gregorian calendar date
-         according to the [formula] provided in Wikipedia article.
-
-         [Julian Day Number]: http://en.wikipedia.org/wiki/Julian_day
-         [formula]: http://en.wikipedia.org/wiki/Julian_day#Converting_Gregorian_calendar_date_to_Julian_Day_Number
-         "
-    shared Integer jdn(year, month, day){
-
-        doc "Year of the gregorian date"
+doc "Returns a gregorian calendar date according to the specified year, month and date values"
+shared Date gregorianDate(year, month, date){
+        doc "Year number of the date"
         Integer year;
-        doc "Month of the gregorian date"
-        Integer month;
-        doc "Day of month of the gregorian date"
-        Integer day;
+        
+        doc "Month of the year"
+        Integer|Month month; 
+        
+        doc "Date of month"
+        Integer date;
+        
+    return GregorianDate( math.dayOfEra(year, monthOf(month).integer, date) );
+}
 
-        value a = (14-month)/12;
-        value y = year + 4800 - a;
-        value m = month + 12*a - 3;
+doc "Calculate gregorian date values from the specified epoch value"
+class EopchToGregorian(Integer epochDay){
+    variable value zeroDay := epochDay + days.toEpoch;
+    zeroDay -= 60;  // adjust to 0000-03-01 so leap day is at end of four year cycle
+    variable value adjust := 0;
+    if (zeroDay < 0) {
+        // adjust negative years to positive for calculation
+        value adjustCycles = (zeroDay + 1) / days.perCycle - 1;
+        adjust := adjustCycles * 400;
+        zeroDay += -adjustCycles * days.perCycle;
+    }
+    variable value yearEst := (400 * zeroDay + 591) / days.perCycle;
+    variable value doyEst := zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
+    if (doyEst < 0) {
+        // fix estimate
+        yearEst--;
+        doyEst := zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
+    }
+    yearEst += adjust;  // reset any negative year
+    value marchDoy0 = doyEst;
 
-        return day + (153*m + 2)/5 + 365*y + y/4 - y/100 + y/400 - 32045;
+    // convert march-based values back to january-based
+    value marchMonth0 = (marchDoy0 * 5 + 2) / 153;
+    yearEst += marchMonth0 / 10;
+
+    // check year now we are certain it is correct
+    assert( years.minimum <= yearEst );
+    assert( yearEst <= years.maximum );
+
+    shared Integer year = yearEst;
+    shared Integer month = (marchMonth0 + 2) % 12 + 1;
+    shared Integer day = marchDoy0 - (marchMonth0 * 306 + 5) / 10 + 1;
+}
+
+doc "Common math primitives for calculating gregorian date values"
+object math extends CalendarMath() {
+    doc "Calculates the day of era of the given gregorian date value." 
+    shared Integer dayOfEra(Integer yyyy, Integer mm, Integer dd){
+        value y = yyyy;
+        value m = mm;
+        variable value total := 365 * y;
+        if (y >= 0) {
+            total += (y + 3) / 4 - (y + 99) / 100 + (y + 399) / 400;
+        }
+        else {
+            total -= y / -4 - y / -100 + y / -400;
+        }
+        total += ((367 * m - 362) / 12);
+        total += dd - 1;
+        if (m > 2) {
+            total--;
+            if (leapYear(yyyy) == false) {
+                total--;
+            }
+        }
+        return total - days.toEpoch;
     }
 
-    doc "Calculates epoch date from the provided Julian Day Number."
-    shared Integer epoch( jdn ){
+    shared Integer yearFrom(Integer dayOfEra) {
+        return EopchToGregorian(dayOfEra).year;
+    }
 
-        doc "Julian Day Number"
-        Integer jdn;
+    shared Month monthFrom(Integer dayOfEra) {
+        return monthOf(EopchToGregorian(dayOfEra).month);
+    }
 
-        return jdn - 2440587;
+    shared Integer dayFrom(Integer dayOfEra) {
+        return EopchToGregorian(dayOfEra).day;
+    }
+
+    shared DayOfWeek weekdayFrom(Integer dayOfEra) {
+        return dayOfWeek( floorMod(dayOfEra + 4, 7) );
     }
 
     doc "Calculates if the given year is a leap year"
@@ -141,10 +206,5 @@ shared object gregorianRules extends CalendarMath() {
             return false;
         }
         return (year % 4 == 0);
-    }
-
-    doc "Calculates the day of era of the given date value." 
-    shared Integer dayOfEra(Integer yyyy, Integer mm, Integer dd){
-        return epoch(jdn(yyyy, mm, dd));
     }
 }

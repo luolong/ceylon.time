@@ -1,5 +1,5 @@
-import ceylon.time.base { ReadableDate, Month, monthOf = month, DateBehavior }
-import ceylon.time.impl { GregorianDate, gregorianRules }
+import ceylon.time.base { ReadableDate, Month, monthOf=monthOf, DateBehavior }
+import ceylon.time.impl { gregorianDate }
 import ceylon.time.timezone { TimeZone }
 
 doc "An interface for date objects in the ISO-8601 calendar system.
@@ -41,7 +41,7 @@ shared Date gregorian(year, month, date){
         doc "Date of month"
         Integer date;
         
-    return GregorianDate( gregorianRules.dayOfEra(year, monthOf(month).integer, date) );
+    return gregorianDate( year, monthOf(month).integer, date );
 }
 
 
