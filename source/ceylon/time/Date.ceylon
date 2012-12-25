@@ -1,5 +1,6 @@
-import ceylon.time.impl { GregorianDate, yearField = year, dayOfMonthField = dayPerMonth, monthPerYear }
+import ceylon.time.impl { GregorianDate }
 import ceylon.time.base { ReadableDate, MonthOfYear, monthOfYear, DateBehavior }
+import ceylon.time.field { days, years, monthsField = months }
 
 doc "An interface for date objects in the ISO-8601 calendar system.
 
@@ -39,16 +40,15 @@ Integer j(Integer yyyy, Integer mm, Integer d) {
     return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
 }
 
-//TODO: We need it like a high order method... something like dayOfEra.from( Chrono, yyyy, mm, d)
 doc "Calculates the number of days according to gregorian calendar rules"
 shared Integer gregorian(Integer yyyy, Integer mm, Integer d) {
 
-    yearField.checkValidValue( yyyy );
+    years.checkValidValue( yyyy );
 
     value mo = monthOfYear(mm);
-    monthPerYear.checkValidValue( mo.integer );
-
-    dayOfMonthField.checkValidValue(d);
+    monthsField.checkValidValue( mo.integer );
+	
+    days.checkValidValue(d);
 
     value m = (mm + 9) % 12;
     value y = yyyy - m/10;

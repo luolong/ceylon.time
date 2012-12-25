@@ -10,5 +10,5 @@ class TimeSuite() extends Suite("ceylon.time") {
 }
 
 void run() {
-    TimeSuite().run();
+    TimeSuite().run(); 
 }

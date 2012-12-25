@@ -1,5 +1,6 @@
 import ceylon.time.base { ReadableTime, TimeBehavior }
-import ceylon.time.impl { TimeOfDay, hourPerDay, minutePerHour, secondPerMinute, milliPerSecond, milliPerMinute, milliPerHour, milliPerDay }
+import ceylon.time.impl { TimeOfDay }
+import ceylon.time.field { milliseconds, secondsField = seconds, minutesField = minutes, hoursField = hours }
 
 doc "An abstraction representing time of day like _6pm_ or _8.30am_."
 shared interface Time
@@ -12,25 +13,19 @@ shared interface Time
 
 doc "Create new instance of [[Time]]"
 shared Time time(Integer hours = 0, Integer minutes=0, Integer seconds=0, Integer millis=0) {
-    value hourRange = hourPerDay.getMaximumRepresentation();
-    value milliOfHourRange = milliPerHour.getMaximumRepresentation();
-    
     value hh = (hours == 0) then 0
-          else (hours %  hourRange) * milliOfHourRange;
-    
-    value minutesRange = minutePerHour.getMaximumRepresentation();
-    value milliOfMinuteRange = milliPerMinute.getMaximumRepresentation();
+          else (hours %  hoursField.perDay) * milliseconds.perHour;
     
     value mm = (minutes == 0) then 0
-          else (minutes % minutesRange) * milliOfMinuteRange;
+          else (minutes % minutesField.perHour) * milliseconds.perMinute;
     
-    value secondRange = secondPerMinute.getMaximumRepresentation();
-    value milliOfSecondRange = milliPerSecond.getMaximumRepresentation();
+    value secondRange = secondsField.perHour;
+    value milliOfSecondRange = milliseconds.perSecond;
     
     value ss = (seconds == 0) then 0
           else (seconds % secondRange) * milliOfSecondRange;
     
     value totalMillis = hh + mm + ss + millis;
     return TimeOfDay( (totalMillis >= 0 ) then totalMillis
-            else ( ( milliPerDay.getMaximumRepresentation() ) + totalMillis ) );
+            else ( ( milliseconds.perDay ) + totalMillis ) );
 }

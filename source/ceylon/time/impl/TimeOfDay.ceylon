@@ -1,4 +1,5 @@
-import ceylon.time { Time, time }
+import ceylon.time {Time, time}
+import ceylon.time.field { millisecondsField = milliseconds, secondsField = seconds, minutesField = minutes, hoursField = hours }
 doc "Extremely simple implementation of Time interface, representing an 
      abstraction of a _time of day_ such as 10am or 3.20pm."
 shared class TimeOfDay(millisOfDay) 
@@ -9,31 +10,31 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Number of milliseconds since last full second"
     shared actual Integer millis {
-        return millisOfDay % ( milliPerSecond.getMaximumRepresentation() );
+        return millisOfDay % millisecondsField.perSecond;
     }
 
     doc "Number of seconds since last midnight"
     shared actual Integer secondsOfDay {
-        return millisOfDay / ( milliPerSecond.getMaximumRepresentation() );
+        return millisOfDay / millisecondsField.perSecond;
     }
 
     shared actual Integer seconds {
-        return secondsOfDay % ( secondPerMinute.getMaximumRepresentation() );
+        return secondsOfDay % secondsField.perMinute;
     }
 
     doc "Number of minutes since last midnight"
     shared actual Integer minutesOfDay {
-        return secondsOfDay / ( secondPerMinute.getMaximumRepresentation() );
+        return secondsOfDay / secondsField.perMinute;
     }
 
     doc "Number of minutes since last full hour."
     shared actual Integer minutes {
-        return minutesOfDay % ( minutePerHour.getMaximumRepresentation() ); 
+        return minutesOfDay % minutesField.perHour; 
     }
 
     doc "Number of full hours elapsed since last midnight."
     shared actual Integer hours {
-        return minutesOfDay / ( minutePerHour.getMaximumRepresentation() );
+        return minutesOfDay / minutesField.perHour;
     }
 
     doc "Compare two instants of time"
@@ -61,19 +62,19 @@ shared class TimeOfDay(millisOfDay)
     }
 
     shared actual Time minusHours(Integer hours) {
-        return plusHours(-(hours % hourPerDay.getMaximumRepresentation()));
+        return plusHours(-(hours % hoursField.perDay));
     }
 
     shared actual Time minusMilliseconds(Integer milliseconds) {
-        return plusMilliseconds( -( milliseconds % milliPerDay.getMaximumRepresentation() ) );
+        return plusMilliseconds( -( milliseconds % millisecondsField.perDay ) );
     }
 
     shared actual Time minusMinutes(Integer minutes) {
-        return plusMinutes(-(minutes % minutePerDay.getMaximumRepresentation() ));
+        return plusMinutes(-(minutes % minutesField.perDay ));
     }
 
     shared actual Time minusSeconds(Integer seconds) {
-        return plusSeconds(-(seconds % secondPerDay.getMaximumRepresentation()));
+        return plusSeconds(-(seconds % secondsField.perDay));
     }
 
     shared actual Time plusHours(Integer hours) {
@@ -81,8 +82,7 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer hoursPerDay = hourPerDay.getMaximumRepresentation();
-        Integer newHour = ((hours % hoursPerDay) + this.hours + hoursPerDay) % hoursPerDay;
+        Integer newHour = ((hours % hoursField.perDay) + this.hours + hoursField.perDay) % hoursField.perDay;
         return time(newHour, minutes, seconds, millis);
     }
 
@@ -98,16 +98,16 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer minutesPerHour = minutePerHour.getMaximumRepresentation();
-        Integer minutesPerDay = minutePerDay.getMaximumRepresentation();
+        Integer minutesPerHour = minutesField.perHour;
+        Integer minutesPerDay = minutesField.perDay;
 
-        Integer mofd = hours * minutesPerHour + this.minutes;
-        Integer newMofd = ((minutes % minutesPerDay) + mofd + minutesPerDay) % minutesPerDay;
-        if (mofd == newMofd) {
+        Integer minutesOfDay = hours * minutesPerHour + this.minutes;
+        Integer newMinutesOfDay = ((minutes % minutesPerDay) + minutesOfDay + minutesPerDay) % minutesPerDay;
+        if (minutesOfDay == newMinutesOfDay) {
             return this;
         }
-        Integer newHour = newMofd / minutesPerHour;
-        Integer newMinute = newMofd % minutesPerHour;
+        Integer newHour = newMinutesOfDay / minutesPerHour;
+        Integer newMinute = newMinutesOfDay % minutesPerHour;
         return time(newHour, newMinute, seconds, millis);
     }
 
@@ -116,15 +116,15 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer secondsPerHour = secondPerHour.getMaximumRepresentation();
-        Integer secondsPerDay = secondPerDay.getMaximumRepresentation();
-        Integer secondsPerMinute = secondPerMinute.getMaximumRepresentation();
-        Integer minutesPerHour = minutePerHour.getMaximumRepresentation();
+        Integer secondsPerHour = secondsField.perHour;
+        Integer secondsPerDay = secondsField.perDay;
+        Integer secondsPerMinute = secondsField.perMinute;
+        Integer minutesPerHour = minutesField.perHour;
 
-        Integer sofd = hours * secondsPerHour +
+        Integer secondsOfDay = hours * secondsPerHour +
                     minutes * secondsPerMinute + this.seconds;
-        Integer newSofd = ((seconds % secondsPerDay) + sofd + secondsPerDay) % secondsPerDay;
-        if (sofd == newSofd) {
+        Integer newSofd = ((seconds % secondsPerDay) + secondsOfDay + secondsPerDay) % secondsPerDay;
+        if (secondsOfDay == newSofd) {
             return this;
         }
 
@@ -138,28 +138,28 @@ shared class TimeOfDay(millisOfDay)
         if (this.hours == hours) {
             return this;
         }
-        hourPerDay.checkValidValue(hours);
+        hoursField.checkValidValue(hours);
         return time(hours, minutes, seconds, millis);
     }
     shared actual Time withMinutes(Integer minutes) {
         if (this.minutes == minutes) {
             return this;
         }
-        minutePerHour.checkValidValue(minutes);
+        minutesField.checkValidValue(minutes);
         return time(hours, minutes, seconds, millis);
     }
     shared actual Time withSeconds(Integer seconds) {
         if (this.seconds == seconds) {
             return this;
         }
-        secondPerMinute.checkValidValue(seconds);
+        secondsField.checkValidValue(seconds);
         return time(hours, minutes, seconds, millis );
     }
     shared actual Time withMilliseconds(Integer milliseconds) {
         if (this.millis == milliseconds) {
             return this;
         }
-        milliPerSecond.checkValidValue(milliseconds);
+        millisecondsField.checkValidValue(milliseconds);
         return time(hours, minutes, seconds, milliseconds);
     }
 

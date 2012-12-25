@@ -1,78 +1,155 @@
-import com.redhat.ceylon.sdk.test { assertTrue }
-import ceylon.time { date, Date }
-import ceylon.time.base { december, monday, january, november, february }
-
-Date data_1982_12_13 = date( 1982, december, 13);
+import com.redhat.ceylon.sdk.test { assertEquals }
+import ceylon.time { date, Date, Period }
+import ceylon.time.base { december, monday, january, november, february, march, april }
 
 shared void testDates() {
 
+    value data_1900_1_1 = date(1900, january, 1);
+    value data_2000_01_31 = date( 2000, january, 31 );
+    value data_1982_12_13 = date( 1982, december, 13);
+
     print("Testing GregorianCalendar Instances");
-    assertTrue( data_1982_12_13.dayOfYear == 347 );
-    assertTrue( data_1982_12_13.dayOfMonth == 13 );
-    assertTrue( data_1982_12_13.dayOfEra == 724197 ); // i dont know if its correct
-    assertTrue( data_1982_12_13.dayOfWeek == monday );
+    assertEquals( data_1982_12_13.dayOfYear, 347 );
+    assertEquals( data_1982_12_13.dayOfMonth, 13 );
+    assertEquals( data_1982_12_13.dayOfEra, 724197 );
+    assertEquals( data_1982_12_13.dayOfWeek, monday );
+    assertEquals( data_1982_12_13.month, december );
+    assertEquals( data_1982_12_13.year, 1982 );
+	assertEquals( data_1982_12_13.weekOfYear, 50 );
+
+    assertEquals( data_1900_1_1.dayOfYear, 1 );
+    assertEquals( data_1900_1_1.dayOfMonth, 1 );
+    assertEquals( data_1900_1_1.dayOfEra, 693901 ); 
+    assertEquals( data_1900_1_1.dayOfWeek, monday );
+    assertEquals( data_1900_1_1.month, january );
+    assertEquals( data_1900_1_1.year, 1900 );
+	assertEquals( data_1900_1_1.weekOfYear, 1 );
 
     print("Testing leapYear");
-    assertTrue( date(2012, january, 1 ).leapYear == true );
-    assertTrue( date(2008, january, 1 ).leapYear == true );
-    assertTrue( date(2011, january, 1 ).leapYear == false );
-    assertTrue( date(1900, january, 1 ).leapYear == false );
+    assertEquals( date(2400, january, 1 ).leapYear, true );
+    assertEquals( date(2200, january, 1 ).leapYear, false );
+    assertEquals( date(2100, january, 1 ).leapYear, false );
+    assertEquals( date(2012, january, 1 ).leapYear, true );
+    assertEquals( date(2011, january, 1 ).leapYear, false );
+    assertEquals( date(2008, january, 1 ).leapYear, true );
+    assertEquals( date(2000, january, 1 ).leapYear, true );
+    assertEquals( date(1900, january, 1 ).leapYear, false );
+    assertEquals( date(1600, january, 1 ).leapYear, true );
+
+    print("Testing weekOfYear");
+	//Random dates
+    assertEquals( date(2009, april, 28).weekOfYear, 18);
+    assertEquals( date(2012, december, 16).weekOfYear, 50);
+
+    //http://en.wikipedia.org/wiki/ISO_week_date
+    //http://www.personal.ecu.edu/mccartyr/isowdcal.html
+    assertEquals( date(2005, january, 1).weekOfYear, 53);
+    assertEquals( date(2005, january, 2).weekOfYear, 53);
+    assertEquals( date(2005, december, 31).weekOfYear, 52);
+    assertEquals( date(2007, january, 1).weekOfYear, 1);
+    assertEquals( date(2007, december, 30).weekOfYear, 52);
+    assertEquals( date(2007, december, 31).weekOfYear, 1);
+    assertEquals( date(2008, january, 1).weekOfYear, 1);
+    assertEquals( date(2008, december, 28).weekOfYear, 52);
+    assertEquals( date(2008, december, 29).weekOfYear, 1);
+    assertEquals( date(2008, december, 30).weekOfYear, 1);
+    assertEquals( date(2008, december, 31).weekOfYear, 1);
+    assertEquals( date(2009, january, 1).weekOfYear, 1);
+    assertEquals( date(2009, december, 31).weekOfYear, 53);
+    assertEquals( date(2010, january, 1).weekOfYear, 53);
+    assertEquals( date(2010, january, 2).weekOfYear, 53);
+    assertEquals( date(2010, january, 3).weekOfYear, 53);
 
     print( "Testing plusDays");
-    assertTrue( data_1982_12_13.plusDays( 5 )  <=> date( 1982, december, 18 ) == equal );
-    assertTrue( data_1982_12_13.plusDays( 5 )  <=> date( 1982, december, 18 ) == equal );
-    assertTrue( data_1982_12_13.plusDays( 45 ) <=> date( 1983, january, 27 )  == equal );
+    assertEquals( data_1982_12_13.plusDays( 0 ), data_1982_12_13 );
+    assertEquals( data_1982_12_13.plusDays( 5 ), date( 1982, december, 18 ) );
+    assertEquals( data_1982_12_13.plusDays( 5 ), date( 1982, december, 18 ) );
+    assertEquals( data_1982_12_13.plusDays( 45 ), date( 1983, january, 27 ) );
+    assertEquals( data_1982_12_13.plusDays( 10954 ), date( 2012, december, 9 ) );
 
     print( "Testing minusDays");
-    assertTrue( data_1982_12_13.minusDays( 5 ) <=> date( 1982, december, 8 ) == equal );
+    assertEquals( data_1982_12_13.minusDays( 0 ), data_1982_12_13 );
+    assertEquals( data_1982_12_13.minusDays( 5 ), date( 1982, december, 8 ) );
+    assertEquals( date( 2012, december, 9 ).minusDays( 10954 ), data_1982_12_13 );
 
     print( "Testing plusMonths");
-    assertTrue( data_1982_12_13.plusMonths(1) <=> date( 1983, january, 13) == equal );
-    assertTrue( data_1982_12_13.plusMonths(12) <=> date( 1983, december, 13) == equal );
+    assertEquals( data_1982_12_13.plusMonths(0), data_1982_12_13 );
+    assertEquals( data_1982_12_13.plusMonths(1), date( 1983, january, 13) );
+    assertEquals( data_1982_12_13.plusMonths(12), date( 1983, december, 13) );
+    assertEquals( data_1982_12_13.plusMonths(36), date( 1985, december, 13) );
+	
+    assertEquals( data_2000_01_31.plusMonths(1), date( 2000, february, 29) );
+    assertEquals( data_2000_01_31.plusMonths(14), date( 2001, march, 31) );
 
     print( "Testing minusMonths");
-    assertTrue( data_1982_12_13.minusMonths(1) <=> date( 1982, november, 13) == equal );
-    assertTrue( data_1982_12_13.minusMonths(12) <=> date( 1981, december, 13) == equal );
+    assertEquals( data_1982_12_13.minusMonths(0), data_1982_12_13 );
+    assertEquals( data_1982_12_13.minusMonths(1), date( 1982, november, 13) );
+    assertEquals( data_1982_12_13.minusMonths(12), date( 1981, december, 13) );
 
     print( "Testing plusYears");
-    assertTrue( data_1982_12_13.plusYears(18) <=> date( 2000, december, 13) == equal );
-    assertTrue( data_1982_12_13.plusYears(30) <=> date( 2012, december, 13) == equal );
-    assertTrue( date(2012, february, 29).plusYears(1) <=> date( 2013, february, 28) == equal );
+    assertEquals( data_1982_12_13.plusYears(0), data_1982_12_13 );
+    assertEquals( data_1982_12_13.plusYears(18), date( 2000, december, 13) );
+    assertEquals( data_1982_12_13.plusYears(30), date( 2012, december, 13) );
+    assertEquals( date(2012, february, 29).plusYears(1), date( 2013, february, 28) );
 
     print( "Testing minusYears");
-    assertTrue( data_1982_12_13.minusYears(10) <=> date( 1972, december, 13) == equal );
-    assertTrue( date(2012, february, 29).minusYears(1) <=> date( 2011, february, 28) == equal );
+    assertEquals( data_2000_01_31.minusYears(1), date( 1999, january, 31) );
+
+    assertEquals( data_1982_12_13.minusYears(10), date( 1972, december, 13) );
+    assertEquals( date(2012, february, 29).minusYears(1), date( 2011, february, 28) );
 
     print( "Testing plusWeeks");
-    assertTrue( data_1982_12_13.plusWeeks(1) <=> date( 1982, december, 20) == equal );
-    assertTrue( data_1982_12_13.plusWeeks(3) <=> date( 1983, january, 3) == equal );
+    assertEquals( data_1982_12_13.plusWeeks(1).dayOfWeek, data_1982_12_13.dayOfWeek );
+    assertEquals( data_1982_12_13.plusWeeks(1), date( 1982, december, 20) );
+    assertEquals( data_1982_12_13.plusWeeks(3), date( 1983, january, 3) );
 
     print( "Testing minusWeeks");
-    assertTrue( data_1982_12_13.minusWeeks(1) <=> date( 1982, december, 6) == equal );
-    assertTrue( data_1982_12_13.minusWeeks(3) <=> date( 1982, november, 22) == equal );
+    assertEquals( data_1982_12_13.minusWeeks(1), date( 1982, december, 6) );
+    assertEquals( data_1982_12_13.minusWeeks(3), date( 1982, november, 22) );
+    assertEquals( data_1982_12_13.minusWeeks(3).dayOfWeek, date( 1982, november, 22).dayOfWeek );
 
     print( "Testing withDayOfMonth");
-    assertTrue( data_1982_12_13.withDayOfMonth(17) <=> date( 1982, december, 17) == equal);
-    assertTrue( data_1982_12_13.withDayOfMonth(40) <=> date( 1982, december, 31) == equal);
+    assertEquals( data_1982_12_13.withDayOfMonth(13), data_1982_12_13 );
+    assertEquals( data_1982_12_13.withDayOfMonth(17), date( 1982, december, 17) );
+	
+    //TODO: Should we throw exception if isnt valid day?
+    assertEquals( data_1982_12_13.withDayOfMonth(0), date( 1982, 11, 30 ) );
+    assertEquals( data_1982_12_13.withDayOfMonth(40), date( 1982, december, 31) );
+    assertEquals( date(2011, february,1).withDayOfMonth(29), date( 2011, february, 28) );
+    //////
 
     print( "Testing withMonth");
-    assertTrue( data_1982_12_13.withMonth(1) <=> date( 1982, january, 13) == equal);
-    assertTrue( data_1982_12_13.withMonth(january) <=> date( 1982, january, 13) == equal);
-    assertTrue( date(2012, december, 31).withMonth(2) <=> date( 2012, february, 29) == equal);
-    assertTrue( date(2012, december, 31).withMonth(february) <=> date( 2012, february, 29) == equal);
+    assertEquals( data_1982_12_13.withMonth(december), data_1982_12_13 );
+    assertEquals( data_1982_12_13.withMonth(1), date( 1982, january, 13) );
+    assertEquals( data_1982_12_13.withMonth(january), date( 1982, january, 13) );
+    assertEquals( date(2012, december, 31).withMonth(2), date( 2012, february, 29) );
+    assertEquals( date(2012, december, 31).withMonth(february), date( 2012, february, 29) );
 
     print( "Testing withYear");
-    assertTrue( data_1982_12_13.withYear(2000) <=> date( 2000, december, 13) == equal);
+    assertEquals( data_1982_12_13.withYear(1982), data_1982_12_13 );
+    assertEquals( data_1982_12_13.withYear(2000), date( 2000, december, 13) );
+    assertEquals( data_1982_12_13.withYear(1800), date( 1800, december, 13) );
 
     print( "Testing Ordinal");
     Date data_1983_01_01 = date( 1983, january, 1 );
-    variable Integer cont := 0;
+    variable value cont := 0;
     for ( Date date in data_1982_12_13..data_1983_01_01 ) {
-        assertTrue( date == data_1982_12_13.plusDays(cont++) );
+        assertEquals( date, data_1982_12_13.plusDays(cont++) );
     }
 
+    print( "Testing plus" );
+    value period_0001_02_03 = Period {
+        years = 1;
+        months = 2;
+        days = 3;
+    };
+    value newDataAmount = data_1982_12_13.plus( period_0001_02_03 );
+    assertEquals( newDataAmount.year, 1984 );
+    assertEquals( newDataAmount.month, february );
+    assertEquals( newDataAmount.dayOfMonth, 16 );
+
     print( "Testing string");
-    assertTrue( data_1982_12_13.string == "1982-12-13" );
-    assertTrue( date(2012, january, 1 ).string == "2012-01-01" );
+    assertEquals( data_1982_12_13.string, "1982-12-13" );
+    assertEquals( date(2012, january, 1 ).string, "2012-01-01" );
 
 }
