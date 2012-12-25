@@ -14,13 +14,13 @@ shared interface Time
 doc "Create new instance of [[Time]]"
 shared Time time(Integer hours = 0, Integer minutes=0, Integer seconds=0, Integer millis=0) {
     value hh = (hours == 0) then 0
-          else (hours %  hoursField.integer) * milliseconds.perHour;
+          else (hours %  hoursField.perDay) * milliseconds.perHour;
     
     value mm = (minutes == 0) then 0
-          else (minutes % minutesField.integer) * milliseconds.perMinute;
+          else (minutes % minutesField.perHour) * milliseconds.perMinute;
     
-    value secondRange = secondsField.integer;
-    value milliOfSecondRange = milliseconds.integer;
+    value secondRange = secondsField.perHour;
+    value milliOfSecondRange = milliseconds.perSecond;
     
     value ss = (seconds == 0) then 0
           else (seconds % secondRange) * milliOfSecondRange;

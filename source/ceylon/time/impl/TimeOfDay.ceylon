@@ -10,31 +10,31 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Number of milliseconds since last full second"
     shared actual Integer millis {
-        return millisOfDay % millisecondsField.integer;
+        return millisOfDay % millisecondsField.perSecond;
     }
 
     doc "Number of seconds since last midnight"
     shared actual Integer secondsOfDay {
-        return millisOfDay / millisecondsField.integer;
+        return millisOfDay / millisecondsField.perSecond;
     }
 
     shared actual Integer seconds {
-        return secondsOfDay % secondsField.integer;
+        return secondsOfDay % secondsField.perMinute;
     }
 
     doc "Number of minutes since last midnight"
     shared actual Integer minutesOfDay {
-        return secondsOfDay / secondsField.integer;
+        return secondsOfDay / secondsField.perMinute;
     }
 
     doc "Number of minutes since last full hour."
     shared actual Integer minutes {
-        return minutesOfDay % minutesField.integer; 
+        return minutesOfDay % minutesField.perHour; 
     }
 
     doc "Number of full hours elapsed since last midnight."
     shared actual Integer hours {
-        return minutesOfDay / minutesField.integer;
+        return minutesOfDay / minutesField.perHour;
     }
 
     doc "Compare two instants of time"
@@ -62,7 +62,7 @@ shared class TimeOfDay(millisOfDay)
     }
 
     shared actual Time minusHours(Integer hours) {
-        return plusHours(-(hours % hoursField.integer));
+        return plusHours(-(hours % hoursField.perDay));
     }
 
     shared actual Time minusMilliseconds(Integer milliseconds) {
@@ -82,8 +82,7 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer hoursPerDay = hoursField.integer;
-        Integer newHour = ((hours % hoursPerDay) + this.hours + hoursPerDay) % hoursPerDay;
+        Integer newHour = ((hours % hoursField.perDay) + this.hours + hoursField.perDay) % hoursField.perDay;
         return time(newHour, minutes, seconds, millis);
     }
 
@@ -99,7 +98,7 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer minutesPerHour = minutesField.integer;
+        Integer minutesPerHour = minutesField.perHour;
         Integer minutesPerDay = minutesField.perDay;
 
         Integer minutesOfDay = hours * minutesPerHour + this.minutes;
@@ -119,8 +118,8 @@ shared class TimeOfDay(millisOfDay)
 
         Integer secondsPerHour = secondsField.perHour;
         Integer secondsPerDay = secondsField.perDay;
-        Integer secondsPerMinute = secondsField.integer;
-        Integer minutesPerHour = minutesField.integer;
+        Integer secondsPerMinute = secondsField.perMinute;
+        Integer minutesPerHour = minutesField.perHour;
 
         Integer secondsOfDay = hours * secondsPerHour +
                     minutes * secondsPerMinute + this.seconds;

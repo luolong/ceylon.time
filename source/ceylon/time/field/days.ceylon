@@ -1,4 +1,4 @@
-shared object days extends DateField(1) {
+shared object days extends DateField() {
 	shared Integer perWeek = 7;
 	
 	shared actual Integer maximumLargest = 31;

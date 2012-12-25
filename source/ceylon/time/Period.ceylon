@@ -261,17 +261,17 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value months = this.months % 12;
         //TODO: We need to remove ceylon.math reference because it only compile to JVM
         variable Whole total := wholeNumber(this.hours * secondsField.perHour)
-                              + wholeNumber(this.minutes * secondsField.integer)
+                              + wholeNumber(this.minutes * secondsField.perMinute)
                               + wholeNumber(this.seconds);
 
         value millis = ( wholeNumber(this.milliseconds) % wholeNumber( milliseconds.integer ) ).integer;
         total += wholeNumber(this.milliseconds) / wholeNumber( milliseconds );
 
-        value seconds = ( total % wholeNumber( secondsField.integer ) ).integer;
-        total := total / wholeNumber( secondsField.integer );
+        value seconds = ( total % wholeNumber( secondsField.perMinute ) ).integer;
+        total := total / wholeNumber( secondsField.perMinute );
 
-        value minutes = ( total % wholeNumber(minutesField.integer) ).integer;
-        value hours = ( total / wholeNumber(minutesField.integer) ).integer;
+        value minutes = ( total % wholeNumber(minutesField.perHour) ).integer;
+        value hours = ( total / wholeNumber(minutesField.perHour) ).integer;
 
         return Period {
             years = years;

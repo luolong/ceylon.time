@@ -1,4 +1,4 @@
-shared object months extends DateField(1) {
+shared object months extends DateField() {
 	shared Integer perYear = 12;
 	
 	shared actual Integer maximumLargest = 12;

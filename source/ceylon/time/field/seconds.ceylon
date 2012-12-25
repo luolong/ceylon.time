@@ -1,4 +1,5 @@
-shared object seconds extends TimeField(60) {
+shared object seconds extends TimeField() {
+	shared Integer perMinute = 60;
 	shared Integer perHour = 3600;
 	shared Integer perDay = 86400;
 	

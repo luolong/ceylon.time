@@ -1,7 +1,7 @@
-shared object years extends DateField(1) {
+shared object years extends DateField() {
 	
-	shared actual Integer maximumLargest = 366;
-	shared actual Integer maximumSmallest = 365;
-	shared actual Integer minimalLargest = 1;
-	shared actual Integer minimalSmallest = 1;
+	shared actual Integer maximumLargest = 999_999_999;
+	shared actual Integer maximumSmallest = 999_999_999;
+	shared actual Integer minimalLargest = -999_999_999;
+	shared actual Integer minimalSmallest = -999_999_999;
 }

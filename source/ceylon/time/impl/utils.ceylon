@@ -63,15 +63,15 @@ shared Boolean leapYear( Integer year ) {
 shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
     return millis / milliseconds.perDay +
                 seconds / secondsField.perDay +
-                minutes / minutesField.integer +
-                hours / hoursField.integer;  
+                minutes / minutesField.perHour +
+                hours / hoursField.perDay;  
 }
 
 shared Integer restOfMillisPerDay( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
 	return millis % milliseconds.perDay +
-                (seconds % secondsField.perDay) * milliseconds.integer +
+                (seconds % secondsField.perDay) * milliseconds.perSecond +
                 (minutes % minutesField.perDay) * milliseconds.perMinute +
-                (hours % hoursField.integer) * milliseconds.perHour;
+                (hours % hoursField.perDay) * milliseconds.perHour;
 }
 
 doc "return padded value"
