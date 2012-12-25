@@ -111,8 +111,8 @@ Operations on Date
 
 - Difference of two dates returns a Period.
 - Adding and subtracting a Period (with precision of a day)
-- converting to DateTime, ZoneDateTime, etc.
-- 
+- Converting to DateTime, ZoneDateTime, etc.
+- Iterating over range of dates by a specific interval
 
 ...
 
