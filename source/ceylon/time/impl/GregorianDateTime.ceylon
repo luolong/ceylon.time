@@ -1,5 +1,5 @@
 
-import ceylon.time { Date, Time, DateTime }
+import ceylon.time { Date, Time, DateTime, Period }
 import ceylon.time.base { DayOfWeek, Month, milliseconds }
 
 doc "Default implementation of a gregorian calendar"
@@ -77,6 +77,16 @@ shared class GregorianDateTime( date, time )
     shared actual Integer distanceFrom(DateTime other) {
         //TODO: What precision?
         return bottom;
+    }
+    
+    shared actual DateTime plus(Period period){
+        return plusYears(period.years)
+            .plusMonths(period.months)
+            .plusDays(period.days)
+            .plusHours(period.hours)
+            .plusMinutes(period.minutes)
+            .plusSeconds(period.seconds)
+            .plusMilliseconds(period.milliseconds);
     }
 
     shared actual DateTime plusYears(Integer years) {

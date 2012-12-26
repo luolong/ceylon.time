@@ -5,17 +5,6 @@ import com.redhat.ceylon.sdk.test { assertTrue, assertNotNull, assertEquals, ass
 
 Date data_1982_12_13 = date( 1982, december, 13);
 
-doc "Testing the common usage scenarios for Date data type"
-void testDateCommonUsage(){
-    
-    value millis = now().millis;
-    print( "systemTime = " millis "; dateOfEra = " millis "");
-    
-    print("Testing common date usage scenarios");
-    assertNotNull( today(), "today() should return a date" );
-    
-}
-
 shared void testDates() {
     
     print("Testing GregorianCalendar Instances");

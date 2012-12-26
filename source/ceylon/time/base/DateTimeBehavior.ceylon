@@ -1,4 +1,5 @@
-import ceylon.time { Date, Time }
+import ceylon.time { Date, Time, Period, DateTime }
+
 shared interface DateTimeBehavior<Element, out DateType, out TimeType>
     satisfies DateBehavior<Element> & TimeBehavior<Element>
     given Element satisfies DateTimeBehavior<Element, DateType, TimeType>
@@ -10,5 +11,7 @@ shared interface DateTimeBehavior<Element, out DateType, out TimeType>
     shared formal TimeType time;
 
     shared formal DateType date;
+
+    shared formal DateTime plus(Period period); 
 
 }
