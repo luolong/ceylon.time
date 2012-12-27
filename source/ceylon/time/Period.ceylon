@@ -1,8 +1,7 @@
 import ceylon.math.whole{Whole, wholeNumber}
-import ceylon.time.impl { 
-    minutePerHour, secondPerMinute, secondPerHour, milliPerSecond 
-}
-import ceylon.time.base { ReadablePeriod, PeriodBehavior, ReadableDatePeriod, ReadableTimePeriod }
+import ceylon.time.base {
+    ReadablePeriod, PeriodBehavior, ReadableDatePeriod, ReadableTimePeriod, 
+    min = minutes, sec = seconds, ms = milliseconds}
 
 doc "An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
      _minutes_, _seconds_ and _milliseconds_, such as '3 Months, 4 Days and 7 Hours'.
@@ -261,19 +260,19 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 
         value years = this.years + this.months / 12;
         value months = this.months % 12;
-        //TODO: We need to remove ceylon.math reference because it only compile to JVM
-        variable Whole total := wholeNumber(this.hours * secondPerHour.maximumRepresentation)
-                              + wholeNumber(this.minutes * secondPerMinute.maximumRepresentation)
+
+        variable Whole total := wholeNumber(this.hours * sec.perHour)
+                              + wholeNumber(this.minutes * sec.perMinute)
                               + wholeNumber(this.seconds);
 
-        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( milliPerSecond.maximumRepresentation  )) ).integer;
-        total += wholeNumber(this.milliseconds) / wholeNumber(( milliPerSecond.maximumRepresentation ));
+        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( ms.perSecond )) ).integer;
+        total += wholeNumber(this.milliseconds) / wholeNumber(( ms.perSecond ));
 
-        value seconds = ( total % wholeNumber(( secondPerMinute.maximumRepresentation )) ).integer;
-        total := total / wholeNumber(( secondPerMinute.maximumRepresentation ));
+        value seconds = ( total % wholeNumber(( sec.perMinute )) ).integer;
+        total := total / wholeNumber(( sec.perMinute ));
 
-        value minutes = ( total % wholeNumber(minutePerHour.maximumRepresentation) ).integer;
-        value hours = ( total / wholeNumber(minutePerHour.maximumRepresentation ) ).integer;
+        value minutes = ( total % wholeNumber(min.perHour) ).integer;
+        value hours = ( total / wholeNumber(min.perHour ) ).integer;
 
         return Period {
             years = years;

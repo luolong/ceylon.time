@@ -1,5 +1,7 @@
-import ceylon.time { Date, Time, DateTime, dateTime }
-import ceylon.time.base { DayOfWeek, MonthOfYear, ReadablePeriod }
+import ceylon.language { Integer }
+import ceylon.time { Date, Time, DateTime }
+import ceylon.time.base { DayOfWeek, ReadablePeriod, Month, milliseconds }
+
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDateTime( date, time ) 
     satisfies  DateTime {
@@ -12,12 +14,12 @@ shared class GregorianDateTime( date, time )
                                   else time <=> other.time;
     }
 
-	shared actual Integer dayOfMonth {
-        return date.dayOfMonth;
+	shared actual Integer day {
+        return date.day;
     }
 
-    shared actual DayOfWeek dayOfWeek {
-        return date.dayOfWeek;
+    shared actual DayOfWeek weekday {
+        return date.weekday;
     }
 
     shared actual Integer dayOfYear {
@@ -40,7 +42,7 @@ shared class GregorianDateTime( date, time )
         return date.weekOfYear;
     }
 
-    shared actual MonthOfYear month {
+    shared actual Month month {
         return date.month;
     }
 
@@ -94,13 +96,11 @@ shared class GregorianDateTime( date, time )
     }
 
     shared actual DateTime plusWeeks(Integer weeks) {
-        value newDate = date.plusWeeks(weeks);
-        return dateTime( newDate.year, newDate.month, newDate.dayOfMonth, time.hours, time.minutes, time.seconds, time.millis);
+        return GregorianDateTime { date = date.plusWeeks(weeks); time = time; };
     }
 
     shared actual DateTime minusWeeks(Integer weeks) {
-        value newDate = date.minusWeeks(weeks);
-        return dateTime( newDate.year, newDate.month, newDate.dayOfMonth, time.hours, time.minutes, time.seconds, time.millis);
+        return plusWeeks(-weeks);
     }
 
     shared actual DateTime plusDays(Integer days) {
@@ -108,8 +108,7 @@ shared class GregorianDateTime( date, time )
     }
 	
     shared actual DateTime minusDays(Integer days) {
-        value newDate = date.minusDays(days);
-        return dateTime( newDate.year, newDate.month, newDate.dayOfMonth, time.hours, time.minutes, time.seconds, time.millis);
+        return plusDays(-days);
     }
 
     shared actual DateTime plusHours(Integer hours) {
@@ -150,7 +149,7 @@ shared class GregorianDateTime( date, time )
     }
 
     shared actual DateTime plusMilliseconds(Integer milliseconds) {
-        if ( seconds == 0 ) {
+        if ( milliseconds == 0 ) {
             return this;
         }
         value signal = milliseconds >= 0 then 1 else -1; 
@@ -161,8 +160,8 @@ shared class GregorianDateTime( date, time )
         return plusMilliseconds(-milliseconds);
     }
 
-    shared actual DateTime withDayOfMonth(Integer dayOfMonth) {
-        return GregorianDateTime { date = date.withDayOfMonth(dayOfMonth); time = time; };
+    shared actual DateTime withDay(Integer dayOfMonth) {
+        return GregorianDateTime { date = date.withDay(dayOfMonth); time = time; };
     }
 
     shared actual DateTime withHours(Integer hours) {
@@ -173,7 +172,7 @@ shared class GregorianDateTime( date, time )
         return GregorianDateTime { date = date.withYear(year); time = time; };
     }
 
-    shared actual DateTime withMonth(Integer|MonthOfYear month) {
+    shared actual DateTime withMonth(Month month) {
         return GregorianDateTime( date.withMonth(month), time );
     }
 
@@ -212,7 +211,7 @@ shared class GregorianDateTime( date, time )
                 return true;
             }
 
-            return date.equals(other.date) && time.equals(other.time);
+            return day.equals(other.day) && time.equals(other.time);
         }
         return false;
     }
@@ -235,9 +234,10 @@ shared class GregorianDateTime( date, time )
         };
 
         Integer actualMillisOfDay = time.millisOfDay;
+        value math = CalendarMath();
         value totalMillis = restOfMillis * signal + actualMillisOfDay;
-        value totalDays = days + floorDiv(totalMillis, milliPerDay.maximumRepresentation);
-        value newMillis = floorMod(totalMillis, milliPerDay.maximumRepresentation);
+        value totalDays = days + math.floorDiv(totalMillis, milliseconds.perDay);
+        value newMillis = math.floorMod(totalMillis, milliseconds.perDay);
         
         Time newTime = (newMillis == actualMillisOfDay) then time else TimeOfDay(newMillis);
 

@@ -1,3 +1,4 @@
+
 doc "Common behavior for date types"
 shared interface DateBehavior<Element> of Element 
        given Element satisfies ReadableDate{
@@ -6,10 +7,10 @@ shared interface DateBehavior<Element> of Element
     shared formal Element withYear(Integer year);
 
     doc "Returns a copy of this period with the specified month of year."
-    shared formal Element withMonth(Integer|MonthOfYear month);
+    shared formal Element withMonth(Month month);
 
     doc "Returns a copy of this period with the specified amount of days."
-    shared formal Element withDayOfMonth(Integer dayOfMonth);
+    shared formal Element withDay(Integer dayOfMonth);
 
     doc "Returns a copy of this period with the specified number of years added."
     shared formal Element plusYears(Integer years);

@@ -6,7 +6,7 @@ shared Instant now(Clock? clock = null) {
     if (exists clock) {
         return clock.instant();
     }
-    return systemUTC().instant();
+    return systemTime.instant();
 }
 
 doc "A specific instant of time on a continuous time-scale.
