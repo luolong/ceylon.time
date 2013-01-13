@@ -23,23 +23,10 @@ shared abstract class DayOfWeek(integer)
         return this.integer <=> other.integer;
     }
 
-    shared actual Integer distanceFrom(DayOfWeek other) {
-        if ( other == this ) {
-            return 0;
-        }
-        variable value cont := 0;
-        variable value next := this; 
-        while ( next != other ) {
-            cont++;
-            next++;
-        }
-        return cont;
-    }
-
 }
 
 doc "List of all available weekdays"
-shared DayOfWeek[] weekdays = { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
+shared DayOfWeek[] weekdays = [ sunday, monday, tuesday, wednesday, thursday, friday, saturday ];
 
 shared DayOfWeek dayOfWeek(Integer|DayOfWeek weekday){
     switch(weekday)

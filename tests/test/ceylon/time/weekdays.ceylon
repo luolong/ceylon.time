@@ -63,10 +63,10 @@ void testDayOfWeek(){
     assertTrue( friday < saturday, "friday < saturday" );
     assertTrue( friday > sunday, "friday > sunday" );
 
-	 print( "Testing Ordinal");
-	value data_1982_12_13 = date( 1982, december, 13);
+    print( "Testing Ordinal");
+    value data_1982_12_13 = date( 1982, december, 13);
     value data_1983_01_01 = date( 1983, january, 1 );
-	variable value weekday := data_1982_12_13.weekday; 
+    variable value weekday := data_1982_12_13.weekday; 
     for ( Date date in data_1982_12_13..data_1983_01_01 ) {
         assertEquals( date.weekday, weekday++ );
     }

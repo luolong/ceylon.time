@@ -9,7 +9,7 @@ shared object years {
 shared object months {
 
     doc "Ordered list of all months of Gregorian and Julian calendar system from January to December"
-    shared Month[] all = {january, february, march, april, may, june, july, august, september, october, november, december};
+    shared Month[] all = [january, february, march, april, may, june, july, august, september, october, november, december];
 
     doc "Number of months per year"
     shared Integer perYear = all.size;

@@ -46,14 +46,10 @@ shared abstract class Month(integer)
         return plusMonths(12 - (number % 12));
     }
 
-    doc "Returns number of months separating the other month from this one."
-    shared actual Integer distanceFrom(Month other) {
-        return integer.distanceFrom(other.integer);
-    }
 }
 
 doc "Table of _day of year_ values for the first day of each month"
-Integer[] firstDayOfMonth = {1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335};
+Integer[] firstDayOfMonth = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
 
 doc "Returns month of year specified by the input argument.
 

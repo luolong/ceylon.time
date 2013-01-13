@@ -132,21 +132,21 @@ shared Date gregorianDate(year, month, date){
 
 doc "Calculate gregorian date values from the specified epoch value"
 class EopchToGregorian(Integer epochDay){
-    variable value zeroDay := epochDay + days.toEpoch;
+    variable value zeroDay = epochDay + days.toEpoch;
     zeroDay -= 60;  // adjust to 0000-03-01 so leap day is at end of four year cycle
-    variable value adjust := 0;
+    variable value adjust = 0;
     if (zeroDay < 0) {
         // adjust negative years to positive for calculation
         value adjustCycles = (zeroDay + 1) / days.perCycle - 1;
-        adjust := adjustCycles * 400;
+        adjust = adjustCycles * 400;
         zeroDay += -adjustCycles * days.perCycle;
     }
-    variable value yearEst := (400 * zeroDay + 591) / days.perCycle;
-    variable value doyEst := zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
+    variable value yearEst = (400 * zeroDay + 591) / days.perCycle;
+    variable value doyEst = zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
     if (doyEst < 0) {
         // fix estimate
         yearEst--;
-        doyEst := zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
+        doyEst = zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
     }
     yearEst += adjust;  // reset any negative year
     value marchDoy0 = doyEst;
@@ -170,7 +170,7 @@ object math extends CalendarMath() {
     shared Integer dayOfEra(Integer yyyy, Integer mm, Integer dd){
         value y = yyyy;
         value m = mm;
-        variable value total := 365 * y;
+        variable value total = 365 * y;
         if (y >= 0) {
             total += (y + 3) / 4 - (y + 99) / 100 + (y + 399) / 400;
         }

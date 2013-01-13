@@ -58,10 +58,6 @@ shared class TimeOfDay(millisOfDay)
         return "" pad(hours) ":" pad(minutes) ":" pad(seconds) "." millis "";
     }
 
-    shared actual Integer distanceFrom(Time other) {
-        return millisOfDay.distanceFrom(other.millisOfDay) ;
-    }
-
     shared actual Time minusHours(Integer hours) {
         return plusHours(-(hours % h.perDay));
     }

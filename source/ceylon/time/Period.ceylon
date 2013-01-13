@@ -261,7 +261,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value years = this.years + this.months / 12;
         value months = this.months % 12;
 
-        variable Whole total := wholeNumber(this.hours * sec.perHour)
+        variable Whole total = wholeNumber(this.hours * sec.perHour)
                               + wholeNumber(this.minutes * sec.perMinute)
                               + wholeNumber(this.seconds);
 
@@ -269,7 +269,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         total += wholeNumber(this.milliseconds) / wholeNumber(( ms.perSecond ));
 
         value seconds = ( total % wholeNumber(( sec.perMinute )) ).integer;
-        total := total / wholeNumber(( sec.perMinute ));
+        total = total / wholeNumber(( sec.perMinute ));
 
         value minutes = ( total % wholeNumber(min.perHour) ).integer;
         value hours = ( total / wholeNumber(min.perHour ) ).integer;

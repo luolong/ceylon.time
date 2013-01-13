@@ -7,19 +7,19 @@ import ceylon.time.base { Month, february, april, june, september, november, ms=
 Integer resolveLastValidDay(Integer|Month month, Integer day, Boolean leapYear ) {
     Month actualMonth = monthOf(month);
 
-    variable Integer newDay := day;
+    variable Integer newDay = day;
 
     if ( february == actualMonth ) {
-        newDay := smallest(day,  ( leapYear ) then 29 else 28 );
+        newDay = smallest(day,  ( leapYear ) then 29 else 28 );
     }
     else if ( april == actualMonth 
             || june == actualMonth 
             || september == actualMonth 
             || november == actualMonth ) {
-        newDay := smallest(day, 30);
+        newDay = smallest(day, 30);
     }
     else {
-        newDay := smallest(day, 31);
+        newDay = smallest(day, 31);
     }
 
     return newDay;
