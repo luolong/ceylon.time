@@ -47,7 +47,7 @@ shared object days {
 
 }
 
-doc "Common ptroperties of _hour_ time units"
+doc "Common properties of _hour_ time units"
 shared object hours {
 
     doc "number of hours per day"

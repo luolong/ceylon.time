@@ -43,12 +43,12 @@ shared class TimeOfDay(millisOfDay)
         return millisOfDay <=> other.millisOfDay;
     }
 
-    doc "Previous millisecond"
+    doc "Previous second"
     shared actual Time predecessor {
         return minusSeconds(1);
     }
 
-    doc "Next millisecond"
+    doc "Next second"
     shared actual Time successor {
         return plusSeconds(1);
     }
@@ -133,7 +133,9 @@ shared class TimeOfDay(millisOfDay)
         if (this.hours == hours) {
             return this;
         }
-        assert( 0 <= hours && hours <= h.perDay );
+
+        doc "valid values are from 0 until 23" 
+        assert( 0 <= hours && hours < h.perDay );
         return time(hours, minutes, seconds, millis);
     }
 
@@ -141,21 +143,27 @@ shared class TimeOfDay(millisOfDay)
         if (this.minutes == minutes) {
             return this;
         }
-        assert( 0 <= minutes && minutes <= min.perHour );
+
+        doc "valid values are from 0 until 59"
+        assert( 0 <= minutes && minutes < min.perHour );
         return time(hours, minutes, seconds, millis);
     }
     shared actual Time withSeconds(Integer seconds) {
         if (this.seconds == seconds) {
             return this;
         }
-        assert(0 <= seconds && seconds <= sec.perMinute);
+
+        doc "valid values are from 0 until 59"
+        assert(0 <= seconds && seconds < sec.perMinute);
         return time(hours, minutes, seconds, millis );
     }
     shared actual Time withMilliseconds(Integer milliseconds) {
         if (this.millis == milliseconds) {
             return this;
         }
-        assert(0 <= milliseconds && milliseconds <= ms.perSecond);
+
+        doc "valid values are from 0 until 999"
+        assert(0 <= milliseconds && milliseconds < ms.perSecond);
         return time(hours, minutes, seconds, milliseconds);
     }
 

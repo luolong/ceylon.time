@@ -3,7 +3,6 @@ import ceylon.math.float { log10 }
 import ceylon.math.integer { smallest }
 import ceylon.time.base { Month, february, april, june, september, november, ms=milliseconds, sec=seconds, min=minutes, h=hours, monthOf }
 
-
 Integer resolveLastValidDay(Integer|Month month, Integer day, Boolean leapYear ) {
     Month actualMonth = monthOf(month);
 
@@ -24,7 +23,6 @@ Integer resolveLastValidDay(Integer|Month month, Integer day, Boolean leapYear )
 
     return newDay;
 }
-
 
 shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
     return millis / ms.perDay +
