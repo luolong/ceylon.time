@@ -26,7 +26,7 @@ shared class Instant(millis)
             return Instant(this.millis + other.millis);
         }
         case(is Period){
-            return bottom;
+            return nothing;
             //return other.from(this);
         }
     }
@@ -42,35 +42,35 @@ shared class Instant(millis)
             TimeZone? zone) {
         if (exists zone){
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
-            return bottom;
+            return nothing;
         }
         //TODO: get [[DateTime]] for this [[Instant]] in the default time zone. 
-        return bottom;
+        return nothing;
     }
 
     doc "Returns a Date value for this instant"
         shared Date date(TimeZone? zone) {
         if (exists zone) {
             //TODO: get [[Date]] of this [[Instant]] in the specified time zone.
-            return bottom;
+            return nothing;
         }
         //TODO: get [[Date]] of this [[Instant]] in the default time zone.
-        return bottom;
+        return nothing;
     }
 
     doc "Returns a Time (time of day) value for this instant."
     shared Time time(TimeZone? zone) {
         if (exists zone) {
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
-            return bottom;
+            return nothing;
         }
         //TODO: get [[Time]] of this [[Instant]] in the default time zone.
-        return bottom;
+        return nothing;
     }
 
     doc "Returns ZoneDateTime value for this instant."
     shared ZoneDateTime zoneDateTime(TimeZone zone){
         //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
-        return bottom;		
+        return nothing;
     }
 }

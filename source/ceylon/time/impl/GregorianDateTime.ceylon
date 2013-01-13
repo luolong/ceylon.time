@@ -76,7 +76,7 @@ shared class GregorianDateTime( date, time )
 	
     shared actual Integer distanceFrom(DateTime other) {
         //TODO: What precision?
-        return bottom;
+        return nothing;
     }
 
     shared actual DateTime plusYears(Integer years) {

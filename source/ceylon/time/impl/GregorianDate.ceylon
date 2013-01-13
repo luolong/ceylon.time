@@ -19,7 +19,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual Integer weekOfYear {
-        return bottom;
+        return nothing;
     }
 
     doc "True, if this date is a leap year according to gregorian clendar leap year rules."
@@ -60,6 +60,8 @@ shared class GregorianDate( Integer dayOfEra )
         value newYear = math.floorDiv(calcMonths, 12);
         value newMonth = monthOf(math.floorMod(calcMonths, 12) + 1);
         value newDay = min({day, newMonth.numberOfDays(math.leapYear(newYear))});
+        assert (exists newDay);
+
         return GregorianDate(math.dayOfEra(
                 newYear, 
                 newMonth.integer, 
@@ -94,15 +96,15 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual GregorianDate withDay(Integer day) {
-        return bottom;
+        return nothing;
     }
 
     shared actual GregorianDate withMonth(Month month) {
-        return bottom;
+        return nothing;
     }
 
     shared actual GregorianDate withYear(Integer year) {
-        return bottom;
+        return nothing;
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {

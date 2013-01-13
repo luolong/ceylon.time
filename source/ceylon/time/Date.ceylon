@@ -18,7 +18,7 @@ shared Date today(Clock clock = systemTime, TimeZone? zone = null){
 
 doc "parses a Date from ISO date formatted string (YYYY-MM-DD)"
 shared Date parseDate(String string){
-    return bottom;
+    return nothing;
 }
 
 doc "Returns a date based on the specified year, month and day-ofMonth values"
