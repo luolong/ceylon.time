@@ -1,4 +1,4 @@
-import com.redhat.ceylon.sdk.test { Suite }
+import ceylon.test { Suite }
 
 class TimeSuite() extends Suite("ceylon.time") {
     shared actual Iterable<String->Void()> suite = {

@@ -1,7 +1,7 @@
 import ceylon.time { date, Date, Period }
 import ceylon.time.base { december, monday, january, november, february, march, april, DayOfWeek, wednesday, thursday, tuesday }
 
-import com.redhat.ceylon.sdk.test { assertEquals, assertTrue, assertFalse }
+import ceylon.test { assertEquals, assertTrue, assertFalse }
 
 shared void testDates() {
 

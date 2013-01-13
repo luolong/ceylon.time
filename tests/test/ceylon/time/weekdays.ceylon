@@ -1,7 +1,7 @@
 import ceylon.time { date, Date }
 import ceylon.time.base { monday, tuesday, wednesday, thursday, friday, saturday, sunday, january, december }
 
-import com.redhat.ceylon.sdk.test { assertTrue, assertEquals, assertSame }
+import ceylon.test { assertTrue, assertEquals, assertSame }
 
 void testDayOfWeek(){
 

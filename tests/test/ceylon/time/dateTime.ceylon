@@ -1,6 +1,6 @@
 import ceylon.time { DateTime, dateTime, Period }
 import ceylon.time.base { december, january, november, september }
-import com.redhat.ceylon.sdk.test { assertEquals }
+import ceylon.test { assertEquals }
 
 DateTime data_1982_12_13_09_08_07_0050 = dateTime { year = 1982;  
                                                     month = december; 
