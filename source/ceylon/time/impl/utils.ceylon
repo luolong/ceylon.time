@@ -3,28 +3,26 @@ import ceylon.math.float { log10 }
 import ceylon.math.integer { smallest }
 import ceylon.time.base { Month, february, april, june, september, november, ms=milliseconds, sec=seconds, min=minutes, h=hours, monthOf }
 
-
 Integer resolveLastValidDay(Integer|Month month, Integer day, Boolean leapYear ) {
     Month actualMonth = monthOf(month);
 
-    variable Integer newDay := day;
+    variable Integer newDay = day;
 
     if ( february == actualMonth ) {
-        newDay := smallest(day,  ( leapYear ) then 29 else 28 );
+        newDay = smallest(day,  ( leapYear ) then 29 else 28 );
     }
     else if ( april == actualMonth 
             || june == actualMonth 
             || september == actualMonth 
             || november == actualMonth ) {
-        newDay := smallest(day, 30);
+        newDay = smallest(day, 30);
     }
     else {
-        newDay := smallest(day, 31);
+        newDay = smallest(day, 31);
     }
 
     return newDay;
 }
-
 
 shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
     return millis / ms.perDay +

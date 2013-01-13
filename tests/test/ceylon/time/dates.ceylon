@@ -1,7 +1,7 @@
 import ceylon.time { date, Date, Period }
 import ceylon.time.base { december, monday, january, november, february, march, april, DayOfWeek, wednesday, thursday, tuesday }
 
-import com.redhat.ceylon.sdk.test { assertEquals, assertTrue, assertFalse }
+import ceylon.test { assertEquals, assertTrue, assertFalse }
 
 shared void testDates() {
 
@@ -152,7 +152,7 @@ shared void testDates() {
 
     print( "Testing Ordinal");
     Date data_1983_01_01 = date( 1983, january, 1 );
-    variable value cont := 0;
+    variable value cont = 0;
     for ( Date date in data_1982_12_13..data_1983_01_01 ) {
         assertEquals( date, data_1982_12_13.plusDays(cont++) );
     }

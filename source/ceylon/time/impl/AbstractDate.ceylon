@@ -10,10 +10,6 @@ shared abstract class AbstractDate( dayOfEra )
         return dayOfEra <=> other.dayOfEra;
     }
 
-    shared actual Integer distanceFrom(Date other) {
-        return dayOfEra.distanceFrom(other.dayOfEra);
-    }
-
     shared actual Boolean equals( Object other ) {
         if (is AbstractDate other) {
             return dayOfEra.equals(other.dayOfEra);

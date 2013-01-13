@@ -1,5 +1,5 @@
-import ceylon.time.base { ReadableDate, Month, monthOf=monthOf, DateBehavior }
-import ceylon.time.impl { gregorianDate }
+import ceylon.time.base { ReadableDate, Month, monthOf, DateBehavior }
+import ceylon.time.impl { gregorianDate, julianDate }
 import ceylon.time.timezone { TimeZone }
 
 doc "An interface for date objects in the ISO-8601 calendar system.
@@ -18,7 +18,7 @@ shared Date today(Clock clock = systemTime, TimeZone? zone = null){
 
 doc "parses a Date from ISO date formatted string (YYYY-MM-DD)"
 shared Date parseDate(String string){
-    return bottom;
+    return nothing;
 }
 
 doc "Returns a date based on the specified year, month and day-ofMonth values"
@@ -56,7 +56,7 @@ shared Date julian(year, month, date){
         doc "Date of month"
         Integer date;
         
-    return bottom;
+    return julianDate(year, monthOf(month).integer, date);
 }
 
 doc "Calculates the number of days according to julian calendar rules"

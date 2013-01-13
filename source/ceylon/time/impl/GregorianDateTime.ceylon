@@ -74,11 +74,6 @@ shared class GregorianDateTime( date, time )
         return time.secondsOfDay;
     }
 	
-    shared actual Integer distanceFrom(DateTime other) {
-        //TODO: What precision?
-        return bottom;
-    }
-
     shared actual DateTime plusYears(Integer years) {
         return GregorianDateTime { date = date.plusYears(years); time = time; };
     }
