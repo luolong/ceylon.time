@@ -56,7 +56,6 @@ shared class GregorianDate( Integer dayOfEra )
         value newYear = math.floorDiv(calcMonths, 12);
         value newMonth = monthOf(math.floorMod(calcMonths, 12) + 1);
         value newDay = min({day, newMonth.numberOfDays(math.leapYear(newYear))});
-        assert (exists newDay);
 
         return GregorianDate(math.dayOfEra(
                 newYear, 
@@ -95,7 +94,8 @@ shared class GregorianDate( Integer dayOfEra )
         if ( day == this.day ) {
             return this;
         }
-        return GregorianDate( dayOfEra - this.day + resolveLastValidDay(month, day, leapYear));
+        //return GregorianDate( dayOfEra - this.day + resolveLastValidDay(month, day, leapYear));
+        return nothing;
     }
 
     shared actual GregorianDate withMonth(Month month) {
@@ -104,14 +104,16 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
-        return GregorianDate( math.dayOfEra(year, newMonth.integer, resolveLastValidDay(newMonth, day, leapYear) ));
+        //return GregorianDate( math.dayOfEra(year, newMonth.integer, resolveLastValidDay(newMonth, day, leapYear) ));
+        return nothing;
     }
 
     shared actual GregorianDate withYear(Integer year) {
         if ( year == this.year ) {
             return this;
         }
-        return GregorianDate( math.dayOfEra(year, month.integer, resolveLastValidDay(month, day, math.leapYear(year)) ));
+        return nothing;
+        //return GregorianDate( math.dayOfEra(year, month.integer, resolveLastValidDay(month, day, math.leapYear(year)) ));
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
