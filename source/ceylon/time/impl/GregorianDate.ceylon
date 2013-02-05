@@ -1,26 +1,30 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { DayOfWeek, asDayOfWeek=dayOfWeek, ReadablePeriod, monthOf, Month, days, years, january, sunday }
+import ceylon.time.chronology { impl = gregorian }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, years, january, sunday }
+
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
       extends AbstractDate( dayOfEra ) {
 
+    Integer unixEpoch = impl.getFixed([1970, 1, 1]);
+
     shared actual Integer year{
-        return math.yearFrom( dayOfEra );
+        return impl.yearFrom( dayOfEra + unixEpoch );
     }
 
     shared actual Month month {
-        return math.monthFrom( dayOfEra );
+        return monthOf(impl.monthFrom( dayOfEra + unixEpoch ));
     }
 
     shared actual Integer day {
-        return math.dayFrom( dayOfEra );
+        return impl.dayFrom( dayOfEra + unixEpoch );
     }
 
     doc "True, if this date is a leap year according to gregorian calendar leap year rules."
     shared actual Boolean leapYear {
-        return math.leapYear(year);
+        return impl.leapYear(year);
     }
 
     shared actual Integer dayOfYear {
@@ -36,7 +40,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual DayOfWeek weekday {
-        return math.weekdayFrom( dayOfEra );
+        return weekdayOf(impl.weekdayFrom( dayOfEra + unixEpoch ));
     }
 
     shared actual GregorianDate plusDays(Integer days) {
@@ -46,13 +50,13 @@ shared class GregorianDate( Integer dayOfEra )
         return GregorianDate( dayOfEra + days );
     }
 
-    shared actual GregorianDate plusMonths(Integer monthsToAdd) {
-        if ( monthsToAdd == 0 ) {
+    shared actual GregorianDate plusMonths(Integer months) {
+        if ( months == 0 ) {
             return this;
         }
 
         value monthCount = year * 12 + (month.integer - 1);
-        value calcMonths = monthCount + monthsToAdd;  // safe overflow
+        value calcMonths = monthCount + months;  // safe overflow
         value newYear = math.floorDiv(calcMonths, 12);
         value newMonth = monthOf(math.floorMod(calcMonths, 12) + 1);
         value newDay = min({day, newMonth.numberOfDays(math.leapYear(newYear))});
@@ -256,7 +260,7 @@ object math extends CalendarMath() {
     }
 
     shared DayOfWeek weekdayFrom(Integer dayOfEra) {
-        return asDayOfWeek( floorMod(dayOfEra + 4, 7) );
+        return weekdayOf( floorMod(dayOfEra + 4, 7) );
     }
 
     doc "Calculates if the given year is a leap year"

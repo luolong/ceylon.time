@@ -9,5 +9,5 @@ doc 'Package containing supported chronologies in ceylon.time library.
 
 by ('Roland Tepp')
 
-//TODO: Maybe we should call this a ceylon.time.calendar instead?
-shared package ceylon.time.calendar;
+//TODO: Maybe we should call this a ceylon.time.chronology instead?
+shared package ceylon.time.chronology;

@@ -3,6 +3,8 @@ import ceylon.math.float { cfloor = floor }
 doc "Returns the largest integer less than or equal to _x_"
 shared Integer floor( Float x ) => cfloor( x ).integer;
 
+doc "Returns floored division of the two integers"
+shared Integer fdiv(Integer x, Integer y) => floor(x.float / y.float);
 
 doc "Returns nearest integer to x"
 shared Integer round( Float f ) => floor( f + 0.5);
