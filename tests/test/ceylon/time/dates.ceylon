@@ -1,24 +1,8 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse }
 import ceylon.time { date, Date, Period }
-import ceylon.time.base { december, monday, january, november, february, march, april, DayOfWeek, tuesday, Month, october, sunday, wednesday, september, july }
+import ceylon.time.base { december, monday, january, november, february, april, DayOfWeek, tuesday, Month, october, sunday, wednesday, september, july }
 
 Boolean leapYear = true;
-
-alias RataDie => Integer;
-alias JulianDay => Float;
-alias ModifiedJulianDay => Integer;
-alias Year => Integer;
-alias Week => Integer;
-alias Day => Integer;
-alias GregorianDate => [Year, Month, Day];
-alias ISODate => [Year, Week, Day];
-alias JulianDate => [Year, Month, Day];
-
-alias TestData => {[RataDie, DayOfWeek, JulianDay, ModifiedJulianDay, Year, Month, Day, Year, Week, Day, Year, Month, Day]+};
-TestData testData = { 
-    [-214193, sunday, 1507231.5, -892769, -586, july, 24, -586, 29, 7, -587, july, 30],
-    [-61378, wednesday, 1660037.5, -739963, -168, december, 5, -168, 49, 3, -169, december, 8]
-};
 
 // Table of test data from the book Calendrical Calculations
 shared void test_sun_jul_24_minus586() => assertGregorianDate(-586, july, 24, sunday, !leapYear);
@@ -79,17 +63,13 @@ shared void testDatePlusDays() {
 
 shared void testDateMinusDays() {
     value data_1982_12_13 = date( 1982, december, 13);
-
-    print( "Testing minusDays");
     assertEquals( data_1982_12_13.minusDays( 5 ), date( 1982, december, 8 ) );
     assertEquals( data_1982_12_13.minusDays( 0 ), data_1982_12_13 );
     assertEquals( date( 2012, december, 9 ).minusDays( 10954 ), data_1982_12_13 );
 }
 
-shared void testDates() {
+shared void testDatePlusMonths() {
     value data_1982_12_13 = date( 1982, december, 13);
-
-    print( "Testing plusMonths");
     assertEquals( data_1982_12_13.plusMonths(0), data_1982_12_13 );
     assertEquals( data_1982_12_13.plusMonths(1), date( 1983, january, 13) );
     assertEquals( data_1982_12_13.plusMonths(12), date( 1983, december, 13) );
@@ -97,34 +77,46 @@ shared void testDates() {
 
     //assertEquals( data_2000_01_31.plusMonths(1), date( 2000, february, 29) );
     //assertEquals( data_2000_01_31.plusMonths(14), date( 2001, march, 31) );
+}
 
-    print( "Testing minusMonths");
+shared void testDateMinusMonths() {
+    value data_1982_12_13 = date( 1982, december, 13);
     assertEquals( data_1982_12_13.minusMonths(0), data_1982_12_13 );
     assertEquals( data_1982_12_13.minusMonths(1), date( 1982, november, 13) );
     assertEquals( data_1982_12_13.minusMonths(12), date( 1981, december, 13) );
+}
 
-    print( "Testing plusYears");
+shared void testDatePlusYears() {
+    value data_1982_12_13 = date( 1982, december, 13);
     assertEquals( data_1982_12_13.plusYears(0), data_1982_12_13 );
     assertEquals( data_1982_12_13.plusYears(18), date( 2000, december, 13) );
     assertEquals( data_1982_12_13.plusYears(30), date( 2012, december, 13) );
     assertEquals( date(2012, february, 29).plusYears(1), date( 2013, february, 28) );
+}
 
-    //print( "Testing minusYears");
+shared void testDateMinusYears() {
+    value data_1982_12_13 = date( 1982, december, 13);
     //assertEquals( data_2000_01_31.minusYears(1), date( 1999, january, 31) );
-
     assertEquals( data_1982_12_13.minusYears(10), date( 1972, december, 13) );
     assertEquals( date(2012, february, 29).minusYears(1), date( 2011, february, 28) );
+}
 
-    print( "Testing plusWeeks");
+shared void testDatePlusWeeks() {
+    value data_1982_12_13 = date( 1982, december, 13);
     assertEquals( data_1982_12_13.plusWeeks(1).weekday, data_1982_12_13.weekday );
     assertEquals( data_1982_12_13.plusWeeks(1), date( 1982, december, 20) );
     assertEquals( data_1982_12_13.plusWeeks(3), date( 1983, january, 3) );
+}
 
-    print( "Testing minusWeeks");
+shared void testDateMinusWeeks(){
+    value data_1982_12_13 = date( 1982, december, 13);
     assertEquals( data_1982_12_13.minusWeeks(1), date( 1982, december, 6) );
     assertEquals( data_1982_12_13.minusWeeks(3), date( 1982, november, 22) );
     assertEquals( data_1982_12_13.minusWeeks(3).weekday, date( 1982, november, 22).weekday );
+}
 
+shared void testDates() {
+    value data_1982_12_13 = date( 1982, december, 13);
     print( "Testing withDayOfMonth");
     assertEquals( data_1982_12_13.withDay(13), data_1982_12_13 );
     assertEquals( data_1982_12_13.withDay(17), date( 1982, december, 17) );
@@ -182,3 +174,21 @@ void assertGregorianDate(Integer year, Month month, Integer day, DayOfWeek weekd
     assertEquals(weekday, actual.weekday);
     assertEquals(leapYear, actual.leapYear);
 }
+
+/*
+alias RataDie => Integer;
+alias JulianDay => Float;
+alias ModifiedJulianDay => Integer;
+alias Year => Integer;
+alias Week => Integer;
+alias Day => Integer;
+alias GregorianDate => [Year, Month, Day];
+alias ISODate => [Year, Week, Day];
+alias JulianDate => [Year, Month, Day];
+
+alias TestData => {[RataDie, DayOfWeek, JulianDay, ModifiedJulianDay, Year, Month, Day, Year, Week, Day, Year, Month, Day]+};
+TestData testData = { 
+    [-214193, sunday, 1507231.5, -892769, -586, july, 24, -586, 29, 7, -587, july, 30],
+    [-61378, wednesday, 1660037.5, -739963, -168, december, 5, -168, 49, 3, -169, december, 8]
+};
+*/
