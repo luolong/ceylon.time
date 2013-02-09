@@ -38,14 +38,12 @@ shared abstract class Month(integer)
 
     doc "Returns month of year that comes specified number of months after this month."
     shared Month plusMonths(Integer number) {
-        value m = (integer + number) % 12;
-        assert (exists month = months.all[m]); 
-        return month;
+        return number == 0 then this else addMonths(number).month;
     }
 
     doc "Returns month of year that comes specified number of months before this month."
     shared Month minusMonths(Integer number) {
-        return plusMonths(12 - (number % 12));
+        return number == 0 then this else addMonths(-number).month;
     }
 
     doc "A result of adding or subtracting a month to another mont"
@@ -59,9 +57,10 @@ shared abstract class Month(integer)
     
     doc "Adds number of months to this month and returns the result of this computation."
     shared Overflow addMonths(Integer number){
-        Integer next = (integer + number - 1);
-        assert (exists month = months.all[mod(next, 12) + 1]);
-        if (0 <= next && next <= 12) {
+        value next = (integer - 1 + number);
+        value m = mod(next, 12) + 1;
+        assert (exists month = months.all[mod(next, 12)]);
+        if (0 <= next && next < 12) {
             return Overflow(month, 0);
         }
         

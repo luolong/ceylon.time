@@ -1,5 +1,5 @@
-import ceylon.test { assertEquals }
-import ceylon.time.base { january, february, march, april, may, june, july, august, september, october, november, december, monthOf }
+import ceylon.test { assertEquals, AssertComparisonException }
+import ceylon.time.base { january, february, march, april, may, june, july, august, september, october, november, december, monthOf, Month }
 
 shared void test_january_number() => assertEquals(1, january.integer);
 shared void test_february_number() => assertEquals(2, february.integer);
@@ -131,5 +131,215 @@ shared void test_october_firstDayOfYear_leapYear() => assertEquals(275, october.
 shared void test_november_firstDayOfYear_leapYear() => assertEquals(306, november.fisrtDayOfYear(leapYear));
 shared void test_december_firstDayOfYear_leapYear() => assertEquals(336, december.fisrtDayOfYear(leapYear));
 
+shared void test_compareJanuary() {
+    assertEquals(equal, january <=> january);
+    assertEquals(smaller, january <=> february);
+    assertEquals(smaller, january <=> march);
+    assertEquals(smaller, january <=> april);
+    assertEquals(smaller, january <=> may);
+    assertEquals(smaller, january <=> june);
+    assertEquals(smaller, january <=> july);
+    assertEquals(smaller, january <=> august);
+    assertEquals(smaller, january <=> september);
+    assertEquals(smaller, january <=> october);
+    assertEquals(smaller, january <=> november);
+    assertEquals(smaller, january <=> december);
+}
 
+shared void test_compareFebruary() {
+    assertEquals(larger, february <=> january);
+    assertEquals(equal, february <=> february);
+    assertEquals(smaller, february <=> march);
+    assertEquals(smaller, february <=> april);
+    assertEquals(smaller, february <=> may);
+    assertEquals(smaller, february <=> june);
+    assertEquals(smaller, february <=> july);
+    assertEquals(smaller, february <=> august);
+    assertEquals(smaller, february <=> september);
+    assertEquals(smaller, february <=> october);
+    assertEquals(smaller, february <=> november);
+    assertEquals(smaller, february <=> december);
+}
+
+shared void test_compareMarch() {
+    assertEquals(larger, march <=> january);
+    assertEquals(larger, march <=> february);
+    assertEquals(equal, march <=> march);
+    assertEquals(smaller, march <=> april);
+    assertEquals(smaller, march <=> may);
+    assertEquals(smaller, march <=> june);
+    assertEquals(smaller, march <=> july);
+    assertEquals(smaller, march <=> august);
+    assertEquals(smaller, march <=> september);
+    assertEquals(smaller, march <=> october);
+    assertEquals(smaller, march <=> november);
+    assertEquals(smaller, march <=> december);
+}
+
+shared void test_compareApril() {
+    assertEquals(larger, april <=> january);
+    assertEquals(larger, april <=> february);
+    assertEquals(larger, april <=> march);
+    assertEquals(equal, april <=> april);
+    assertEquals(smaller, april <=> may);
+    assertEquals(smaller, april <=> june);
+    assertEquals(smaller, april <=> july);
+    assertEquals(smaller, april <=> august);
+    assertEquals(smaller, april <=> september);
+    assertEquals(smaller, april <=> october);
+    assertEquals(smaller, april <=> november);
+    assertEquals(smaller, april <=> december);
+}
+
+shared void test_compareMay() {
+    assertEquals(larger, may <=> january);
+    assertEquals(larger, may <=> february);
+    assertEquals(larger, may <=> march);
+    assertEquals(larger, may <=> april);
+    assertEquals(equal, may <=> may);
+    assertEquals(smaller, may <=> june);
+    assertEquals(smaller, may <=> july);
+    assertEquals(smaller, may <=> august);
+    assertEquals(smaller, may <=> september);
+    assertEquals(smaller, may <=> october);
+    assertEquals(smaller, may <=> november);
+    assertEquals(smaller, may <=> december);
+}
+
+shared void test_compareJune() {
+    assertEquals(larger, june <=> january);
+    assertEquals(larger, june <=> february);
+    assertEquals(larger, june <=> march);
+    assertEquals(larger, june <=> april);
+    assertEquals(larger, june <=> may);
+    assertEquals(equal, june <=> june);
+    assertEquals(smaller, june <=> july);
+    assertEquals(smaller, june <=> august);
+    assertEquals(smaller, june <=> september);
+    assertEquals(smaller, june <=> october);
+    assertEquals(smaller, june <=> november);
+    assertEquals(smaller, june <=> december);
+}
+
+shared void test_compareJuly() {
+    assertEquals(larger, july <=> january);
+    assertEquals(larger, july <=> february);
+    assertEquals(larger, july <=> march);
+    assertEquals(larger, july <=> april);
+    assertEquals(larger, july <=> may);
+    assertEquals(larger, july <=> june);
+    assertEquals(equal, july <=> july);
+    assertEquals(smaller, july <=> august);
+    assertEquals(smaller, july <=> september);
+    assertEquals(smaller, july <=> october);
+    assertEquals(smaller, july <=> november);
+    assertEquals(smaller, july <=> december);
+}
+
+shared void test_compareAugust() {
+    assertEquals(larger, august <=> january);
+    assertEquals(larger, august <=> february);
+    assertEquals(larger, august <=> march);
+    assertEquals(larger, august <=> april);
+    assertEquals(larger, august <=> may);
+    assertEquals(larger, august <=> june);
+    assertEquals(larger, august <=> july);
+    assertEquals(equal, august <=> august);
+    assertEquals(smaller, august <=> september);
+    assertEquals(smaller, august <=> october);
+    assertEquals(smaller, august <=> november);
+    assertEquals(smaller, august <=> december);
+}
+
+shared void test_compareSeptember() {
+    assertEquals(larger, september <=> january);
+    assertEquals(larger, september <=> february);
+    assertEquals(larger, september <=> march);
+    assertEquals(larger, september <=> april);
+    assertEquals(larger, september <=> may);
+    assertEquals(larger, september <=> june);
+    assertEquals(larger, september <=> july);
+    assertEquals(larger, september <=> august);
+    assertEquals(equal, september <=> september);
+    assertEquals(smaller, september <=> october);
+    assertEquals(smaller, september <=> november);
+    assertEquals(smaller, september <=> december);
+}
+
+shared void test_compareOctober() {
+    assertEquals(larger, october <=> january);
+    assertEquals(larger, october <=> february);
+    assertEquals(larger, october <=> march);
+    assertEquals(larger, october <=> april);
+    assertEquals(larger, october <=> may);
+    assertEquals(larger, october <=> june);
+    assertEquals(larger, october <=> july);
+    assertEquals(larger, october <=> august);
+    assertEquals(larger, october <=> september);
+    assertEquals(equal, october <=> october);
+    assertEquals(smaller, october <=> november);
+    assertEquals(smaller, october <=> december);
+}
+
+shared void test_compareNovember() {
+    assertEquals(larger, november <=> january);
+    assertEquals(larger, november <=> february);
+    assertEquals(larger, november <=> march);
+    assertEquals(larger, november <=> april);
+    assertEquals(larger, november <=> may);
+    assertEquals(larger, november <=> june);
+    assertEquals(larger, november <=> july);
+    assertEquals(larger, november <=> august);
+    assertEquals(larger, november <=> september);
+    assertEquals(larger, november <=> october);
+    assertEquals(equal, november <=> november);
+    assertEquals(smaller, november <=> december);
+}
+
+shared void test_compareDecember() {
+    assertEquals(larger, december <=> january);
+    assertEquals(larger, december <=> february);
+    assertEquals(larger, december <=> march);
+    assertEquals(larger, december <=> april);
+    assertEquals(larger, december <=> may);
+    assertEquals(larger, december <=> june);
+    assertEquals(larger, december <=> july);
+    assertEquals(larger, december <=> august);
+    assertEquals(larger, december <=> september);
+    assertEquals(larger, december <=> october);
+    assertEquals(larger, december <=> november);
+    assertEquals(equal, december <=> december);
+}
+
+shared void testJanuaryPlusMonths() {
+    assertEquals(january, january.plusMonths(0));
+    assertEquals(february, january.plusMonths(1));
+    assertEquals(march, january.plusMonths(2));
+    assertEquals(april, january.plusMonths(3));
+    assertEquals(may, january.plusMonths(4));
+    assertEquals(june, january.plusMonths(5));
+    assertEquals(july, january.plusMonths(6));
+    assertEquals(august, january.plusMonths(7));
+    assertEquals(september, january.plusMonths(8));
+    assertEquals(october, january.plusMonths(9));
+    assertEquals(november, january.plusMonths(10));
+    assertEquals(december, january.plusMonths(11));
+    assertEquals(january, january.plusMonths(12));
+}
+
+shared void testJanuaryMinusMonths() {
+    assertEquals(january, january.minusMonths(0));
+    assertEquals(december, january.minusMonths(1));
+    assertEquals(november, january.minusMonths(2));
+    assertEquals(october, january.minusMonths(3));
+    assertEquals(september, january.minusMonths(4));
+    assertEquals(august, january.minusMonths(5));
+    assertEquals(july, january.minusMonths(6));
+    assertEquals(june, january.minusMonths(7));
+    assertEquals(may, january.minusMonths(8));
+    assertEquals(april, january.minusMonths(9));
+    assertEquals(march, january.minusMonths(10));
+    assertEquals(february, january.minusMonths(11));
+    assertEquals(january, january.minusMonths(12));
+}
 
