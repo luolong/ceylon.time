@@ -21,10 +21,10 @@ shared interface Chronology<Fields>
     
     doc "Converts date tuple of this calendar system to an equivalent _fixed date_
          representation of the "
-    shared formal Integer getFixed(Fields date);
+    shared formal Integer fixedFrom(Fields date);
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
-    shared formal Fields getDate(Integer fixed);
+    shared formal Fields dateFrom(Integer fixed);
 }
 
 doc "An interface for calendar system that defines leap year rules.
@@ -43,11 +43,11 @@ shared object fixed satisfies Chronology<[Integer]> {
     
     shared actual Integer epoch = rd(1);
     
-    shared actual Integer getFixed([Integer] date) {
+    shared actual Integer fixedFrom([Integer] date) {
         return date[0];
     }
     
-    shared actual [Integer] getDate(Integer fixed) {
+    shared actual [Integer] dateFrom(Integer fixed) {
         return [fixed];
     }
     
@@ -85,7 +85,7 @@ shared object gregorian extends GregorianCalendar() {
                                  else year % 4 == 0;
     }
     
-    Integer fixedFrom(Integer year, Integer month, Integer day) {
+    Integer fixed(Integer year, Integer month, Integer day) {
         return epoch - 1 + 365 * (year - 1) + floor((year - 1) / 4.0)
                - floor((year - 1) / 100.0) + floor((year - 1) / 400.0)
                + floor((367 * month - 362) / 12.0)
@@ -93,8 +93,8 @@ shared object gregorian extends GregorianCalendar() {
                + day;
     }
     
-    shared actual Integer getFixed([Integer, Integer, Integer] date) {
-        return fixedFrom { 
+    shared actual Integer fixedFrom([Integer, Integer, Integer] date) {
+        return fixed { 
             year = date[0]; 
             month = date[1]; 
             day = date[2]; 
@@ -102,11 +102,11 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared Integer newYear(Integer year){
-        return fixedFrom(year, january, 1);
+        return fixed(year, january, 1);
     }
     
     shared Integer yearEnd(Integer year){
-        return fixedFrom(year, december, 31);
+        return fixed(year, december, 31);
     }
     
     shared Integer yearFrom(Integer fixed) {
@@ -122,22 +122,22 @@ shared object gregorian extends GregorianCalendar() {
         return (n100 == 4 || n1 == 4) then year else year + 1;
     }
     
-    shared actual [Integer, Integer, Integer] getDate(Integer date) {
+    shared actual [Integer, Integer, Integer] dateFrom(Integer date) {
         value year = yearFrom(date);
         value priorDays = date - newYear(year);
-        value correction = (date < fixedFrom(year, march, 1)) 
+        value correction = (date < fixed(year, march, 1)) 
                 then 0 else (leapYear(year) then 1 else 2);
         value month = fdiv(12 * (priorDays + correction) + 373, days.perYear());
-        value day = 1 + date - fixedFrom(year, month, 1);
+        value day = 1 + date - fixed(year, month, 1);
         return [year, month, day];
     }
     
     shared Integer monthFrom(Integer date){
-        return getDate(date)[1];
+        return dateFrom(date)[1];
     }
     
     shared Integer dayFrom(Integer date){
-        return getDate(date)[2];
+        return dateFrom(date)[2];
     }
     
     shared Integer weekdayFrom(Integer date) {
