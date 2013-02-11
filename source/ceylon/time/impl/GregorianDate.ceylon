@@ -179,7 +179,7 @@ shared Date gregorianDate(year, month, date){
         doc "Date of month"
         Integer date;
         
-    return GregorianDate( math.dayOfEra(year, monthOf(month).integer, date) );
+    return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, date]) );
 }
 
 doc "Calculate gregorian date values from the specified epoch value"
