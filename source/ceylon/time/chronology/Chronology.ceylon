@@ -127,7 +127,7 @@ shared object gregorian extends GregorianCalendar() {
         value priorDays = date - newYear(year);
         value correction = (date < fixed(year, march, 1)) 
                 then 0 else (leapYear(year) then 1 else 2);
-        value month = fdiv(12 * (priorDays + correction) + 373, days.perYear());
+        value month = fdiv(12 * (priorDays + correction) + 373, 367);
         value day = 1 + date - fixed(year, month, 1);
         return [year, month, day];
     }
