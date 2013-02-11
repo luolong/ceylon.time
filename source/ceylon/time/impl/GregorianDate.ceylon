@@ -1,8 +1,7 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.chronology { impl = gregorian }
-import ceylon.time.math{ fdiv, mod }
-import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, mth=months, years, january, sunday }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, years, january, sunday }
+import ceylon.time.chronology { impl=gregorian }
 
 
 doc "Default implementation of a gregorian calendar"
