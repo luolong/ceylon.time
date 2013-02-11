@@ -1,6 +1,6 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse }
 import ceylon.time { date, Date, Period }
-import ceylon.time.base { december, monday, january, november, february, april, DayOfWeek, tuesday, Month, october, sunday, wednesday, september, july }
+import ceylon.time.base { december, monday, january, november, february, april, DayOfWeek, tuesday, Month, october, sunday, wednesday, september, july, march }
 
 Boolean leapYear = true;
 
@@ -75,8 +75,9 @@ shared void testDatePlusMonths() {
     assertEquals( data_1982_12_13.plusMonths(12), date( 1983, december, 13) );
     assertEquals( data_1982_12_13.plusMonths(36), date( 1985, december, 13) );
 
-    //assertEquals( data_2000_01_31.plusMonths(1), date( 2000, february, 29) );
-    //assertEquals( data_2000_01_31.plusMonths(14), date( 2001, march, 31) );
+	value data_2000_01_31 = date( 2000, january, 31 );
+    assertEquals( data_2000_01_31.plusMonths(1), date( 2000, february, 29) );
+    assertEquals( data_2000_01_31.plusMonths(14), date( 2001, march, 31) );
 }
 
 shared void testDateMinusMonths() {
@@ -96,7 +97,8 @@ shared void testDatePlusYears() {
 
 shared void testDateMinusYears() {
     value data_1982_12_13 = date( 1982, december, 13);
-    //assertEquals( data_2000_01_31.minusYears(1), date( 1999, january, 31) );
+	value data_2000_01_31 = date( 2000, january, 31);
+    assertEquals( data_2000_01_31.minusYears(1), date( 1999, january, 31) );
     assertEquals( data_1982_12_13.minusYears(10), date( 1972, december, 13) );
     assertEquals( date(2012, february, 29).minusYears(1), date( 2011, february, 28) );
 }
@@ -120,7 +122,7 @@ shared void testDates() {
     print( "Testing withDayOfMonth");
     assertEquals( data_1982_12_13.withDay(13), data_1982_12_13 );
     assertEquals( data_1982_12_13.withDay(17), date( 1982, december, 17) );
-	
+
     //TODO: Should we throw exception if isnt valid day?
     assertEquals( data_1982_12_13.withDay(0), date( 1982, 11, 30 ) );
     assertEquals( data_1982_12_13.withDay(40), date( 1982, december, 31) );
@@ -159,8 +161,7 @@ shared void testDates() {
     assertEquals( newDataAmount.year, 1984 );
     assertEquals( newDataAmount.month, february );
     assertEquals( newDataAmount.day, 16 );
-
-    print( "Testing string");
+    print( "Testing string");
     assertEquals( data_1982_12_13.string, "1982-12-13" );
     assertEquals( date(2012, january, 1 ).string, "2012-01-01" );
 

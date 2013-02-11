@@ -58,7 +58,6 @@ shared abstract class Month(integer)
     doc "Adds number of months to this month and returns the result of this computation."
     shared Overflow addMonths(Integer number){
         value next = (integer - 1 + number);
-        value m = mod(next, 12) + 1;
         assert (exists month = months.all[mod(next, 12)]);
         if (0 <= next && next < 12) {
             return Overflow(month, 0);

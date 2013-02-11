@@ -67,7 +67,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual GregorianDate plusWeeks(Integer weeks) {
-        return plusDays( weeks * 7 );
+        return plusDays( weeks * days.perWeek );
     }
 
     shared actual GregorianDate minusDays(Integer days) {
@@ -90,26 +90,27 @@ shared class GregorianDate( Integer dayOfEra )
         if ( day == this.day ) {
             return this;
         }
-        //return GregorianDate( dayOfEra - this.day + resolveLastValidDay(month, day, leapYear));
-        return nothing;
+        return GregorianDate( dayOfEra - this.day + resolveLastValidDay(month, day, leapYear));
     }
 
     shared actual GregorianDate withMonth(Month month) {
         Month newMonth = monthOf(month);
-        if ( month == this.month ) {
+        if ( newMonth == this.month ) {
             return this;
         }
 
-        //return GregorianDate( math.dayOfEra(year, newMonth.integer, resolveLastValidDay(newMonth, day, leapYear) ));
-        return nothing;
+		value d = min{day, month.numberOfDays(impl.leapYear(year))};
+
+        return GregorianDate( impl.fixedFrom([year, newMonth.integer, d]) );
     }
 
     shared actual GregorianDate withYear(Integer year) {
         if ( year == this.year ) {
             return this;
         }
-        return nothing;
-        //return GregorianDate( math.dayOfEra(year, month.integer, resolveLastValidDay(month, day, math.leapYear(year)) ));
+		value correction = ( day == 29 && leapYear) then 1 else 0;
+
+        return GregorianDate( impl.fixedFrom([year, month.integer, day - correction]) );
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
@@ -126,7 +127,6 @@ shared class GregorianDate( Integer dayOfEra )
             if ( weekNumber == 0 ) {
                 value jan1 = withDay(1).withMonth(january);
                 value jan1WeekDay = jan1.weekday == sunday then 7 else jan1.weekday.integer; 
-
                 if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
                     if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
                         result = 53;
