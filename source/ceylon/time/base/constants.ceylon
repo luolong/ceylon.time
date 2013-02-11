@@ -9,7 +9,7 @@ shared object years {
 shared object months {
 
     doc "Ordered list of all months of Gregorian and Julian calendar system from January to December"
-    shared Month[] all = {january, february, march, april, may, june, july, august, september, october, november, december};
+    shared Month[] all = [january, february, march, april, may, june, july, august, september, october, november, december];
 
     doc "Number of months per year"
     shared Integer perYear = all.size;
@@ -45,9 +45,17 @@ shared object days {
          There are 7 leap years from 1970 to 2000."
     shared Integer toEpoch = (perCycle * 5) - (30 * 365 + 7);
 
+    doc "Number of days in four years"
+    shared Integer inFourYears = 1461;
+
+    doc "Number of of days in four years"
+    shared Integer in100Years = 36524;
+
+    doc "Number of of days in four hundred years"
+    shared Integer in400Years = 146097;
 }
 
-doc "Common ptroperties of _hour_ time units"
+doc "Common properties of _hour_ time units"
 shared object hours {
 
     doc "number of hours per day"

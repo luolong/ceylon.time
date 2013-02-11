@@ -261,7 +261,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value years = this.years + this.months / 12;
         value months = this.months % 12;
 
-        variable Whole total := wholeNumber(this.hours * sec.perHour)
+        variable Whole total = wholeNumber(this.hours * sec.perHour)
                               + wholeNumber(this.minutes * sec.perMinute)
                               + wholeNumber(this.seconds);
 
@@ -269,7 +269,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         total += wholeNumber(this.milliseconds) / wholeNumber(( ms.perSecond ));
 
         value seconds = ( total % wholeNumber(( sec.perMinute )) ).integer;
-        total := total / wholeNumber(( sec.perMinute ));
+        total = total / wholeNumber(( sec.perMinute ));
 
         value minutes = ( total % wholeNumber(min.perHour) ).integer;
         value hours = ( total / wholeNumber(min.perHour ) ).integer;
@@ -310,21 +310,20 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
                 }
                 //value secondPart = seconds;
                 //value milliPart = milliseconds;
-                //TODO: Ceylon does not have it, yet. Also waiting TimeZone Impl
-                //value secsMillisOr = secondPart | milliPart;
-                //if (secsNanosOr != 0) {  // if either non-zero
-                //    if ((secsNanosOr | Integer.MIN_VALUE) != 0) {  // if either less than zero
+                //value secsMillisOr = secondPart.or(milliPart);
+                //if (secsMillisOr != 0) {  // if either non-zero
+                //    if ((secsMillisOr.or( Integer.MIN_VALUE ) != 0) {  // if either less than zero
                 //        buf.append('-');
                 //        secondPart = Math.abs(secondPart);
-                //        nanoPart = Math.abs(nanoPart);
+                //        milliPart = Math.abs(milliPart);
                 //    }
                 //    buf.append(secondPart);
-                //    int dotPos = buf.length();
-                //    nanoPart += 1000_000_000;
-                //    while (nanoPart % 10 == 0) {
-                //        nanoPart /= 10;
+                //    value dotPos = buf.length();
+                //    milliPart += 1000_000_000;
+                //    while (milliPart % 10 == 0) {
+                //        milliPart /= 10;
                 //    }
-                //    buf.append(nanoPart);
+                //    buf.append(milliPart);
                 //    buf.setCharAt(dotPos, '.');
                 //    buf.append('S');
                 //}

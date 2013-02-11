@@ -1,14 +1,13 @@
-import com.redhat.ceylon.sdk.test { Suite }
-
-class TimeSuite() extends Suite("ceylon.time") {
-    shared actual Iterable<String->Void()> suite = {
-        "Weekdays" -> testDayOfWeek,
-        "Date" -> testDates,
-        "Time" -> testTimes,
-        "DateTime" -> testDateTime
-    };
-}
+import ceylon.test { suite }
 
 void run() {
-    TimeSuite().run();
+    suite {
+        suiteName = "ceylon.time";
+        tests = [
+            "Weekdays" -> testDayOfWeek,
+            "Date" -> testDates,
+            "Time" -> testTimes,
+            "DateTime" -> testDateTime
+        ];
+    };
 }

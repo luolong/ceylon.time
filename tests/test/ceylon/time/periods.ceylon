@@ -1,4 +1,4 @@
-import com.redhat.ceylon.sdk.test { assertTrue }
+import ceylon.test { assertTrue }
 import ceylon.time { Period }
 
 Period oneSecond = Period {

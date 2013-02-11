@@ -1,4 +1,4 @@
-import com.redhat.ceylon.sdk.test { assertEquals }
+import ceylon.test { assertEquals }
 import ceylon.time { time, Time }
 
 Time midnight = time();
