@@ -1,6 +1,6 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse }
 import ceylon.time { date, Date, Period }
-import ceylon.time.base { december, monday, january, november, february, april, DayOfWeek, tuesday, Month, october, sunday, wednesday, september, july }
+import ceylon.time.base { december, monday, january, november, february, april, DayOfWeek, tuesday, Month, october, sunday, wednesday, september, july, saturday, friday }
 
 Boolean leapYear = true;
 
@@ -12,6 +12,8 @@ shared void test_wed_sep_24_70() => assertGregorianDate(70, september, 24, wedne
 shared void test_mon_jan_01_1900() => assertGregorianDate(1900, january, 1, monday, !leapYear);
 shared void test_tue_oct_29_1974() => assertGregorianDate(1974, october, 29, tuesday, !leapYear);
 shared void test_mon_dec_13_1982() => assertGregorianDate(1982, december, 13, monday, !leapYear);
+shared void test_mon_dec_31_1999() => assertGregorianDate(1999, december, 31, friday, !leapYear);
+shared void test_mon_jan_01_2000() => assertGregorianDate(2000, january, 1, saturday, leapYear);
 shared void test_mon_jan_31_2000() => assertGregorianDate(2000, january, 31, monday, leapYear);
 shared void test_tue_feb_29_2000() => assertGregorianDate(2000, february, 29, tuesday, leapYear);
 shared void test_sun_dec_31_2000() => assertGregorianDate(2000, december, 31, sunday, leapYear);
