@@ -11,7 +11,7 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Number of milliseconds since last full second"
     shared actual Integer millis {
-        return millisOfDay % ms.perDay;
+        return millisOfDayMinusHoursMinutes - (seconds * ms.perSecond);
     }
 
     doc "Number of seconds since last midnight"
@@ -20,7 +20,7 @@ shared class TimeOfDay(millisOfDay)
     }
 
     shared actual Integer seconds {
-        return secondsOfDay % sec.perDay;
+        return millisOfDayMinusHoursMinutes / ms.perSecond;
     }
 
     doc "Number of minutes since last midnight"
@@ -30,12 +30,12 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Number of minutes since last full hour."
     shared actual Integer minutes {
-        return minutesOfDay % min.perHour;
+        return millisOfDayMinusHours / ms.perMinute;
     }
 
     doc "Number of full hours elapsed since last midnight."
     shared actual Integer hours {
-        return minutesOfDay / min.perHour;
+        return millisOfDay / ms.perHour;
     }
 
     doc "Compare two instants of time"
@@ -172,6 +172,14 @@ shared class TimeOfDay(millisOfDay)
             return millisOfDay == other.millisOfDay;
         }
         return false;
+    }
+
+    Integer millisOfDayMinusHours {
+        return millisOfDay - ( hours * ms.perHour );
+    }
+
+    Integer millisOfDayMinusHoursMinutes {
+        return millisOfDayMinusHours - (minutes * ms.perMinute);
     }
 
 }
