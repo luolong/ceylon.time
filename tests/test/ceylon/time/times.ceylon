@@ -1,5 +1,6 @@
 import ceylon.test { assertEquals }
 import ceylon.time { time, Time }
+import ceylon.time.base { seconds, minutes }
 
 Time midnight = time();
 
@@ -14,6 +15,8 @@ shared void testHours() {
     for ( Integer h in 1..23 ) {
         assertTime {
             hour = h;
+            secondsOfDay = h * seconds.perHour;
+            minutesOfDay = h * minutes.perHour;
         };
     }
 }
@@ -22,6 +25,8 @@ shared void testMinutes() {
     for ( Integer m in 1..59 ) {
         assertTime {
             minute = m;
+            secondsOfDay = m * seconds.perMinute;
+            minutesOfDay = m;
         };
     }
 }
@@ -30,6 +35,8 @@ shared void testSeconds() {
     for ( Integer s in 1..59 ) {
         assertTime {
             second = s;
+            secondsOfDay = s;
+            minutesOfDay = 0;
         };
     }
 }
