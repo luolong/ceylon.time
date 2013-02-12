@@ -158,7 +158,7 @@ shared object october extends Month(gregorian.october) {
     shared actual Month successor { return november; }
 }
 
-doc "Nobember. The eleventh month of a gregorian calendar system."
+doc "November. The eleventh month of a gregorian calendar system."
 shared object november extends Month(gregorian.november) {
     shared actual shared actual String string = "november";
     shared actual Month predecessor { return october; }  
