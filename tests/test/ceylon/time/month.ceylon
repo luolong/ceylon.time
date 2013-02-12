@@ -1,5 +1,5 @@
-import ceylon.test { assertEquals, AssertComparisonException }
-import ceylon.time.base { january, february, march, april, may, june, july, august, september, october, november, december, monthOf, Month }
+import ceylon.test { assertEquals }
+import ceylon.time.base { january, february, march, april, may, june, july, august, september, october, november, december, monthOf }
 
 shared void test_january_number() => assertEquals(1, january.integer);
 shared void test_february_number() => assertEquals(2, february.integer);
