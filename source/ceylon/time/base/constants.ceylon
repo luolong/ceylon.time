@@ -70,7 +70,7 @@ shared object minutes {
     shared Integer perHour = 60;
 
     doc "Number of minutes per day"
-    shared Integer perDay = hours.perDay * minutes.perHour;
+    shared Integer perDay { return  hours.perDay * minutes.perHour; }
 }
 
 doc "Properties of a second"
@@ -80,10 +80,10 @@ shared object seconds {
     shared Integer perMinute = 60;
 
     doc "Number of seconds per hour"
-    shared Integer perHour = minutes.perHour * seconds.perMinute;
+    shared Integer perHour { return minutes.perHour * seconds.perMinute; }
 
     doc "Number of seconds per day"
-    shared Integer perDay = hours.perDay * seconds.perHour;
+    shared Integer perDay { return hours.perDay * seconds.perHour; }
 }
 
 doc "Millisecond properties."
@@ -93,11 +93,11 @@ shared object milliseconds {
     shared Integer perSecond = 1000;
 
     doc "Milliseconds per minute (60000)"
-    shared Integer perMinute = seconds.perMinute * milliseconds.perSecond;
+    shared Integer perMinute { return seconds.perMinute * milliseconds.perSecond; }
 
     doc "Number of milliseconds per hour"
-    shared Integer perHour = minutes.perHour * milliseconds.perMinute;
+    shared Integer perHour { return minutes.perHour * milliseconds.perMinute; }
 
     doc "Number of milliseconds per day"
-    shared Integer perDay = hours.perDay * milliseconds.perHour;
+    shared Integer perDay { return  hours.perDay * milliseconds.perHour; }
 }

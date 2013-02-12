@@ -14,14 +14,14 @@ This business needs orientation is also basis for omitting such features as leap
 
 Main data types are followig:
 - Instant
-- LocalDate, LocalTime, LocalDateTime
+- Date, Time, DateTime
 - ZoneDateTime
 
 Supporting data types:
 - TimeZone
 - Period, Duration
 - MonthOfYear, DayOfWeek
-- Clock
+- Clock, Instant
 - etc...
 
 

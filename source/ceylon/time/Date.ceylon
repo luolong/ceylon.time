@@ -41,7 +41,7 @@ shared Date gregorian(year, month, date){
         doc "Date of month"
         Integer date;
         
-    return gregorianDate( year, monthOf(month).integer, date );
+    return gregorianDate( year, month, date );
 }
 
 
