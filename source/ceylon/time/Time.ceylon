@@ -12,23 +12,14 @@ shared interface Time
 
 doc "Create new instance of [[Time]]"
 shared Time time(Integer hours = 0, Integer minutes=0, Integer seconds=0, Integer millis=0) {
-    value hourRange = h.perDay;
-    value milliOfHourRange = ms.perHour;
-    
     value hh = (hours == 0) then 0
-          else (hours %  hourRange) * milliOfHourRange;
-    
-    value minutesRange = min.perHour;
-    value milliOfMinuteRange = ms.perMinute;
+          else (hours %  h.perDay) * ms.perHour;
     
     value mm = (minutes == 0) then 0
-          else (minutes % minutesRange) * milliOfMinuteRange;
-    
-    value secondRange = sec.perMinute;
-    value milliOfSecondRange = ms.perSecond;
+          else (minutes % min.perHour) * ms.perMinute;
     
     value ss = (seconds == 0) then 0
-          else (seconds % secondRange) * milliOfSecondRange;
+          else (seconds % sec.perMinute) * ms.perSecond;
     
     value totalMillis = hh + mm + ss + millis;
     return TimeOfDay( (totalMillis >= 0 ) then totalMillis

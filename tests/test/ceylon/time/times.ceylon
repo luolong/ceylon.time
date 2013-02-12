@@ -1,5 +1,6 @@
 import ceylon.test { assertEquals }
 import ceylon.time { time, Time }
+import ceylon.time.base { seconds, minutes }
 
 Time midnight = time();
 
@@ -10,24 +11,49 @@ Time time_14h_20m_07s_59ms = time {
     millis = 59;
 };
 
-shared void testTimes() {
+shared void testHours() {
+    for ( Integer h in 1..23 ) {
+        assertTime {
+            hour = h;
+            secondsOfDay = h * seconds.perHour;
+            minutesOfDay = h * minutes.perHour;
+        };
+    }
+}
 
-    print( "Testing instance" );
-    assertEquals( midnight.millis, 0, "millis" );
-    assertEquals( midnight.secondsOfDay, 0, "secondsOfDay" );
-    assertEquals( midnight.seconds, 0, "seconds" );
-    assertEquals( midnight.minutesOfDay, 0, "minutesOfDay" );
-    assertEquals( midnight.minutes, 0, "minutes" );
-    assertEquals( midnight.hours, 0, "hour" );
+shared void testMinutes() {
+    for ( Integer m in 1..59 ) {
+        assertTime {
+            minute = m;
+            secondsOfDay = m * seconds.perMinute;
+            minutesOfDay = m;
+        };
+    }
+}
 
-    assertEquals( time_14h_20m_07s_59ms.millis, 59, "millis" );
-    assertEquals( time_14h_20m_07s_59ms.secondsOfDay, 51607, "secondsOfDay" );
-    assertEquals( time_14h_20m_07s_59ms.seconds, 7, "seconds" );
-    assertEquals( time_14h_20m_07s_59ms.minutesOfDay, 860, "minutesOfDay" );
-    assertEquals( time_14h_20m_07s_59ms.minutes, 20, "minutes" );
-    assertEquals( time_14h_20m_07s_59ms.hours, 14, "hour" );
+shared void testSeconds() {
+    for ( Integer s in 1..59 ) {
+        assertTime {
+            second = s;
+            secondsOfDay = s;
+            minutesOfDay = 0;
+        };
+    }
+}
 
-    print( "Testing plusHours");
+shared void testMilliseconds() {
+    for ( Integer ms in 1..999 ) {
+        assertTime {
+            milli = ms;
+        };
+    }
+}
+
+shared void test_09_08_59_0100() => assertTime(9,8,59,100, 32939, 548);
+shared void test_00_00_0_0000() => assertTime(0,0,0,0, 0, 0);
+shared void test_23_59_59_999() => assertTime(23,59,59,999, 86399, 1439);
+
+shared void testPlusHours() {
     assertEquals( midnight.plusHours(15), time( 15 ) );
     assertEquals( time_14h_20m_07s_59ms.plusHours(20), time( 10, 20, 7, 59 ) );
     assertEquals( time_14h_20m_07s_59ms.plusHours(13), time( 3, 20, 7, 59 ) );
@@ -36,8 +62,9 @@ shared void testTimes() {
 
     value toTime_13 = time(09, 08, 07, 50).plusHours(28); 
     assertEquals( 13, toTime_13.hours);
+}
 
-    print( "Testing minusHours");
+shared void testMinusHours() {
     assertEquals( midnight.minusHours(15), time( 9 ) );
     assertEquals( time_14h_20m_07s_59ms.minusHours(20), time( 18, 20, 7, 59 ) );
 
@@ -45,44 +72,64 @@ shared void testTimes() {
 
     value time_5 = time(09, 08, 07, 0050).minusHours(28); 
     assertEquals( 5, time_5.hours);
+}
 
-    print( "Testing plusMinutes");
+shared void testPlusMinutes() {
     assertEquals( midnight.plusMinutes(15), time( 0, 15, 0, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.plusMinutes(40), time( 15, 0, 7, 59 ) );
+}
 
-    print( "Testing minusMinutes");
+shared void testMinusMinutes() {
     assertEquals( midnight.minusMinutes(15), time( 23, 45, 0, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.minusMinutes(21), time( 13, 59, 7, 59 ) );
+}
 
-    print( "Testing plusSeconds");
+shared void testPlusSeconds() {
     assertEquals( midnight.plusSeconds(15), time( 0, 0, 15, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.plusSeconds(54), time( 14, 21, 1, 59 ) );
+}
 
-    print( "Testing minusSeconds");
+shared void testMinusSeconds() {
     assertEquals( midnight.minusSeconds(15), time( 23, 59, 45, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.minusSeconds(21), time( 14, 19, 46, 59 ) );
+}
 
-    print( "Testing plusMilliseconds");
+shared void testPlusMilliseconds() {
     assertEquals( midnight.plusMilliseconds( 20 ), time( 0, 0, 0, 20 ) );
     assertEquals( time_14h_20m_07s_59ms.plusMilliseconds( 941 ), time( 14, 20, 8, 0 ) );
+}
 
-    print( "Testing minusMilliseconds");
+shared void testMinusMilliseconds() {
     assertEquals( midnight.minusMilliseconds( 20 ), time( 23, 59, 59, 980 ) );
     assertEquals( time_14h_20m_07s_59ms.minusMilliseconds( 941 ), time( 14, 20, 6, 118 ) );
+}
 
-    print( "Testing withHours");
+shared void testWithHours() {
     assertEquals( midnight.withHours( 20 ), time( 20, 0, 0, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.withHours( 2 ), time( 2, 20, 7, 59 ) );
+}
 
-    print( "Testing withMinutes");
+shared void testWithMinutes() {
     assertEquals( midnight.withMinutes( 20 ), time( 0, 20, 0, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.withMinutes( 2 ), time( 14, 2, 7, 59 ) );
+}
 
-    print( "Testing withSeconds");
+shared void testWithSeconds() {
     assertEquals( midnight.withSeconds( 20 ), time( 0, 0, 20, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.withSeconds( 2 ), time( 14, 20, 2, 59 ) );
+}
 
-    print( "Testing withMilliseconds");
+shared void testWithMilliseconds() {
     assertEquals( midnight.withMilliseconds( 20 ), time( 0, 0, 0, 20 ) );
     assertEquals( time_14h_20m_07s_59ms.withMilliseconds( 2 ), time( 14, 20, 7, 2 ) );
+}
+
+shared void assertTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0, Integer secondsOfDay = 0, Integer minutesOfDay = 0) {
+    Time actual = time( hour, minute, second, milli );
+    assertEquals { expected = hour; actual = actual.hours; };
+    assertEquals { expected = minute; actual = actual.minutes; };
+    assertEquals { expected = second; actual = actual.seconds; };
+    assertEquals { expected = milli; actual = actual.millis; };
+    assertEquals { expected = secondsOfDay; actual = actual.secondsOfDay; };
+    assertEquals { expected = minutesOfDay; actual = actual.minutesOfDay; };
 }
