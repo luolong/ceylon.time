@@ -42,9 +42,9 @@ shared void testMilliseconds() {
     }
 }
 
-shared void test_09_08_59_0100() => assertTime(9,8,59,100);
-shared void test_00_00_0_0000() => assertTime();
-shared void test_23_59_59_999() => assertTime(23,59,59,999);
+shared void test_09_08_59_0100() => assertTime(9,8,59,100, 32939, 548);
+shared void test_00_00_0_0000() => assertTime(0,0,0,0, 0, 0);
+shared void test_23_59_59_999() => assertTime(23,59,59,999, 86399, 1439);
 
 shared void testPlusHours() {
     assertEquals( midnight.plusHours(15), time( 15 ) );
@@ -117,10 +117,12 @@ shared void testWithMilliseconds() {
     assertEquals( time_14h_20m_07s_59ms.withMilliseconds( 2 ), time( 14, 20, 7, 2 ) );
 }
 
-shared void assertTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0) {
+shared void assertTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0, Integer secondsOfDay = 0, Integer minutesOfDay = 0) {
     Time actual = time( hour, minute, second, milli );
     assertEquals { expected = hour; actual = actual.hours; };
     assertEquals { expected = minute; actual = actual.minutes; };
     assertEquals { expected = second; actual = actual.seconds; };
     assertEquals { expected = milli; actual = actual.millis; };
+    assertEquals { expected = secondsOfDay; actual = actual.secondsOfDay; };
+    assertEquals { expected = minutesOfDay; actual = actual.minutesOfDay; };
 }
