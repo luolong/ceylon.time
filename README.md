@@ -21,7 +21,7 @@ Supporting data types:
 - TimeZone
 - Period, Duration
 - MonthOfYear, DayOfWeek
-- Clock, Instant
+- Clock
 - etc...
 
 
