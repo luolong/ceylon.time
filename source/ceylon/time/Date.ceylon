@@ -27,23 +27,8 @@ shared Date date(Integer year, Integer|Month month, Integer date){
     //if (year > 1582 || (year == 1582 && m <= march)){
     //	return JulianDate()
     //}
-    return gregorian(year, m, date);
-} 
-
-doc "Returns a gregorian calendar date according to the specified year, month and date values"
-shared Date gregorian(year, month, date){
-        doc "Year number of the date"
-        Integer year;
-        
-        doc "Month of the year"
-        Integer|Month month; 
-        
-        doc "Date of month"
-        Integer date;
-        
-    return gregorianDate( year, month, date );
+    return gregorianDate(year, m, date);
 }
-
 
 doc "Returns a julian calendar date according to the specified year, month and date values"
 shared Date julian(year, month, date){

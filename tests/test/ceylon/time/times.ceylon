@@ -124,6 +124,19 @@ shared void testWithMilliseconds() {
     assertEquals( time_14h_20m_07s_59ms.withMilliseconds( 2 ), time( 14, 20, 7, 2 ) );
 }
 
+shared void testPredecessor_Time() {
+    assertEquals( midnight.predecessor, time(23,59,59) ); 
+}
+
+shared void testSuccessor_Time() {
+    assertEquals( midnight.successor, time(0,0,1) ); 
+}
+
+shared void testString_Time() {
+    assertEquals( midnight.string, "00:00:00.0000");
+    assertEquals( time_14h_20m_07s_59ms.string, "14:20:07.0059");
+}
+
 shared void assertTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0, Integer secondsOfDay = 0, Integer minutesOfDay = 0) {
     Time actual = time( hour, minute, second, milli );
     assertEquals { expected = hour; actual = actual.hours; };
