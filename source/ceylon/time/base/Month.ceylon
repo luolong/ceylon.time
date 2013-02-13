@@ -1,5 +1,5 @@
-import ceylon.time.math { mod, fdiv }
 import ceylon.time.chronology { gregorian }
+import ceylon.time.math { fdiv, mod }
 
 doc "A month in a Gregorian or Julian calendar system."
 shared abstract class Month(integer)
@@ -38,12 +38,12 @@ shared abstract class Month(integer)
 
     doc "Returns month of year that comes specified number of months after this month."
     shared Month plusMonths(Integer number) {
-        return number == 0 then this else plus(number).month;
+        return number == 0 then this else add(number).month;
     }
 
     doc "Returns month of year that comes specified number of months before this month."
     shared Month minusMonths(Integer number) {
-        return number == 0 then this else plus(-number).month;
+        return number == 0 then this else add(-number).month;
     }
 
     doc "A result of adding or subtracting a month to another mont"
@@ -57,14 +57,11 @@ shared abstract class Month(integer)
     
     doc "Adds number of months to this month and returns the result of 
          as new month value and."
-    shared Overflow plus(Integer number){
-        value next = (integer - 1 + number);
+    shared Overflow add(Integer numberOfMonths){
+        value next = (integer - 1 + numberOfMonths);
         assert (exists month = months.all[mod(next, 12)]);
-        if (0 <= next && next < 12) {
-            return Overflow(month, 0);
-        }
         
-        Integer years = fdiv(next + 1, 12);
+        Integer years = fdiv(next, 12);
         return Overflow(month, years); 
     }
 }

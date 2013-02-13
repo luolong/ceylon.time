@@ -1,5 +1,5 @@
 import ceylon.test { assertEquals }
-import ceylon.time.base { january, february, march, april, may, june, july, august, september, october, november, december, monthOf }
+import ceylon.time.base { january, february, march, april, may, june, july, august, september, october, november, december, monthOf, Month }
 
 shared void test_january_number() => assertEquals(1, january.integer);
 shared void test_february_number() => assertEquals(2, february.integer);
@@ -343,11 +343,37 @@ shared void test_january_minusMonths() {
     assertEquals(january, january.minusMonths(12));
 }
 
-shared void test_Month_plus() {
-    assertEquals(december, january.plus(11).month);
-    assertEquals(0, january.plus(11).years);
-    
-    assertEquals(january, december.plus(-11).month);
-    assertEquals(0, january.plus(-11).years);
+shared void test_january_minus_13() => assertMonthAdd(january.add(-13), [december, -2]);
+shared void test_january_minus_12() => assertMonthAdd(january.add(-12), [january, -1]);
+shared void test_january_minus_11() => assertMonthAdd(january.add(-11), [february, -1]);
+shared void test_january_minus_10() => assertMonthAdd(january.add(-10), [march, -1]);
+shared void test_january_minus_9() => assertMonthAdd(january.add(-9), [april, -1]);
+shared void test_january_minus_8() => assertMonthAdd(january.add(-8), [may, -1]);
+shared void test_january_minus_7() => assertMonthAdd(january.add(-7), [june, -1]);
+shared void test_january_minus_6() => assertMonthAdd(january.add(-6), [july, -1]);
+shared void test_january_minus_5() => assertMonthAdd(january.add(-5), [august, -1]);
+shared void test_january_minus_4() => assertMonthAdd(january.add(-4), [september, -1]);
+shared void test_january_minus_3() => assertMonthAdd(january.add(-3), [october, -1]);
+shared void test_january_minus_2() => assertMonthAdd(january.add(-2), [november, -1]);
+shared void test_january_minus_1() => assertMonthAdd(january.add(-1), [december, -1]);
+shared void test_january_plus_0() => assertMonthAdd(january.add(0), [january, 0]);
+shared void test_january_plus_1() => assertMonthAdd(january.add(1), [february, 0]);
+shared void test_january_plus_2() => assertMonthAdd(january.add(2), [march, 0]);
+shared void test_january_plus_3() => assertMonthAdd(january.add(3), [april, 0]);
+shared void test_january_plus_4() => assertMonthAdd(january.add(4), [may, 0]);
+shared void test_january_plus_5() => assertMonthAdd(january.add(5), [june, 0]);
+shared void test_january_plus_6() => assertMonthAdd(january.add(6), [july, 0]);
+shared void test_january_plus_7() => assertMonthAdd(january.add(7), [august, 0]);
+shared void test_january_plus_8() => assertMonthAdd(january.add(8), [september, 0]);
+shared void test_january_plus_9() => assertMonthAdd(january.add(9), [october, 0]);
+shared void test_january_plus_10() => assertMonthAdd(january.add(10), [november, 0]);
+shared void test_january_plus_11() => assertMonthAdd(january.add(11), [december, 0]);
+shared void test_january_plus_12() => assertMonthAdd(january.add(12), [january, 1]);
+shared void test_january_plus_13() => assertMonthAdd(january.add(13), [february, 1]);
+
+
+
+void assertMonthAdd(Month.Overflow actual, [Month, Integer] expected){
+    assertEquals(expected, [actual.month, actual.years]);
 }
 

@@ -53,7 +53,7 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
-        value o = month.plus(months);
+        value o = month.add(months);
         value d = min{day, o.month.numberOfDays(impl.leapYear(year + o.years))};
 
         return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, d]) );
