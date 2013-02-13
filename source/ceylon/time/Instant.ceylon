@@ -1,5 +1,8 @@
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
-import ceylon.time.base { ReadableInstant }
+import ceylon.time.base { ReadableInstant, milliseconds, january }
+import ceylon.time.chronology { gregorian }
+import ceylon.time { dateImpl = date, dateTimeImpl = dateTime, timeImpl = time }
+import ceylon.time.impl { normalizedTimeInMillis }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -16,7 +19,7 @@ doc "A specific instant of time on a continuous time-scale.
 shared class Instant(millis) 
     satisfies ReadableInstant & Comparable<Instant> {
 
-    doc "Internal value of an instant as a number of milliseconds since january 1st 1974 UTC"
+    doc "Internal value of an instant as a number of milliseconds since january 1st 1970 UTC"
     shared actual Integer millis;
 
     doc "Adds a period to this instant"
@@ -39,33 +42,37 @@ shared class Instant(millis)
     shared DateTime dateTime(
             doc "Time zone of the conversion.
                  If omitted the current/default time zone of the system will be used."
-            TimeZone? zone) {
+            TimeZone? zone = null) {
         if (exists zone){
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
             return nothing;
         }
-        //TODO: get [[DateTime]] for this [[Instant]] in the default time zone. 
-        return nothing;
+        //TODO: Should we have this as field in gregorianCalendar?
+        value fixed = dateTimeImpl(1970, january, 1); 
+        return fixed.plusMilliseconds(millis);
     }
 
     doc "Returns a Date value for this instant"
-        shared Date date(TimeZone? zone) {
+    shared Date date(TimeZone? zone = null) {
         if (exists zone) {
             //TODO: get [[Date]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-        //TODO: get [[Date]] of this [[Instant]] in the default time zone.
-        return nothing;
+        
+        value inDays = millis / milliseconds.perDay;
+        //TODO: Should we have this as field in gregorianCalendar?
+        value fixed = dateImpl(1970, january, 1); 
+        return fixed.plusDays(inDays);
     }
 
     doc "Returns a Time (time of day) value for this instant."
-    shared Time time(TimeZone? zone) {
+    shared Time time(TimeZone? zone = null) {
         if (exists zone) {
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-        //TODO: get [[Time]] of this [[Instant]] in the default time zone.
-        return nothing;
+		
+        return timeImpl( 0, 0, 0, normalizedTimeInMillis(0, 0, 0, millis) );
     }
 
     doc "Returns ZoneDateTime value for this instant."

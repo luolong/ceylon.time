@@ -211,6 +211,10 @@ shared class GregorianDateTime( date, time )
         return false;
     }
 
+    shared actual String string {
+        return "" date.string " " time.string "";
+    }
+
     GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
 
         Integer days = daysFromMillis { 
@@ -221,7 +225,7 @@ shared class GregorianDateTime( date, time )
             millis = millis; 
         } * signal;
 
-        value restOfMillis =  restOfMillisPerDay {
+        value restOfMillis =  normalizedTimeInMillis {
             hours = hours;
             minutes = minutes;
             seconds = seconds;
