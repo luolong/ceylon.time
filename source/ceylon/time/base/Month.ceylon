@@ -64,7 +64,7 @@ shared abstract class Month(integer)
             return Overflow(month, 0);
         }
         
-        Integer years = fdiv(next, 12);
+        Integer years = fdiv(next + 1, 12);
         return Overflow(month, years); 
     }
 }

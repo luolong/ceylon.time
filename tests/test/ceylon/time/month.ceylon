@@ -311,7 +311,7 @@ shared void test_compareDecember() {
     assertEquals(equal, december <=> december);
 }
 
-shared void testJanuaryPlusMonths() {
+shared void test_january_plusMonths() {
     assertEquals(january, january.plusMonths(0));
     assertEquals(february, january.plusMonths(1));
     assertEquals(march, january.plusMonths(2));
@@ -327,7 +327,7 @@ shared void testJanuaryPlusMonths() {
     assertEquals(january, january.plusMonths(12));
 }
 
-shared void testJanuaryMinusMonths() {
+shared void test_january_minusMonths() {
     assertEquals(january, january.minusMonths(0));
     assertEquals(december, january.minusMonths(1));
     assertEquals(november, january.minusMonths(2));
@@ -341,5 +341,13 @@ shared void testJanuaryMinusMonths() {
     assertEquals(march, january.minusMonths(10));
     assertEquals(february, january.minusMonths(11));
     assertEquals(january, january.minusMonths(12));
+}
+
+shared void test_Month_plus() {
+    assertEquals(december, january.plus(11).month);
+    assertEquals(0, january.plus(11).years);
+    
+    assertEquals(january, december.plus(-11).month);
+    assertEquals(0, january.plus(-11).years);
 }
 
