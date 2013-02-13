@@ -31,11 +31,9 @@ shared Integer daysFromMillis( Integer hours = 0, Integer minutes = 0, Integer s
            hours / h.perDay;
 }
 
-shared Integer restOfMillisPerDay( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-    return millis % ms.perDay +
-                (seconds % sec.perDay) * ms.perSecond +
-                (minutes % min.perDay) * ms.perMinute +
-                (hours % h.perDay) * ms.perHour;
+shared Integer normalizedTimeInMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
+    value totalMillis = hours * ms.perHour + minutes * ms.perMinute + seconds * ms.perSecond + millis;
+    return totalMillis % ms.perDay;
 }
 
 doc "return padded value"
