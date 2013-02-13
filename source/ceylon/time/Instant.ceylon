@@ -73,4 +73,15 @@ shared class Instant(millis)
         //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
         return nothing;
     }
+
+    doc "Returns duration in milliseconds from this instant to the other instant."
+    shared Duration durationTo(Instant other) {
+        return Duration(other.millis - this.millis);
+    }
+    
+    doc "Returns duration in milliseconds from other instant to this instant."
+    shared Duration durationFrom(Instant other) {
+        return Duration(this.millis - other.millis);
+    }
+
 }

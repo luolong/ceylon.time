@@ -308,25 +308,14 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
                 if (minutes != 0) {
                     buf.append(minutes.string).append('M');
                 }
-                //value secondPart = seconds;
-                //value milliPart = milliseconds;
-                //value secsMillisOr = secondPart.or(milliPart);
-                //if (secsMillisOr != 0) {  // if either non-zero
-                //    if ((secsMillisOr.or( Integer.MIN_VALUE ) != 0) {  // if either less than zero
-                //        buf.append('-');
-                //        secondPart = Math.abs(secondPart);
-                //        milliPart = Math.abs(milliPart);
-                //    }
-                //    buf.append(secondPart);
-                //    value dotPos = buf.length();
-                //    milliPart += 1000_000_000;
-                //    while (milliPart % 10 == 0) {
-                //        milliPart /= 10;
-                //    }
-                //    buf.append(milliPart);
-                //    buf.setCharAt(dotPos, '.');
-                //    buf.append('S');
-                //}
+                if (seconds != 0 || milliseconds != 0) {
+                    buf.append(seconds.string);
+                    if (milliseconds != 0) {
+                        buf.append("." milliseconds "");
+                    }
+                    buf.append("S");
+                }
+                
             }
             return buf.string;
         }
