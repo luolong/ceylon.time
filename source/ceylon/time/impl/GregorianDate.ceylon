@@ -124,13 +124,15 @@ shared class GregorianDate( Integer dayOfEra )
 
         function normalizeFirstWeek( Integer weekNumber ) {
             variable value result = weekNumber;
-            value jan1 = withDay(1).withMonth(january);
-            value jan1WeekDay = jan1.weekday == sunday then 7 else jan1.weekday.integer; 
-            if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
-                if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
-                    result = 53;
-                } else {
-                    result = 52;
+            if ( weekNumber == 0 ) {
+                value jan1 = withDay(1).withMonth(january);
+                value jan1WeekDay = jan1.weekday == sunday then 7 else jan1.weekday.integer; 
+                if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
+                    if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
+                        result = 53;
+                    } else {
+                        result = 52;
+                    }
                 }
             }
             return result;
@@ -138,10 +140,12 @@ shared class GregorianDate( Integer dayOfEra )
 
         function normalizeLastWeek( Integer weekNumber ) {
             variable value result = weekNumber;
-            value weekDay = weekday == sunday then 7 else weekday.integer; 
-            value totalDaysInYear = leapYear then 366 else 365;
-            if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
-                result = 1;
+            if ( weekNumber == 53 ) {
+                value weekDay = weekday == sunday then 7 else weekday.integer; 
+                value totalDaysInYear = leapYear then 366 else 365;
+                if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
+                    result = 1;
+                }
             }
             return result;
         }
