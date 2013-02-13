@@ -32,7 +32,7 @@ shared void testEquals() {
 }
 
 shared void testPlusYears() {
-	assertEquals( 2000, data_1982_12_13_09_08_07_0050.plusYears(18).year);
+    assertEquals( 2000, data_1982_12_13_09_08_07_0050.plusYears(18).year);
 }
 
 shared void testMinusYears() {
@@ -57,7 +57,7 @@ shared void testMinusDays() {
 
 shared void testPlusHours_DateTime() {
     assertEquals( 18, data_1982_12_13_09_08_07_0050.plusHours(9).hours);
-    
+
     value data_1982_12_14_13 = data_1982_12_13_09_08_07_0050.plusHours(28); 
     assertEquals( 13, data_1982_12_14_13.hours);
     assertEquals( 14, data_1982_12_14_13.day);
@@ -65,7 +65,7 @@ shared void testPlusHours_DateTime() {
 
 shared void testMinusHours_DateTime() {
     assertEquals( 2, data_1982_12_13_09_08_07_0050.minusHours(7).hours);
-    
+
     value data_1982_12_12_5 = data_1982_12_13_09_08_07_0050.minusHours(28);
     assertEquals( 5, data_1982_12_12_5.hours);
     assertEquals( 12, data_1982_12_12_5.day);
@@ -73,7 +73,7 @@ shared void testMinusHours_DateTime() {
 
 shared void testPlusMinutes_DateTime() {
     assertEquals( 15, data_1982_12_13_09_08_07_0050.plusMinutes(7).minutes);
-    
+
     value data_1982_12_13_10_3 = data_1982_12_13_09_08_07_0050.plusMinutes(55);
     assertEquals( 3, data_1982_12_13_10_3.minutes);
     assertEquals( 10, data_1982_12_13_10_3.hours);
@@ -81,7 +81,7 @@ shared void testPlusMinutes_DateTime() {
 
 shared void testMinusMinutes_DateTime() {
     assertEquals( 15, data_1982_12_13_09_08_07_0050.plusMinutes(7).minutes);
-    
+
     value data_1982_12_13_8_15 = data_1982_12_13_09_08_07_0050.minusMinutes(53);
     assertEquals( 15, data_1982_12_13_8_15.minutes);
     assertEquals( 8, data_1982_12_13_8_15.hours);    
@@ -89,7 +89,7 @@ shared void testMinusMinutes_DateTime() {
 
 shared void testPlusSeconds_DateTime() {
     assertEquals( 16, data_1982_12_13_09_08_07_0050.plusSeconds(9).seconds);
-    
+
     value data_1982_12_13_9_9_15 = data_1982_12_13_09_08_07_0050.plusSeconds(53+15);
     assertEquals( 15, data_1982_12_13_9_9_15.seconds);
     assertEquals( 9, data_1982_12_13_9_9_15.minutes);
@@ -97,7 +97,7 @@ shared void testPlusSeconds_DateTime() {
 
 shared void testMinusSeconds_DateTime() {
     assertEquals( 15, data_1982_12_13_09_08_07_0050.plusMinutes(7).minutes);
-    
+
     value data_1982_12_13_9_7_4 = data_1982_12_13_09_08_07_0050.minusSeconds(7+56);
     assertEquals( 4, data_1982_12_13_9_7_4.seconds);
     assertEquals( 7, data_1982_12_13_9_7_4.minutes);
@@ -105,7 +105,7 @@ shared void testMinusSeconds_DateTime() {
 
 shared void testPlusMillis_DateTime() {
     assertEquals( 150, data_1982_12_13_09_08_07_0050.plusMilliseconds(100).millis);
-    
+
     value data_1982_12_13_9_8_15_300 = data_1982_12_13_09_08_07_0050.plusMilliseconds(950+7300);
     assertEquals( 300, data_1982_12_13_9_8_15_300.millis);
     assertEquals( 15, data_1982_12_13_9_8_15_300.seconds);
@@ -113,10 +113,32 @@ shared void testPlusMillis_DateTime() {
 
 shared void testMinusMilliseconds_DateTime() {
     assertEquals( 950, data_1982_12_13_09_08_07_0050.minusMilliseconds(100).millis);
-    
+
     value data_1982_12_13_9_8_4_100 = data_1982_12_13_09_08_07_0050.minusMilliseconds(50+2900);
     assertEquals( 100, data_1982_12_13_9_8_4_100.millis);
     assertEquals( 4, data_1982_12_13_9_8_4_100.seconds);
+}
+
+shared void testPredecessor_DateTime() {
+    assertEquals(data_1982_12_13_09_08_07_0050.predecessor, dateTime { year = 1982;  
+                                                                       month = december; 
+                                                                       date = 12; 
+                                                                       hour = 9; 
+                                                                       minutes = 8;
+                                                                       seconds = 7;
+                                                                       millis = 50;
+                                                                      });
+}
+
+shared void testSuccessor_DateTime() {
+    assertEquals(data_1982_12_13_09_08_07_0050.successor, dateTime { year = 1982;  
+                                                                       month = december; 
+                                                                       date = 14; 
+                                                                       hour = 9; 
+                                                                       minutes = 8;
+                                                                       seconds = 7;
+                                                                       millis = 50;
+                                                                      });
 }
 
 void assertGregorianDateTime( Integer year, Month month, Integer day, DayOfWeek weekday, Boolean leapYear = false, 
