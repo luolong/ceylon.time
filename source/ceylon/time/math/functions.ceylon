@@ -25,3 +25,11 @@ doc "Least common multiple"
 shared Integer lcm(Integer x, Integer y)
         => (x.float * y.float / gcd(x, y).float).integer;
 
+doc "Returns an _adjusted remainder_ of the two integers."
+shared Integer amod(Integer x, Integer y){
+    value amod = mod(x, y);
+    if (amod == 0) {
+        return y;
+    }
+    return amod;
+}
