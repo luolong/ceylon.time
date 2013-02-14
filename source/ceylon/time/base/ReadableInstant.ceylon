@@ -2,7 +2,7 @@ import ceylon.time { Instant }
 
 doc "An abstraction for data that can represent an instant of time."
 
-by ('Diego Coronel', 'Roland Tepp')
+by ("Diego Coronel", "Roland Tepp")
 see (Instant)
 shared interface ReadableInstant {
 

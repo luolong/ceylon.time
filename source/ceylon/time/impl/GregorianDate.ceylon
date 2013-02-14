@@ -163,7 +163,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual String string {
-        return "" year "-" pad(month.integer) "-" pad(day) "";
+        return "``year``-``pad(month.integer)``-``pad(day)``";	
     }
 }
 

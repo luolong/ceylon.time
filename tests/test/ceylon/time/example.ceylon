@@ -20,7 +20,7 @@ void run(){
     print("Calculating duration of the computation...");
     value duration = start.durationTo(now());
     
-    print("Calculated 20000 digits of pi in " duration.period.normalized() "");
+    print("Calculated 20000 digits of pi in ``duration.period.normalized()``");
 }
 
 Whole two = wholeNumber(2);

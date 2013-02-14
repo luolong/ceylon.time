@@ -212,7 +212,7 @@ shared class GregorianDateTime( date, time )
     }
 
     shared actual String string {
-        return "" date.string " " time.string "";
+        return "``date.string`` ``time.string``";
     }
 
     GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
