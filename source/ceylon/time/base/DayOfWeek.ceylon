@@ -51,7 +51,7 @@ shared DayOfWeek parseDayOfWeek(String weekday){
         }
     }
 
-    throw WeekdayParseError("Unrecognized weekday: " weekday "." );
+    throw WeekdayParseError("Unrecognized weekday: ``weekday`` ." );
 }
 
 

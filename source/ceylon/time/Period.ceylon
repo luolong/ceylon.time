@@ -290,28 +290,28 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
             return "PT0S";
         } else {
             StringBuilder buf = StringBuilder();
-            buf.append('P');
+            buf.append("P");
             if (years != 0) {
-                buf.append(years.string).append('Y');
+                buf.append(years.string).append("Y");
             }
             if (months != 0) {
-                buf.append(months.string).append('M');
+                buf.append(months.string).append("M");
             }
             if (days != 0) {
-                buf.append(days.string).append('D');
+                buf.append(days.string).append("D");
             }
             if ( hours != 0 || minutes != 0 || seconds != 0 || milliseconds != 0 ) {
-                buf.append('T');
+                buf.append("T");
                 if (hours != 0) {
-                    buf.append(hours.string).append('H');
+                    buf.append(hours.string).append("H");
                 }
                 if (minutes != 0) {
-                    buf.append(minutes.string).append('M');
+                    buf.append(minutes.string).append("M");
                 }
                 if (seconds != 0 || milliseconds != 0) {
                     buf.append(seconds.string);
                     if (milliseconds != 0) {
-                        buf.append("." milliseconds "");
+                        buf.append(".``milliseconds``");
                     }
                     buf.append("S");
                 }
