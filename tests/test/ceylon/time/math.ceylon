@@ -34,7 +34,7 @@ shared void testAmod(){
     for ( y in range ){
         for( x in -y..y ){
             value expected = y + mod(x, -y);
-            assertEquals(expected, amod(x, y), "" x " amod " y " should be " expected "");
+            assertEquals(expected, amod(x, y), "``x`` ``amod`` ``y`` should be ``expected``");
         }
     }
 }

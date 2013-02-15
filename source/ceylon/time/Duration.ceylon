@@ -13,6 +13,6 @@ shared class Duration(millis) satisfies ReadableDuration {
     }
 
     shared actual String string {
-        return "" millis "ms";
+        return "``millis``ms";
     }
 }
