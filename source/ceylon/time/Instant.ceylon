@@ -1,8 +1,7 @@
-import ceylon.time.timezone { TimeZone, ZoneDateTime }
+import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
 import ceylon.time.base { ReadableInstant, milliseconds, january }
-import ceylon.time.chronology { gregorian }
-import ceylon.time { dateImpl = date, dateTimeImpl = dateTime, timeImpl = time }
 import ceylon.time.impl { normalizedTimeInMillis }
+import ceylon.time.timezone { TimeZone, ZoneDateTime }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -58,7 +57,7 @@ shared class Instant(millis)
             //TODO: get [[Date]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-        
+
         value inDays = millis / milliseconds.perDay;
         //TODO: Should we have this as field in gregorianCalendar?
         value fixed = dateImpl(1970, january, 1); 
@@ -71,7 +70,7 @@ shared class Instant(millis)
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-		
+
         return timeImpl( 0, 0, 0, normalizedTimeInMillis(0, 0, 0, millis) );
     }
 
