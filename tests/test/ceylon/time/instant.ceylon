@@ -1,6 +1,6 @@
-import ceylon.time { now, Instant, fixedTime, Clock, date, dateTime, time }
-import ceylon.time.base { february }
 import ceylon.test { assertEquals }
+import ceylon.time { now, Instant, fixedTime, Clock, date }
+import ceylon.time.base { february }
 
 //Wed Feb 13 14:00:42.0057 BOT 2013
 Clock clock = fixedTime(1360778442057);
