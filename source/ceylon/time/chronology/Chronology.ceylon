@@ -1,5 +1,5 @@
-import ceylon.time.math{ calendarMath }
 import ceylon.time.base { days }
+import ceylon.time.math { floor, floorDiv, mod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
      
@@ -86,9 +86,9 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     Integer fixed(Integer year, Integer month, Integer day) {
-        return epoch - 1 + 365 * (year - 1) + calendarMath.floor((year - 1) / 4.0)
-               - calendarMath.floor((year - 1) / 100.0) + calendarMath.floor((year - 1) / 400.0)
-               + calendarMath.floor((367 * month - 362) / 12.0)
+        return epoch - 1 + 365 * (year - 1) + floor((year - 1) / 4.0)
+               - floor((year - 1) / 100.0) + floor((year - 1) / 400.0)
+               + floor((367 * month - 362) / 12.0)
                + ((month > 2) then (leapYear(year) then -1 else -2) else 0)
                + day;
     }
@@ -111,13 +111,13 @@ shared object gregorian extends GregorianCalendar() {
     
     shared Integer yearFrom(Integer fixed) {
         value d0 = fixed - epoch;
-        value n400 = calendarMath.floorDiv(d0, days.in400Years);
-        value d1 = calendarMath.mod(d0, days.in400Years);
-        value n100 = calendarMath.floorDiv(d1, days.in100Years);
-        value d2 = calendarMath.mod(d1, days.in100Years);
-        value n4 = calendarMath.floorDiv(d2, days.inFourYears);
-        value d3 = calendarMath.mod(d2, days.inFourYears);
-        value n1 = calendarMath.floorDiv(d3, days.perYear());
+        value n400 = floorDiv(d0, days.in400Years);
+        value d1 = mod(d0, days.in400Years);
+        value n100 = floorDiv(d1, days.in100Years);
+        value d2 = mod(d1, days.in100Years);
+        value n4 = floorDiv(d2, days.inFourYears);
+        value d3 = mod(d2, days.inFourYears);
+        value n1 = floorDiv(d3, days.perYear());
         value year = 400 * n400 + 100 * n100 + 4 * n4 + n1;
         return (n100 == 4 || n1 == 4) then year else year + 1;
     }
@@ -127,7 +127,7 @@ shared object gregorian extends GregorianCalendar() {
         value priorDays = date - newYear(year);
         value correction = (date < fixed(year, march, 1)) 
                 then 0 else (leapYear(year) then 1 else 2);
-        value month = calendarMath.floorDiv(12 * (priorDays + correction) + 373, 367);
+        value month = floorDiv(12 * (priorDays + correction) + 373, 367);
         value day = 1 + date - fixed(year, month, 1);
         return [year, month, day];
     }
@@ -141,7 +141,7 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared Integer weekdayFrom(Integer date) {
-        return calendarMath.mod(date, 7);
+        return mod(date, 7);
     }
     
 }
