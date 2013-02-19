@@ -1,35 +1,48 @@
 import ceylon.math.float { cfloor = floor }
 
-doc "Returns the largest integer less than or equal to _x_"
-shared Integer floor( Float x ) => cfloor( x ).integer;
+doc "Utility class for common functions for calendar related calculations"
+shared object calendarMath {
 
-doc "Returns floored division of the two integers"
-shared Integer fdiv(Integer x, Integer y) => floor(x.float / y.float);
+    doc "Returns the largest integer less than or equal to _x_"
+    shared Integer floor( Float x ) => cfloor( x ).integer;
 
-doc "Returns nearest integer to x"
-shared Integer round( Float f ) => floor( f + 0.5);
+    doc "Returns floored division of the two integers"
+    shared Integer floorDiv(Integer x, Integer y) => floor(x.float / y.float);
 
-doc "Modulus (remainder) function."
-shared Integer mod(Integer x, Integer y) {
-    Float fx = x.float;
-    Float fy = y.float;
-    return (fx - fy * floor(fx / fy)).integer;
-}
+    doc "Returns nearest integer to x"
+    shared Integer round( Float f ) => floor( f + 0.5);
 
-
-doc "Greatest common denominator"
-shared Integer gcd(Integer x, Integer y)
-        => (y == 1) then x else gcd(y, mod(x, y));
-
-doc "Least common multiple"
-shared Integer lcm(Integer x, Integer y)
-        => (x.float * y.float / gcd(x, y).float).integer;
-
-doc "Returns an _adjusted remainder_ of the two integers."
-shared Integer amod(Integer x, Integer y){
-    value amod = mod(x, y);
-    if (amod == 0) {
-        return y;
+    doc "Modulus (remainder) function."
+    shared Integer mod(Integer x, Integer y) {
+        Float fx = x.float;
+        Float fy = y.float;
+        return (fx - fy * floor(fx / fy)).integer;
     }
-    return amod;
+
+    doc "Returns an _adjusted remainder_ of the two integers."
+    shared Integer amod(Integer x, Integer y){
+        value amod = mod(x, y);
+        if (amod == 0) {
+            return y;
+        }
+        return amod;
+    }
+
+    doc "Returns the floor modulus.
+
+         - This returns `0` for  `floorMod(0, 4)`.
+         - This returns `-1` for `floorMod(-1, 4)`.
+         - This returns `-2` for `floorMod(-2, 4)`.
+         - This returns `-3` for `floorMod(-3, 4)`.
+         - This returns `-0` for `floorMod(-4, 4)`.
+         "
+    shared Integer floorMod(a, b) {
+        doc "the dividend"
+        Integer a;
+        doc "the divisor"
+        Integer b;
+
+        return (((a % b) + b) % b);
+    }
+
 }
