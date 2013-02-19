@@ -1,5 +1,5 @@
 import ceylon.time { DateTime, dateTime }
-import ceylon.time.base { december, january, november, september, Month, DayOfWeek, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february }
+import ceylon.time.base { december, january, november, september, Month, Weekday, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february }
 import ceylon.test { assertEquals }
 
 DateTime data_1982_12_13_09_08_07_0050 = dateTime { year = 1982;  
@@ -141,7 +141,7 @@ shared void testSuccessor_DateTime() {
                                                                       });
 }
 
-void assertGregorianDateTime( Integer year, Month month, Integer day, DayOfWeek weekday, Boolean leapYear = false, 
+void assertGregorianDateTime( Integer year, Month month, Integer day, Weekday weekday, Boolean leapYear = false, 
                               Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0) {
     value actual = dateTime(year, month, day, hour, minute, second, milli);
     assertEquals(year, actual.year);
