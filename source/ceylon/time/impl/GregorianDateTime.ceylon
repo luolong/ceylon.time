@@ -1,6 +1,6 @@
 import ceylon.language { Integer }
 import ceylon.time { Date, Time, DateTime }
-import ceylon.time.base { Weekday, ReadablePeriod, Month, milliseconds, daysOf = days }
+import ceylon.time.base { ReadablePeriod, Month, milliseconds, daysOf=days, DayOfWeek }
 import ceylon.time.math { floorDiv, mod=floorMod }
 
 doc "Default implementation of a gregorian calendar"
@@ -19,8 +19,8 @@ shared class GregorianDateTime( date, time )
         return date.day;
     }
 
-    shared actual Weekday weekday {
-        return date.weekday;
+    shared actual DayOfWeek dayOfWeek {
+        return date.dayOfWeek;
     }
 
     shared actual Integer dayOfYear {

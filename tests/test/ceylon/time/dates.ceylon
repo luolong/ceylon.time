@@ -1,6 +1,6 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse }
 import ceylon.time { date, Date, Period }
-import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, Weekday, Month }
+import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month }
 
 // Constants
 Boolean leapYear = true;
@@ -101,7 +101,7 @@ shared void testDateMinusYears() {
 }
 
 shared void testDatePlusWeeks() {
-    assertEquals( data_1982_12_13.plusWeeks(1).weekday, data_1982_12_13.weekday );
+    assertEquals( data_1982_12_13.plusWeeks(1).dayOfWeek, data_1982_12_13.dayOfWeek );
     assertEquals( data_1982_12_13.plusWeeks(1), date( 1982, december, 20) );
     assertEquals( data_1982_12_13.plusWeeks(3), date( 1983, january, 3) );
 }
@@ -109,7 +109,7 @@ shared void testDatePlusWeeks() {
 shared void testDateMinusWeeks(){
     assertEquals( data_1982_12_13.minusWeeks(1), date( 1982, december, 6) );
     assertEquals( data_1982_12_13.minusWeeks(3), date( 1982, november, 22) );
-    assertEquals( data_1982_12_13.minusWeeks(3).weekday, date( 1982, november, 22).weekday );
+    assertEquals( data_1982_12_13.minusWeeks(3).dayOfWeek, date( 1982, november, 22).dayOfWeek );
 }
 
 shared void testWithDay() {
@@ -171,12 +171,13 @@ shared void testString() {
     assertEquals( date(2012, january, 1 ).string, "2012-01-01" );
 }
 
-void assertGregorianDate(Integer year, Month month, Integer day, Weekday weekday, Boolean leapYear = false, Integer? dayOfYear = null ) {
+// Asserts that what we put in, we get back from the Date object
+void assertGregorianDate(Integer year, Month month, Integer day, DayOfWeek dayOfWeek, Boolean leapYear = false, Integer? dayOfYear = null ) {
     value actual = date(year, month, day);
     assertEquals(year, actual.year);
     assertEquals(month, actual.month);
     assertEquals(day, actual.day);
-    assertEquals(weekday, actual.weekday);
+    assertEquals(dayOfWeek, actual.dayOfWeek);
     assertEquals(leapYear, actual.leapYear);
 
     if ( exists dayOfYear ) {

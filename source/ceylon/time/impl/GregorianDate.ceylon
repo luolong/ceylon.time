@@ -1,7 +1,8 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { Weekday, weekdayOf=weekday, ReadablePeriod, monthOf, Month, days, january, sunday }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday }
 import ceylon.time.chronology { impl=gregorian }
+import ceylon.time.math { adjustedMod }
 
 
 doc "Default implementation of a gregorian calendar"
@@ -37,7 +38,7 @@ shared class GregorianDate( Integer dayOfEra )
         return plusDays( 1 );
     }
 
-    shared actual Weekday weekday {
+    shared actual DayOfWeek dayOfWeek {
         return weekdayOf(impl.weekdayFrom( dayOfEra ));
     }
 
@@ -128,7 +129,7 @@ shared class GregorianDate( Integer dayOfEra )
             variable value result = weekNumber;
             if ( weekNumber == 0 ) {
                 value jan1 = withDay(1).withMonth(january);
-                value jan1WeekDay = jan1.weekday == sunday then 7 else jan1.weekday.integer; 
+                value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
                 if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
                     if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
                         result = 53;
@@ -143,7 +144,7 @@ shared class GregorianDate( Integer dayOfEra )
         function normalizeLastWeek( Integer weekNumber ) {
             variable value result = weekNumber;
             if ( weekNumber == 53 ) {
-                value weekDay = weekday == sunday then 7 else weekday.integer; 
+                value weekDay = adjustedMod(dayOfWeek.integer, 7); 
                 value totalDaysInYear = leapYear then 366 else 365;
                 if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
                     result = 1;
@@ -152,7 +153,7 @@ shared class GregorianDate( Integer dayOfEra )
             return result;
         }
 
-        value dayOfWeekNumber = weekday == sunday then 7 else weekday.integer;
+        value dayOfWeekNumber = adjustedMod(dayOfWeek.integer, 7);
         variable value weekNumber = ( dayOfYear - dayOfWeekNumber + 10 ) / 7;
 
         if ( weekNumber == weekFromYearBefore ) {

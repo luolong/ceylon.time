@@ -71,8 +71,8 @@ shared void testComparable_friday_Weekday() {
 shared void testOrdinal_Weekday() {
     value data_1982_12_13 = date( 1982, december, 13);
     value data_1983_01_01 = date( 1983, january, 1 );
-    variable value weekday = data_1982_12_13.weekday; 
+    variable value dow = data_1982_12_13.dayOfWeek; 
     for ( Date date in data_1982_12_13..data_1983_01_01 ) {
-        assertEquals( date.weekday, weekday++ );
+        assertEquals( date.dayOfWeek, dow++ );
     }
 }

@@ -20,7 +20,7 @@ shared interface ReadableDate {
     shared formal Integer day;
 
     doc "Day of the week."
-    shared formal Weekday weekday;
+    shared formal DayOfWeek dayOfWeek;
 
     doc "Number of the week of the date"
     shared formal Integer weekOfYear;
