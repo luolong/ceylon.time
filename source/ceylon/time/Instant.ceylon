@@ -1,6 +1,5 @@
 import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
 import ceylon.time.base { ReadableInstant, milliseconds, january }
-import ceylon.time.impl { normalizedTimeInMillis }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
 
 doc "Obtains the current instant from the system clock."
@@ -71,7 +70,7 @@ shared class Instant(millis)
             return nothing;
         }
 
-        return timeImpl( 0, 0, 0, normalizedTimeInMillis(0, 0, 0, millis) );
+        return timeImpl( 0, 0, 0, millis % milliseconds.perDay );
     }
 
     doc "Returns ZoneDateTime value for this instant."

@@ -2,6 +2,7 @@ import ceylon.test { assertEquals }
 import ceylon.time.math { floor, round, mod, amod }
 
 // Test floor function
+
 shared void testFloorPositiveWhole() => assertEquals( 3, floor( 3.0));
 shared void testFloorPositiveFloat() => assertEquals( 3, floor( 3.14));
 shared void testFloorNegativeFloat() => assertEquals(-4, floor(-3.14));
