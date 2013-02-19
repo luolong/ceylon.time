@@ -52,36 +52,3 @@ shared String pad(Integer number, String padding = "00"){
 
     return number.string;
 }
-
-doc "Utility class for common functions for calendar related calculations"
-shared class CalendarMath(){
-
-    doc "Returns the floor modulus.
-
-         - This returns `0` for  `floorMod(0, 4)`.
-         - This returns `-1` for `floorMod(-1, 4)`.
-         - This returns `-2` for `floorMod(-2, 4)`.
-         - This returns `-3` for `floorMod(-3, 4)`.
-         - This returns `-0` for `floorMod(-4, 4)`.
-         "
-    shared Integer floorMod(a, b) {
-        doc "the dividend"
-        Integer a;
-        doc "the divisor"
-        Integer b;
-
-        return (((a % b) + b) % b);
-    }
-
-    doc "Returns floor division."
-    shared Integer floorDiv(a, b) {
-        doc "the dividend"
-        Integer a;
-        doc "the divisor"
-        Integer b;
-
-        return (a >= 0 then a / b else ((a + 1) / b) - 1);
-    }
-
-
-}
