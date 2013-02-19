@@ -1,6 +1,6 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday }
+import ceylon.time.base { Weekday, weekdayOf=weekday, ReadablePeriod, monthOf, Month, days, january, sunday }
 import ceylon.time.chronology { impl=gregorian }
 
 
@@ -37,7 +37,7 @@ shared class GregorianDate( Integer dayOfEra )
         return plusDays( 1 );
     }
 
-    shared actual DayOfWeek weekday {
+    shared actual Weekday weekday {
         return weekdayOf(impl.weekdayFrom( dayOfEra ));
     }
 

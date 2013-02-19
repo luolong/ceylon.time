@@ -19,8 +19,8 @@ Main data types are followig:
 
 Supporting data types:
 - TimeZone
-- Period, Duration
-- MonthOfYear, DayOfWeek
+- Period, Duration, Interval
+- MonthOfYear, Weekday
 - Clock
 - etc...
 
