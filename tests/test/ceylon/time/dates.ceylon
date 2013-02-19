@@ -1,6 +1,6 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse }
 import ceylon.time { date, Date, Period }
-import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month }
+import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, Weekday, Month }
 
 // Constants
 Boolean leapYear = true;
@@ -171,7 +171,7 @@ shared void testString() {
     assertEquals( date(2012, january, 1 ).string, "2012-01-01" );
 }
 
-void assertGregorianDate(Integer year, Month month, Integer day, DayOfWeek weekday, Boolean leapYear = false, Integer? dayOfYear = null ) {
+void assertGregorianDate(Integer year, Month month, Integer day, Weekday weekday, Boolean leapYear = false, Integer? dayOfYear = null ) {
     value actual = date(year, month, day);
     assertEquals(year, actual.year);
     assertEquals(month, actual.month);
