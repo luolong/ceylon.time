@@ -90,7 +90,9 @@ shared class GregorianDate( Integer dayOfEra )
         if ( day == this.day ) {
             return this;
         }
-        return GregorianDate( dayOfEra - this.day + resolveLastValidDay(month, day, leapYear));
+
+        value lastValidDay = smallest(month.numberOfDays(leapYear), day);
+        return GregorianDate( dayOfEra - this.day + lastValidDay );
     }
 
     shared actual GregorianDate withMonth(Month month) {
@@ -163,7 +165,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual String string {
-        return "``year``-``pad(month.integer)``-``pad(day)``";	
+        return "``year``-``leftPad(month.integer)``-``leftPad(day)``";	
     }
 }
 

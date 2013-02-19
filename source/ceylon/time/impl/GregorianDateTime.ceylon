@@ -1,6 +1,6 @@
 import ceylon.language { Integer }
 import ceylon.time { Date, Time, DateTime }
-import ceylon.time.base { Weekday, ReadablePeriod, Month, milliseconds }
+import ceylon.time.base { Weekday, ReadablePeriod, Month, milliseconds, daysOf = days }
 import ceylon.time.math { calendarMath }
 
 doc "Default implementation of a gregorian calendar"
@@ -217,14 +217,20 @@ shared class GregorianDateTime( date, time )
     }
 
     GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
-
-        Integer days = daysFromMillis { 
-            hours = hours; 
-            minutes = minutes; 
-            seconds = 
-            seconds; 
+	
+        Integer days = daysOf.daysFromMillis { 
+            hour = hours; 
+            minute = minutes; 
+            second = seconds; 
             millis = millis; 
         } * signal;
+
+        Integer normalizedTimeInMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
+            value totalMillis = hours * milliseconds.perHour 
+                                + minutes * milliseconds.perMinute 
+                                + seconds * milliseconds.perSecond + millis;
+            return totalMillis % milliseconds.perDay;
+        }
 
         value restOfMillis =  normalizedTimeInMillis {
             hours = hours;
