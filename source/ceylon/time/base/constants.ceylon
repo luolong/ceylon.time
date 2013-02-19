@@ -53,6 +53,13 @@ shared object days {
 
     doc "Number of of days in four hundred years"
     shared Integer in400Years = 146097;
+
+    shared Integer daysFromMillis( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer millis = 0) {
+        return millis / milliseconds.perDay +
+               second / seconds.perDay +
+               minute / minutes.perDay +
+               hour / hours.perDay;
+    }
 }
 
 doc "Common properties of _hour_ time units"
