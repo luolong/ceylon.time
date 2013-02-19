@@ -1,5 +1,5 @@
 import ceylon.time.chronology { gregorian }
-import ceylon.time.math { mod, floorDiv }
+import ceylon.time.math { mod=floorMod, fdiv=floorDiv }
 
 doc "A month in a Gregorian or Julian calendar system."
 shared abstract class Month(integer)
@@ -61,7 +61,7 @@ shared abstract class Month(integer)
         value next = (integer - 1 + numberOfMonths);
         assert (exists month = months.all[mod(next, 12)]);
         
-        Integer years = floorDiv(next, 12);
+        Integer years = fdiv(next, 12);
         return Overflow(month, years); 
     }
 }

@@ -1,5 +1,5 @@
 import ceylon.time.base { days }
-import ceylon.time.math { floor, floorDiv, mod }
+import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
      
@@ -111,13 +111,13 @@ shared object gregorian extends GregorianCalendar() {
     
     shared Integer yearFrom(Integer fixed) {
         value d0 = fixed - epoch;
-        value n400 = floorDiv(d0, days.in400Years);
+        value n400 = fdiv(d0, days.in400Years);
         value d1 = mod(d0, days.in400Years);
-        value n100 = floorDiv(d1, days.in100Years);
+        value n100 = fdiv(d1, days.in100Years);
         value d2 = mod(d1, days.in100Years);
-        value n4 = floorDiv(d2, days.inFourYears);
+        value n4 = fdiv(d2, days.inFourYears);
         value d3 = mod(d2, days.inFourYears);
-        value n1 = floorDiv(d3, days.perYear());
+        value n1 = fdiv(d3, days.perYear());
         value year = 400 * n400 + 100 * n100 + 4 * n4 + n1;
         return (n100 == 4 || n1 == 4) then year else year + 1;
     }
@@ -127,7 +127,7 @@ shared object gregorian extends GregorianCalendar() {
         value priorDays = date - newYear(year);
         value correction = (date < fixed(year, march, 1)) 
                 then 0 else (leapYear(year) then 1 else 2);
-        value month = floorDiv(12 * (priorDays + correction) + 373, 367);
+        value month = fdiv(12 * (priorDays + correction) + 373, 367);
         value day = 1 + date - fixed(year, month, 1);
         return [year, month, day];
     }

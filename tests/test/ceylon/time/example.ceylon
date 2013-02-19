@@ -1,5 +1,6 @@
-import ceylon.time { now, Instant }
+
 import ceylon.math.whole { Whole, one, zero, wholeNumber }
+import ceylon.time { now, Instant }
 
 doc "An example program using ceylon.time"
 void run(){

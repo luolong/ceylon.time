@@ -1,5 +1,5 @@
 import ceylon.test { assertEquals }
-import ceylon.time.math { floor, round, mod, amod }
+import ceylon.time.math { floor, round, mod=floorMod, amod=adjustedMod }
 
 // Test floor function
 
@@ -33,9 +33,9 @@ shared void testModulusTransitive() => assertEquals(3*4, mod(3*9, 3*5));
 shared void testAmod(){
     value range = { for (y in -9..9) if (y != 0) y };
     for ( y in range ){
-        for( x in -y..y ){
+        for( x in -y..y ) {
             value expected = y + mod(x, -y);
-            assertEquals(expected, amod(x, y), "``x`` ``amod`` ``y`` should be ``expected``");
+            assertEquals(expected, amod(x, y), "``x`` amod ``y`` should be ``expected``");
         }
     }
 }
