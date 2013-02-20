@@ -2,6 +2,7 @@ import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time.base {
     ReadablePeriod, PeriodBehavior, ReadableDatePeriod, ReadableTimePeriod, 
     min = minutes, sec = seconds, ms = milliseconds}
+import ceylon.time.impl { leftPad }
 
 doc "An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
      _minutes_, _seconds_ and _milliseconds_, such as '3 Months, 4 Days and 7 Hours'.
@@ -130,57 +131,36 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 
     doc "Returns a copy of this period with the specified number of years added."
     shared actual Period plusYears(Integer years){
-        if (years == 0){
-            return this;
-        }
         return withYears( this.years + years );
     }
 
     doc "Returns a copy of this period with the specified number of months added."
     shared actual Period plusMonths(Integer months){
-        if (months == 0){
-            return this;
-        }
         return withMonths( this.months + months );
     }
 
     doc "Returns a copy of this period with the specified number of days added."
     shared actual Period plusDays(Integer days){
-        if (days == 0){
-            return this;
-        }
         return withDays( this.days + days );
     }
 
     doc "Returns a copy of this period with the specified number of hours added."
     shared actual Period plusHours(Integer hours){
-        if (hours == 0){
-            return this;
-        }
         return withHours( this.hours + hours );
     }
 
     doc "Returns a copy of this period with the specified number of minutes added."
     shared actual Period plusMinutes(Integer minutes){
-        if (minutes == 0){
-            return this;
-        }
         return withMinutes( this.minutes + minutes );
     }
 
     doc "Returns a copy of this period with the specified number of seconds added."
     shared actual Period plusSeconds(Integer seconds){
-        if (seconds == 0){
-            return this;
-        }
         return withSeconds( this.seconds + seconds );
     }
 
     doc "Returns a copy of this period with the specified number of nonoseconds added."
     shared actual Period plusMilliseconds(Integer milliseconds){
-        if (milliseconds == 0){
-            return this;
-        }
         return withMilliseconds( this.milliseconds + milliseconds );
     }
 
@@ -240,15 +220,11 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return this;
     }
 
-    //TODO: create an instant
-    //shared Instant from( Instant instant ) {
-    //}
-
     doc "Returns a copy of this period with all amounts normalized to the 
          standard ranges for date/time fields.
 
          Two normalizations occur, one for years and months, and one for
-         hours, minutes, seconds and nanoseconds.
+         hours, minutes, seconds and milliseconds.
 
          Days are not normalized, as a day may vary in length at daylight savings cutover.
          Neither is days normalized into months, as number of days per month varies from 
@@ -311,7 +287,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
                 if (seconds != 0 || milliseconds != 0) {
                     buf.append(seconds.string);
                     if (milliseconds != 0) {
-                        buf.append(".``milliseconds``");
+                        buf.append(".``leftPad(milliseconds,"000")``");
                     }
                     buf.append("S");
                 }
