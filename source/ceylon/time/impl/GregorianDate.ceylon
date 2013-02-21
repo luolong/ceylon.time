@@ -39,7 +39,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual DayOfWeek dayOfWeek {
-        return weekdayOf(impl.weekdayFrom( dayOfEra ));
+        return weekdayOf(impl.dayOfWeekFrom( dayOfEra ));
     }
 
     shared actual GregorianDate plusDays(Integer days) {

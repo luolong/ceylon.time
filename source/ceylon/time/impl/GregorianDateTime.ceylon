@@ -218,7 +218,7 @@ shared class GregorianDateTime( date, time )
 
     GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
 	
-        Integer days = daysOf.daysFromMillis { 
+        Integer days = daysOf.daysFromTime { 
             hour = hours; 
             minute = minutes; 
             second = seconds; 

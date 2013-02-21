@@ -1,4 +1,4 @@
-import ceylon.time.base { days }
+import ceylon.time.base { days, milliseconds }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -18,13 +18,16 @@ shared interface Chronology<Fields>
     doc "Epoch is the offset of the _fixed date_ day number that defines 
          the beginning of the calendar."
     shared formal Integer epoch;
-    
+
     doc "Converts date tuple of this calendar system to an equivalent _fixed date_
          representation of the "
     shared formal Integer fixedFrom(Fields date);
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
     shared formal Fields dateFrom(Integer fixed);
+
+    doc "Milliseconds elapsed from unix date"
+    shared formal Integer millisFrom(Fields date);
 }
 
 doc "An interface for calendar system that defines leap year rules.
@@ -36,20 +39,6 @@ shared interface LeapYear<Self, Fields> of Self
     
     doc "Returns true if the specified year is a leap year according to the leap year rules of the"
     shared formal Boolean leapYear( Integer leapYear );
-    
-}
-
-shared object fixed satisfies Chronology<[Integer]> {
-    
-    shared actual Integer epoch = rd(1);
-    
-    shared actual Integer fixedFrom([Integer] date) {
-        return date[0];
-    }
-    
-    shared actual [Integer] dateFrom(Integer fixed) {
-        return [fixed];
-    }
     
 }
 
@@ -65,6 +54,9 @@ shared object gregorian extends GregorianCalendar() {
     doc "Epoch of the gregorian calendar"
     shared actual Integer epoch = rd(1);
     
+    doc "Represents unix date"
+    shared [Integer,Integer,Integer] unixEpoch = [1970,1,1];
+
     shared Integer january = 1;
     shared Integer february = 2;
     shared Integer march = 3;
@@ -99,6 +91,11 @@ shared object gregorian extends GregorianCalendar() {
             month = date[1]; 
             day = date[2]; 
         };
+    }
+
+    doc "Milliseconds from unix date"
+    shared actual Integer millisFrom([Integer, Integer, Integer] date) {
+        return (fixedFrom(date) - fixedFrom(unixEpoch)) * milliseconds.perDay;
     }
     
     shared Integer newYear(Integer year){
@@ -140,7 +137,7 @@ shared object gregorian extends GregorianCalendar() {
         return dateFrom(date)[2];
     }
     
-    shared Integer weekdayFrom(Integer date) {
+    shared Integer dayOfWeekFrom(Integer date) {
         return mod(date, 7);
     }
     
