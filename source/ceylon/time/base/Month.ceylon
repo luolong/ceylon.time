@@ -70,11 +70,11 @@ doc "Table of _day of year_ values for the first day of each month"
 Integer[] firstDayOfMonth = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
 
 doc "Returns month of year specified by the input argument.
-
+     
      If input is an Integer, this method returns a month according to the integer 
      value of the [[MonthOfYear]] (i.e. 1=[[january]], 2=[[february]], ... 12=[[december]])
      Any invalid values will throw an exception.
-
+     
      If the imput value is a [[MonthOfYear]], the input value is returned as is."
 shared Month monthOf(Integer|Month month){
     switch (month)

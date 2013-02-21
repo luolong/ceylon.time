@@ -6,7 +6,7 @@ import ceylon.time.impl { leftPad }
 
 doc "An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
      _minutes_, _seconds_ and _milliseconds_, such as '3 Months, 4 Days and 7 Hours'.
-
+     
      A period is a human-scale description of an amount of time.
      "
 shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
@@ -222,10 +222,10 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 
     doc "Returns a copy of this period with all amounts normalized to the 
          standard ranges for date/time fields.
-
+         
          Two normalizations occur, one for years and months, and one for
          hours, minutes, seconds and milliseconds.
-
+         
          Days are not normalized, as a day may vary in length at daylight savings cutover.
          Neither is days normalized into months, as number of days per month varies from 
          month to another and depending on the leap year."
