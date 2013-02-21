@@ -3,7 +3,7 @@ import ceylon.time.impl { gregorianDate, julianDate }
 import ceylon.time.timezone { TimeZone }
 
 doc "An interface for date objects in the ISO-8601 calendar system.
-
+     
      A date is often viewed as triple of year-month-day values. 
      This interface also defines access to other date fields such as 
      day-of-year, day-of-week and week-of-year."

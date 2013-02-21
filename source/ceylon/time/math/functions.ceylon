@@ -10,10 +10,10 @@ doc "Returns nearest integer to x"
 shared Integer round( Float f ) => floor( f + 0.5);
 
 doc "Returns the floor remainder (modulus) of the two integers.
-
+     
         value moduli = [for (x in 4..-4) mod(x, 4)] 
         assert( moduli == [0, 3, 2, 1, 0, 3, 2, 1, 0] );
-    "
+     "
 shared Integer floorMod(Integer x, Integer y) {
     Float fx = x.float;
     Float fy = y.float;
@@ -21,10 +21,10 @@ shared Integer floorMod(Integer x, Integer y) {
 }
 
 doc "Returns an _adjusted remainder_ of the two integers.
-
+     
         value moduli = [for (x in 4..-4) amod(x, 4)];
         assert( moduli == [4, 3, 2, 1, 4, 3, 2, 1, 4] );
-    "
+     "
 shared Integer adjustedMod(Integer x, Integer y){
     value amod = floorMod(x, y);
     if (amod == 0) {

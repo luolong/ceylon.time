@@ -67,10 +67,10 @@ shared interface PeriodBehavior<Element> of Element
 
     doc "Returns a copy of this period with all amounts normalized to the 
          standard ranges for date-time fields.
-
+         
          Two normalizations occur, one for years and months, and one for
          hours, minutes, seconds and nanoseconds.
-
+         
          Days are not normalized, as a day may vary in length at daylight savings cutover.
          Neither is days normalized into months, as number of days per month varies from 
          month to another and depending on the leap year."

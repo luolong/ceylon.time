@@ -11,7 +11,7 @@ shared Instant now(Clock? clock = null) {
 }
 
 doc "A specific instant of time on a continuous time-scale.
-
+     
      An instant represents a single point in time irrespective of 
      any time-zone offsets or geographical locations"
 shared class Instant(millis) 
