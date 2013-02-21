@@ -2,7 +2,7 @@ import ceylon.time { Date, Time, DateTime }
 import ceylon.time.timezone { ZoneDateTime }
 
 doc "A common interface of all date like objects.
-
+     
      This interface is common to all data types that
      either partially or fully represent information 
      that can be interpreted as _date_."
