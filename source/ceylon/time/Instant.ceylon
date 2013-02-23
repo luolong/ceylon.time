@@ -29,7 +29,8 @@ shared class Instant(millis)
         }
         case(is Period){
             value date = this.dateTime().plus(other);
-            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) + date.time.millisOfDay);
+            // TODO: Waiting TimeZone + date.time.millisOfDay 
+            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) );
         }
     }
 
@@ -41,7 +42,8 @@ shared class Instant(millis)
         }
         case(is Period){
             value date = this.dateTime().minus(other);
-            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) - date.time.millisOfDay);
+            // TODO: Waiting TimeZone - date.time.millisOfDay
+            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) );
         }
     }
 
