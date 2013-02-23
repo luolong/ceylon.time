@@ -9,6 +9,9 @@ shared Integer rd( Integer t ) {
     return t - epoch;
 }
 
+doc "Represents unix date"
+shared [Integer,Integer,Integer] unixEpoch = [1970,1,1];
+
 doc "Generic base interface of a _calendar system_.
      Chronology serves as a computational backend to 
      a Date representation of the same calendar system."
@@ -25,9 +28,7 @@ shared interface Chronology<Fields>
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
     shared formal Fields dateFrom(Integer fixed);
-
-    doc "Milliseconds elapsed from unix date"
-    shared formal Integer millisFrom(Fields date);
+    
 }
 
 doc "An interface for calendar system that defines leap year rules.
@@ -46,17 +47,19 @@ doc "Base class for a gregorian calendar chronology."
 abstract shared class GregorianCalendar() of gregorian
          satisfies Chronology<[Integer, Integer, Integer]>
                  & LeapYear<GregorianCalendar, [Integer, Integer, Integer]> {
+
+    doc "Milliseconds elapsed from unix epoch"
+    shared formal Integer millisFrom([Integer, Integer, Integer] date);
     
 }
 
+doc "Represents the implementation of all calculations for
+     the rules based on Gregorian Calendar"
 shared object gregorian extends GregorianCalendar() {
     
     doc "Epoch of the gregorian calendar"
     shared actual Integer epoch = rd(1);
     
-    doc "Represents unix date"
-    shared [Integer,Integer,Integer] unixEpoch = [1970,1,1];
-
     shared Integer january = 1;
     shared Integer february = 2;
     shared Integer march = 3;

@@ -1,7 +1,7 @@
 import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
 import ceylon.time.base { ReadableInstant, milliseconds }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
-import ceylon.time.chronology { gregorian }
+import ceylon.time.chronology { gregorian, unixEpoch }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -46,8 +46,7 @@ shared class Instant(millis)
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
             return nothing;
         }
-        value fixed = dateTimeImpl(gregorian.unixEpoch[0], gregorian.unixEpoch[1], gregorian.unixEpoch[2]); 
-        return fixed.plusMilliseconds(millis);
+        return unixDateTime.plusMilliseconds(millis);
     }
 
     doc "Returns a Date value for this instant"
@@ -58,8 +57,7 @@ shared class Instant(millis)
         }
 
         value inDays = millis / milliseconds.perDay;
-        value fixed = dateImpl(gregorian.unixEpoch[0], gregorian.unixEpoch[1], gregorian.unixEpoch[2]); 
-        return fixed.plusDays(inDays);
+        return unixDate.plusDays(inDays);
     }
 
     doc "Returns a Time (time of day) value for this instant."
@@ -86,6 +84,16 @@ shared class Instant(millis)
     doc "Returns duration in milliseconds from other instant to this instant."
     shared Duration durationFrom(Instant other) {
         return Duration(this.millis - other.millis);
+    }
+
+    doc "Return the unix date instance"
+    DateTime unixDateTime {
+         return dateTimeImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
+    }
+
+    doc "Return the unix date instance"
+    Date unixDate {
+         return dateImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
     }
 
 }
