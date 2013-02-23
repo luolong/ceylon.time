@@ -200,6 +200,16 @@ shared class GregorianDateTime( date, time )
                 .plusMonths( amount.date.months )
                 .plusYears( amount.date.years );
     }
+
+    shared actual DateTime minus( ReadablePeriod amount ) {
+        return   minusMilliseconds(amount.time.milliseconds)
+                .minusSeconds( amount.time.seconds )
+                .minusMinutes( amount.time.minutes )
+                .minusHours( amount.time.hours )
+                .minusDays( amount.date.days )
+                .minusMonths( amount.date.months )
+                .minusYears( amount.date.years );
+    }
     
     shared actual Boolean equals( Object other ) {
         if (is GregorianDateTime other) {

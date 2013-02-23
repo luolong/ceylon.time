@@ -33,6 +33,18 @@ shared class Instant(millis)
         }
     }
 
+    doc "Subtracts a period to this instant"
+    shared Instant minus(Duration|Period other){
+        switch(other)
+        case(is Duration){
+            return Instant(this.millis - other.millis);
+        }
+        case(is Period){
+            value date = this.dateTime().minus(other);
+            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) + date.time.millisOfDay);
+        }
+    }
+
     shared actual Comparison compare(Instant other) {
         return millis <=> other.millis;
     }

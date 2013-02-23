@@ -120,6 +120,10 @@ shared class GregorianDate( Integer dayOfEra )
         return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
     }
 
+    shared actual GregorianDate minus( ReadablePeriod amount ) {
+        return minusDays( amount.date.days ).minusMonths( amount.date.months ).minusYears( amount.date.years );
+    }
+
     doc "Week of year calculations is UTC based"
     shared actual Integer weekOfYear {
         value weekFromYearBefore = 0;
