@@ -1,5 +1,6 @@
-doc "Attempt at standard date/time library for Ceylon language"
+doc "Date and Time library for Ceylon language SDK.
+     
+     This library is loosely modeled/inspired by the JodaTime/JSR-310 date/time ibrary.
+     "
 by ("Diego Coronel", "Roland Tepp")
-module ceylon.time '0.5' {
-    import ceylon.math '0.5';
-}
+module ceylon.time '0.5' {}

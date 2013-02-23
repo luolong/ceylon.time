@@ -1,7 +1,12 @@
-import ceylon.math.float { cfloor=floor }
 
 doc "Returns the largest integer less than or equal to _x_"
-shared Integer floor( Float x ) => cfloor( x ).integer;
+shared Integer floor( Float x ) {
+    value i = x.integer;
+    if (i.negative){
+        return i - 1;
+    }
+    return i;
+}
 
 doc "Returns floored division of the two integers"
 shared Integer floorDiv(Integer x, Integer y) => floor(x.float / y.float);

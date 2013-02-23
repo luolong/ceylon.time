@@ -120,25 +120,33 @@ shared void testMinusMilliseconds_DateTime() {
 }
 
 shared void testPredecessor_DateTime() {
-    assertEquals(data_1982_12_13_09_08_07_0050.predecessor, dateTime { year = 1982;  
-                                                                       month = december; 
-                                                                       date = 12; 
-                                                                       hour = 9; 
-                                                                       minutes = 8;
-                                                                       seconds = 7;
-                                                                       millis = 50;
-                                                                      });
+    assertEquals{ 
+        actual = data_1982_12_13_09_08_07_0050.predecessor; 
+        expected = dateTime { 
+            year = 1982;  
+            month = december; 
+            date = 12; 
+            hour = 9; 
+            minutes = 8;
+            seconds = 7;
+            millis = 50;
+        };
+    };
 }
 
 shared void testSuccessor_DateTime() {
-    assertEquals(data_1982_12_13_09_08_07_0050.successor, dateTime { year = 1982;  
-                                                                       month = december; 
-                                                                       date = 14; 
-                                                                       hour = 9; 
-                                                                       minutes = 8;
-                                                                       seconds = 7;
-                                                                       millis = 50;
-                                                                      });
+    assertEquals{ 
+        actual = data_1982_12_13_09_08_07_0050.successor; 
+        expected = dateTime {
+            year = 1982;
+            month = december;
+            date = 14; 
+            hour = 9; 
+            minutes = 8;
+            seconds = 7;
+            millis = 50;
+         };
+     };
 }
 
 void assertGregorianDateTime( Integer year, Month month, Integer day, DayOfWeek dayOfWeek, Boolean leapYear = false, 

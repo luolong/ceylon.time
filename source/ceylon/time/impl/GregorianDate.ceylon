@@ -117,7 +117,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
-        return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
+        return plusDays( amount.dateOnly.days ).plusMonths( amount.dateOnly.months ).plusYears( amount.dateOnly.years );
     }
 
     doc "Week of year calculations is UTC based"
@@ -171,15 +171,15 @@ shared class GregorianDate( Integer dayOfEra )
 }
 
 doc "Returns a gregorian calendar date according to the specified year, month and date values"
-shared Date gregorianDate(year, month, date){
+shared Date gregorianDate(year, month, day){
         doc "Year number of the date"
         Integer year;
         
         doc "Month of the year"
         Integer|Month month; 
         
-        doc "Date of month"
-        Integer date;
+        doc "Day of month"
+        Integer day;
         
-    return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, date]) );
+    return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, day]) );
 }

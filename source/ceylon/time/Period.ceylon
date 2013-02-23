@@ -1,4 +1,3 @@
-import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time.base {
     ReadablePeriod, PeriodBehavior, ReadableDatePeriod, ReadableTimePeriod, 
     min = minutes, sec = seconds, ms = milliseconds}
@@ -55,6 +54,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return false;
     }
 
+    doc "compare this period to the _other_ period."
     shared actual Comparison compare(Period other) {
         Period norm1 = this.normalized();
         Period norm2 = other.normalized();
@@ -212,11 +212,13 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         };
     }
 
-    shared actual ReadableDatePeriod date {
+    doc "Returns a date only view of this period."
+    shared actual ReadableDatePeriod dateOnly {
         return this;
     }
 
-    shared actual ReadableTimePeriod time {
+    doc "Returns a time only view of this period."
+    shared actual ReadableTimePeriod timeOnly {
         return this;
     }
 
@@ -237,18 +239,18 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value years = this.years + this.months / 12;
         value months = this.months % 12;
 
-        variable Whole total = wholeNumber(this.hours * sec.perHour)
-                              + wholeNumber(this.minutes * sec.perMinute)
-                              + wholeNumber(this.seconds);
+        variable Integer total = this.hours * sec.perHour
+                               + this.minutes * sec.perMinute
+                               + this.seconds;
 
-        value millis = ( wholeNumber(this.milliseconds) % wholeNumber(( ms.perSecond )) ).integer;
-        total += wholeNumber(this.milliseconds) / wholeNumber(( ms.perSecond ));
+        value millis = this.milliseconds % ms.perSecond;
+        total += this.milliseconds / ms.perSecond;
 
-        value seconds = ( total % wholeNumber(( sec.perMinute )) ).integer;
-        total = total / wholeNumber(( sec.perMinute ));
+        value seconds = total % sec.perMinute;
+        total = total / sec.perMinute;
 
-        value minutes = ( total % wholeNumber(min.perHour) ).integer;
-        value hours = ( total / wholeNumber(min.perHour ) ).integer;
+        value minutes = total % min.perHour;
+        value hours = total / min.perHour;
 
         return Period {
             years = years;
@@ -261,10 +263,12 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         };
     }
 
+    doc "Returns the ISO 8601 formatted string for this period"
     shared actual String string {
         if (this == zero) {
             return "PT0S";
-        } else {
+        }
+        else {
             StringBuilder buf = StringBuilder();
             buf.append("P");
             if (years != 0) {
@@ -291,7 +295,6 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
                     }
                     buf.append("S");
                 }
-                
             }
             return buf.string;
         }

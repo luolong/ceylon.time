@@ -3,11 +3,11 @@ shared interface ReadablePeriod
        satisfies ReadableDatePeriod 
                & ReadableTimePeriod {
 
-    doc "Returns a copy of this period with time values truncated."
-    shared formal ReadableDatePeriod date;
+    doc "Returns a copy of this period containing only the date period fields."
+    shared formal ReadableDatePeriod dateOnly;
 
-    doc "Returns a copy of this period without days, months and years fields."
-    shared formal ReadableTimePeriod time;
+    doc "Returns a copy of this period containing only the time period fields."
+    shared formal ReadableTimePeriod timeOnly;
 
 }
 

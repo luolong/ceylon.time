@@ -1,5 +1,4 @@
 import ceylon.language { Integer }
-import ceylon.math.float { log10 }
 
 doc "return padded value"
 shared String leftPad(Integer number, String padding = "00"){
@@ -7,13 +6,14 @@ shared String leftPad(Integer number, String padding = "00"){
         return padding;
     }
 
-    value digits = log10( number.magnitude.float ).wholePart.integer + 1;
+    value string = number.string;
+    value digits = string.size;
     if (digits < padding.size) {
-        value padded = padding.plus( number.string );
+        value padded = padding + string;
         return padded.segment(
                       padded.size - padding.size,
                       padding.size );
     }
 
-    return number.string;
+    return string;
 }

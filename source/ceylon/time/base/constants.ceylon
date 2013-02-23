@@ -1,3 +1,6 @@
+import ceylon.time.math { floorDiv }
+
+doc "Common properties and limits on months"
 shared object years {
     doc "The minimum supported year for instances of `Date`, -999,999,999."
     shared Integer minimum = -999_999_999;
@@ -6,6 +9,7 @@ shared object years {
     shared Integer maximum = 999_999_999;
 }
 
+doc "Common properties and limits on months"
 shared object months {
 
     doc "Ordered list of all months of Gregorian and Julian calendar system from January to December"
@@ -48,17 +52,14 @@ shared object days {
     doc "Number of days in four years"
     shared Integer inFourYears = 1461;
 
-    doc "Number of of days in four years"
-    shared Integer in100Years = 36524;
+    doc "Number of of per century (100 years)"
+    shared Integer perCentury = 36524;
 
-    doc "Number of of days in four hundred years"
-    shared Integer in400Years = 146097;
+    doc "Number of of days in four centuries (400 years)"
+    shared Integer perFourCenturies = 146097;
 
-    shared Integer daysFromMillis( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer millis = 0) {
-        return millis / milliseconds.perDay +
-               second / seconds.perDay +
-               minute / minutes.perDay +
-               hour / hours.perDay;
+    shared Integer fromMillis( Integer millis = 0) {
+        return floorDiv(millis, milliseconds.perDay);
     }
 }
 

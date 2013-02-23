@@ -1,7 +1,7 @@
 import ceylon.language { Integer }
 import ceylon.time { Date, Time, DateTime }
-import ceylon.time.base { ReadablePeriod, Month, milliseconds, daysOf=days, DayOfWeek }
-import ceylon.time.math { floorDiv, mod=floorMod }
+import ceylon.time.base { ReadablePeriod, Month, ms=milliseconds, daysOf=days, DayOfWeek }
+import ceylon.time.math { floorDiv, floorMod }
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDateTime( date, time ) 
@@ -192,15 +192,15 @@ shared class GregorianDateTime( date, time )
         return plusDays(1);    }
 
     shared actual DateTime plus( ReadablePeriod amount ) {
-        return   plusMilliseconds(amount.time.milliseconds)
-                .plusSeconds( amount.time.seconds )
-                .plusMinutes( amount.time.minutes )
-                .plusHours( amount.time.hours )
-                .plusDays( amount.date.days )
-                .plusMonths( amount.date.months )
-                .plusYears( amount.date.years );
+        return plusMilliseconds(amount.milliseconds)
+              .plusSeconds( amount.seconds )
+              .plusMinutes( amount.minutes )
+              .plusHours( amount.hours )
+              .plusDays( amount.days )
+              .plusMonths( amount.months )
+              .plusYears( amount.years );
     }
-    
+
     shared actual Boolean equals( Object other ) {
         if (is GregorianDateTime other) {
             if (this === other){
@@ -218,33 +218,20 @@ shared class GregorianDateTime( date, time )
 
     GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
 	
-        Integer days = daysOf.daysFromMillis { 
-            hour = hours; 
-            minute = minutes; 
-            second = seconds; 
-            millis = millis; 
-        } * signal;
+        value inputMillis = hours * ms.perHour 
+                          + minutes * ms.perMinute 
+                          + seconds * ms.perSecond
+                          + millis;
 
-        Integer normalizedTimeInMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
-            value totalMillis = hours * milliseconds.perHour 
-                                + minutes * milliseconds.perMinute 
-                                + seconds * milliseconds.perSecond + millis;
-            return totalMillis % milliseconds.perDay;
-        }
+        value days = daysOf.fromMillis(inputMillis) * signal;
+        value restOfMillis = floorMod(inputMillis, ms.perDay) * signal
+                           + time.millisOfDay;
 
-        value restOfMillis =  normalizedTimeInMillis {
-            hours = hours;
-            minutes = minutes;
-            seconds = seconds;
-            millis = millis;
-        };
+        value totalDays = days + floorDiv(restOfMillis, ms.perDay);
+        value newMillis = floorMod(restOfMillis, ms.perDay);
 
-        Integer actualMillisOfDay = time.millisOfDay;
-        value totalMillis = restOfMillis * signal + actualMillisOfDay;
-        value totalDays = days + floorDiv(totalMillis, milliseconds.perDay);
-        value newMillis = mod(totalMillis, milliseconds.perDay);
-        
-        Time newTime = (newMillis == actualMillisOfDay) then time else TimeOfDay(newMillis);
+        Time newTime = (newMillis == time.millisOfDay) 
+                       then time else TimeOfDay(newMillis);
 
         return GregorianDateTime( date.plusDays(totalDays), newTime);
     }

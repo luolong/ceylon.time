@@ -18,10 +18,14 @@ void run(){
     }
     print("");
     
-    print("Calculating duration of the computation...");
     value duration = start.durationTo(now());
+    print("Calculated 40000 digits of pi in ``duration.period.normalized()``");
     
-    print("Calculated 20000 digits of pi in ``duration.period.normalized()``");
+    value startDate = start.date();
+    value startTime = start.time();
+    
+    print("Pi calculation started on ``startDate`` at ``startTime`` (UTC)");
+    
 }
 
 Whole two = wholeNumber(2);

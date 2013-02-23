@@ -1,5 +1,7 @@
-import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
-import ceylon.time.base { ReadableInstant, milliseconds, january }
+import ceylon.time { dateImpl=date, dateTimeImpl=dateTime }
+import ceylon.time.base { ReadableInstant, ms=milliseconds, january }
+import ceylon.time.impl { TimeOfDay }
+import ceylon.time.math { mod=floorMod }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
 
 doc "Obtains the current instant from the system clock."
@@ -32,14 +34,20 @@ shared class Instant(millis)
         }
     }
 
+    doc "Compares this instant to the _other_ instant"
     shared actual Comparison compare(Instant other) {
         return millis <=> other.millis;
     }
 
-    doc "Returns DateTime value for this instant."
+    doc "Returns this instant as a [[DateTime]] value."
     shared DateTime dateTime(
             doc "Time zone of the conversion.
-                 If omitted the current/default time zone of the system will be used."
+                 
+                 If omitted the current/default time zone of the system will be used.
+                 
+                 **Note:** Since time zone support is not implemented yet, this method 
+                 will return dateTime according to the of the UTC-0 instead of using local 
+                 time zone."
             TimeZone? zone = null) {
         if (exists zone){
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
@@ -50,27 +58,43 @@ shared class Instant(millis)
         return fixed.plusMilliseconds(millis);
     }
 
-    doc "Returns a Date value for this instant"
-    shared Date date(TimeZone? zone = null) {
+    doc "Returns this instant as a [[Date]] value"
+    shared Date date(
+            doc "Time zone of the conversion.
+                 
+                 If omitted the current/default time zone of the system will be used.
+                 
+                 **Note:** Since time zone support is not implemented yet, this method 
+                 will return date according to the of the UTC-0 instead of using local 
+                 time zone."
+            TimeZone? zone = null) {
         if (exists zone) {
             //TODO: get [[Date]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
 
-        value inDays = millis / milliseconds.perDay;
+        value inDays = millis / ms.perDay;
         //TODO: Should we have this as field in gregorianCalendar?
         value fixed = dateImpl(1970, january, 1); 
         return fixed.plusDays(inDays);
     }
 
-    doc "Returns a Time (time of day) value for this instant."
-    shared Time time(TimeZone? zone = null) {
+    doc "Returns _time of day_ for this instant"
+    shared Time time(
+            doc "Time zone of the conversion.
+                 
+                 If omitted the current/default time zone of the system will be used.
+                 
+                 **Note:** Since time zone support is not implemented yet, this method 
+                 will return time of day according to the of the UTC-0 instead of using local 
+                 time zone."
+            TimeZone? zone = null) {
         if (exists zone) {
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
 
-        return timeImpl( 0, 0, 0, millis % milliseconds.perDay );
+        return TimeOfDay( mod(millis, ms.perDay) );
     }
 
     doc "Returns ZoneDateTime value for this instant."

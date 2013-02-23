@@ -1,3 +1,5 @@
+
+doc "Common period behavior."
 shared interface PeriodBehavior<Element> of Element 
        given Element satisfies PeriodBehavior<Element>
                              & ReadablePeriod {

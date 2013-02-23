@@ -42,11 +42,14 @@ shared interface Clock {
 }
 
 doc "Gets a clock that obtains the current instant using the best available system clock."
-shared object systemTime satisfies Clock{
+shared object systemTime satisfies Clock {
+    
+    doc "Return number of milliseconds from system time"
     shared actual Integer millis() {
         return process.milliseconds;
     }
 
+    doc "Return current instant from system time"
     shared actual Instant instant() {
         return Instant( millis() );
     }
@@ -66,11 +69,14 @@ shared Clock fixedTime(Instant|Integer instant) {
 
 doc "Implementation of a clock that always returns the same instant.
      This is typically used for testing."
-class FixedInstant(Instant fixedInstant) satisfies Clock{
+class FixedInstant(Instant fixedInstant) satisfies Clock {
+    
+    doc "Returns milliseconds from the fixed instant"
     shared actual Integer millis() {
         return fixedInstant.millis;
     }
 
+    doc "Returns the fixed instant"
     shared actual Instant instant() {
         return fixedInstant;
     }
@@ -78,11 +84,14 @@ class FixedInstant(Instant fixedInstant) satisfies Clock{
 
 doc "Implementation of a clock that always returns the same instant.
      This is typically used for testing."
-class FixedMilliseconds(Integer fixedMilliseconds) satisfies Clock{
+class FixedMilliseconds(Integer fixedMilliseconds) satisfies Clock {
+    
+    doc "Returns the fixed milliseconds"
     shared actual Integer millis() {
         return fixedMilliseconds;
     }
 
+    doc "Returns the instant from the fixed milliseconds"
     shared actual Instant instant() {
         return Instant(fixedMilliseconds);
     }

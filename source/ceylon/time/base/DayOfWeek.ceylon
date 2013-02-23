@@ -54,43 +54,49 @@ shared DayOfWeek parseWeekday(String dayOfWeek){
     throw WeekdayParseError("Unrecognized DayOfWeek: ``dayOfWeek`` ." );
 }
 
-
+doc "_Sunday_ is the day of the week that follows Saturday and preceeds Monday."
 shared object sunday extends DayOfWeek(0) {
     shared actual String string = "sunday";
     shared actual DayOfWeek predecessor { return  saturday; }
     shared actual DayOfWeek successor { return monday; }
 }
 
+doc "_Monday_ is the day of the week that follows Sunday and preceeds Tuesday."
 shared object monday extends DayOfWeek(1) {
     shared actual String string = "monday";
     shared actual DayOfWeek predecessor { return sunday; }
     shared actual DayOfWeek successor { return tuesday; }
 }
 
+doc "_Tuesday_ is the day of the week that follows Monday and preceeds Wednesday."
 shared object tuesday extends DayOfWeek(2) {
     shared actual String string = "tuesday";
     shared actual DayOfWeek predecessor { return monday; }
     shared actual DayOfWeek successor { return wednesday; }
 }
 
+doc "_Wednesday_ is the day of the week that follows Tuesday and preceeds Thursday."
 shared object wednesday extends DayOfWeek(3) {
     shared actual String string = "wednesday";
     shared actual DayOfWeek predecessor { return tuesday; }
     shared actual DayOfWeek successor { return thursday; }
 }
 
+doc "_Thursday_ is the day of the week that follows Wednesday and preceeds Friday."
 shared object thursday extends DayOfWeek(4) {
     shared actual String string = "thursday";
     shared actual DayOfWeek predecessor { return wednesday; }
     shared actual DayOfWeek successor { return friday; }
 }
 
+doc "_Friday_ is the day of the week that follows Thursday and preceeds Saturday."
 shared object friday extends DayOfWeek(5) {
     shared actual String string = "friday";
     shared actual DayOfWeek predecessor { return thursday; }
     shared actual DayOfWeek successor { return saturday; }
 }
 
+doc "_Saturday_ is the day of the week that follows Friday and preceeds Sunday."
 shared object saturday extends DayOfWeek(6) {
     shared actual String string = "saturday";
     shared actual DayOfWeek predecessor { return friday; }

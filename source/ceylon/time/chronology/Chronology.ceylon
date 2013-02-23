@@ -111,10 +111,10 @@ shared object gregorian extends GregorianCalendar() {
     
     shared Integer yearFrom(Integer fixed) {
         value d0 = fixed - epoch;
-        value n400 = fdiv(d0, days.in400Years);
-        value d1 = mod(d0, days.in400Years);
-        value n100 = fdiv(d1, days.in100Years);
-        value d2 = mod(d1, days.in100Years);
+        value n400 = fdiv(d0, days.perFourCenturies);
+        value d1 = mod(d0, days.perFourCenturies);
+        value n100 = fdiv(d1, days.perCentury);
+        value d2 = mod(d1, days.perCentury);
         value n4 = fdiv(d2, days.inFourYears);
         value d3 = mod(d2, days.inFourYears);
         value n1 = fdiv(d3, days.perYear());

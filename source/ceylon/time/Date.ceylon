@@ -1,4 +1,5 @@
 import ceylon.time.base { ReadableDate, Month, monthOf, DateBehavior }
+import ceylon.time.chronology { gregorian }
 import ceylon.time.impl { gregorianDate, julianDate }
 import ceylon.time.timezone { TimeZone }
 
@@ -16,18 +17,32 @@ shared Date today(Clock clock = systemTime, TimeZone? zone = null){
     return clock.instant().date(zone);
 }
 
+/*
 doc "parses a Date from ISO date formatted string (YYYY-MM-DD)"
 shared Date parseDate(String string){
     return nothing;
 }
+*/
 
 doc "Returns a date based on the specified year, month and day-ofMonth values"
-shared Date date(Integer year, Integer|Month month, Integer date){
-    value m = monthOf(month);
-    //if (year > 1582 || (year == 1582 && m <= march)){
-    //	return JulianDate()
-    //}
-    return gregorianDate(year, m, date);
+shared Date date(Integer? year, Integer|Month? month, Integer? day){
+    if (exists year, exists month, exists day) {
+        value m = monthOf(month);
+        //if (year > 1582 || (year == 1582 && m <= march)){
+        //	return JulianDate()
+        //}
+        return gregorianDate(year, m, day);
+    }
+    
+    value _today = now().date();
+    value yyyy = year else _today.year;
+    value moy = monthOf(month else _today.month);
+    value doy = day else _today.day;
+    return gregorianDate { 
+        year = yyyy;
+        month = moy; 
+        day = min{ doy, moy.numberOfDays(gregorian.leapYear(yyyy)) };
+    };
 }
 
 doc "Returns a julian calendar date according to the specified year, month and date values"
@@ -44,9 +59,3 @@ shared Date julian(year, month, date){
     return julianDate(year, monthOf(month).integer, date);
 }
 
-doc "Calculates the number of days according to julian calendar rules"
-Integer j(Integer yyyy, Integer mm, Integer d) {
-    value m = (mm + 9) % 12;
-    value y = yyyy - m/10;
-    return 365*y + y/4 - y/100 + y/400 + (m*306 + 5)/10 + ( d - 1 );
-}
