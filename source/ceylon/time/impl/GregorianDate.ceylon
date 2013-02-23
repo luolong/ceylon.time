@@ -92,7 +92,7 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
-        value lastValidDay = smallest(month.numberOfDays(leapYear), day);
+        value lastValidDay = smallest(month.numberOfDays(leapYear), day <= 0 then 1 else day);
         return GregorianDate( dayOfEra - this.day + lastValidDay );
     }
 
@@ -131,15 +131,13 @@ shared class GregorianDate( Integer dayOfEra )
 
         function normalizeFirstWeek( Integer weekNumber ) {
             variable value result = weekNumber;
-            if ( weekNumber == 0 ) {
-                value jan1 = withDay(1).withMonth(january);
-                value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
-                if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
-                    if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
-                        result = 53;
-                    } else {
-                        result = 52;
-                    }
+            value jan1 = withDay(1).withMonth(january);
+            value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
+            if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
+                if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
+                    result = 53;
+                } else {
+                    result = 52;
                 }
             }
             return result;
@@ -147,12 +145,10 @@ shared class GregorianDate( Integer dayOfEra )
 
         function normalizeLastWeek( Integer weekNumber ) {
             variable value result = weekNumber;
-            if ( weekNumber == 53 ) {
-                value weekDay = adjustedMod(dayOfWeek.integer, 7); 
-                value totalDaysInYear = leapYear then 366 else 365;
-                if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
-                    result = 1;
-                }
+            value weekDay = adjustedMod(dayOfWeek.integer, 7); 
+            value totalDaysInYear = leapYear then 366 else 365;
+            if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
+                result = 1;
             }
             return result;
         }

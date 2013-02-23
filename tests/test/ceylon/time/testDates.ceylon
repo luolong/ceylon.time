@@ -118,8 +118,8 @@ shared void testWithDay() {
     assertTrue( data_1982_12_13.withDay(17) <=> date( 1982, december, 17) == equal);
     assertTrue( data_1982_12_13.withDay(40) <=> date( 1982, december, 31) == equal);
 
-    //TODO: Should we throw exception if isnt valid day?
-    assertEquals( data_1982_12_13.withDay(0), date( 1982, 11, 30 ) );
+    assertEquals( data_1982_12_13.withDay(0), date( 1982, 12, 1 ) );
+    assertEquals( data_1982_12_13.withDay(-10), date( 1982, 12, 1 ) );
     assertEquals( data_1982_12_13.withDay(40), date( 1982, december, 31) );
     assertEquals( date(2011, february,1).withDay(29), date( 2011, february, 28) );
 }
