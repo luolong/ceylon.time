@@ -41,7 +41,7 @@ shared class Instant(millis)
         }
         case(is Period){
             value date = this.dateTime().minus(other);
-            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) + date.time.millisOfDay);
+            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) - date.time.millisOfDay);
         }
     }
 
