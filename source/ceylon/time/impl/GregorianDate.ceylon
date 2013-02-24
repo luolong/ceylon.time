@@ -1,6 +1,6 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday, DateTimeException }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday }
 import ceylon.time.chronology { impl=gregorian }
 import ceylon.time.math { adjustedMod }
 
@@ -55,9 +55,8 @@ shared class GregorianDate( Integer dayOfEra )
         }
 
         value o = month.add(months);
-        value d = min{day, o.month.numberOfDays(impl.leapYear(year + o.years))};
 
-        return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, d]) );
+        return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, day]) );
     }
 
     shared actual GregorianDate plusYears(Integer years) {
@@ -101,18 +100,15 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
-		value d = min{day, month.numberOfDays(impl.leapYear(year))};
-
-        return GregorianDate( impl.fixedFrom([year, newMonth.integer, d]) );
+        return GregorianDate( impl.fixedFrom([year, newMonth.integer, day]) );
     }
 
     shared actual GregorianDate withYear(Integer year) {
         if ( year == this.year ) {
             return this;
         }
-        value correction = ( day == 29 && leapYear) then 1 else 0;
 
-        return GregorianDate( impl.fixedFrom([year, month.integer, day - correction]) );
+        return GregorianDate( impl.fixedFrom([year, month.integer, day]) );
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
