@@ -1,4 +1,4 @@
-import ceylon.time.base { days, milliseconds }
+import ceylon.time.base { days, milliseconds, monthOf, DateTimeException, hours, minutes, seconds }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -50,6 +50,9 @@ abstract shared class GregorianCalendar() of gregorian
 
     doc "Milliseconds elapsed from unix epoch"
     shared formal Integer millisFrom([Integer, Integer, Integer] date);
+
+    doc "Throw an exception when its not valid day"
+    shared formal void checkDate([Integer, Integer, Integer] date);
     
 }
 
@@ -89,11 +92,20 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared actual Integer fixedFrom([Integer, Integer, Integer] date) {
+        checkDate(date);
         return fixed { 
             year = date[0]; 
             month = date[1]; 
             day = date[2]; 
         };
+    }
+
+    shared actual void checkDate([Integer, Integer, Integer] date) {
+        value monthConverted = monthOf(date[1]);
+        value maxMonthDays = monthConverted.numberOfDays(leapYear(date[0]));
+        if ( date[2] <= 0 || date[2] > maxMonthDays ) {
+            throw DateTimeException("Date for ``monthConverted.string`` should be between 1 and ``maxMonthDays`` and it was ``date[2]``");
+        }
     }
 
     doc "Milliseconds from unix date"
@@ -144,4 +156,33 @@ shared object gregorian extends GregorianCalendar() {
         return mod(date, 7);
     }
     
+}
+
+shared object time {
+    shared void checkHour( Integer hour ) {
+        if ( hour < 0 || hour >= hours.perDay ) {
+            throw DateTimeException("Hour should be between 0 and 23 but it was ``hour``");
+        }
+    }
+    shared void checkMinute( Integer minute ) {
+        if ( minute < 0 || minute >= minutes.perHour ) {
+            throw DateTimeException("Minute should be between 0 and 59 but it was ``minute``");
+        }
+    }
+    shared void checkSecond( Integer second ) {
+        if ( second < 0 || second >= seconds.perMinute ) {
+            throw DateTimeException("Second should be between 0 and 59 but it was ``second``");
+        }
+    }
+    shared void checkMillisecond( Integer milli ) {
+        if ( milli < 0 || milli >= milliseconds.perSecond ) {
+            throw DateTimeException("Millisecond should be between 0 and 999 but it was ``milli``");
+        }
+    }
+    shared void checkTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0) {
+        checkHour(hour);
+        checkMinute(minute);
+        checkSecond(second);
+        checkMillisecond(milli);
+    }    
 }
