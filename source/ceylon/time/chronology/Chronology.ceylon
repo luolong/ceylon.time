@@ -1,4 +1,4 @@
-import ceylon.time.base { days }
+import ceylon.time.base { days, milliseconds, monthOf, DateTimeException, hours, minutes, seconds }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -9,6 +9,9 @@ shared Integer rd( Integer t ) {
     return t - epoch;
 }
 
+doc "Represents unix date"
+shared [Integer,Integer,Integer] unixEpoch = [1970,1,1];
+
 doc "Generic base interface of a _calendar system_.
      Chronology serves as a computational backend to 
      a Date representation of the same calendar system."
@@ -18,13 +21,14 @@ shared interface Chronology<Fields>
     doc "Epoch is the offset of the _fixed date_ day number that defines 
          the beginning of the calendar."
     shared formal Integer epoch;
-    
+
     doc "Converts date tuple of this calendar system to an equivalent _fixed date_
          representation of the "
     shared formal Integer fixedFrom(Fields date);
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
     shared formal Fields dateFrom(Integer fixed);
+    
 }
 
 doc "An interface for calendar system that defines leap year rules.
@@ -39,27 +43,21 @@ shared interface LeapYear<Self, Fields> of Self
     
 }
 
-shared object fixed satisfies Chronology<[Integer]> {
-    
-    shared actual Integer epoch = rd(1);
-    
-    shared actual Integer fixedFrom([Integer] date) {
-        return date[0];
-    }
-    
-    shared actual [Integer] dateFrom(Integer fixed) {
-        return [fixed];
-    }
-    
-}
-
 doc "Base class for a gregorian calendar chronology."
 abstract shared class GregorianCalendar() of gregorian
          satisfies Chronology<[Integer, Integer, Integer]>
                  & LeapYear<GregorianCalendar, [Integer, Integer, Integer]> {
+
+    doc "Milliseconds elapsed from unix epoch"
+    shared formal Integer millisFrom([Integer, Integer, Integer] date);
+
+    doc "Throw an exception when its not valid day"
+    shared formal void checkDate([Integer, Integer, Integer] date);
     
 }
 
+doc "Represents the implementation of all calculations for
+     the rules based on Gregorian Calendar"
 shared object gregorian extends GregorianCalendar() {
     
     doc "Epoch of the gregorian calendar"
@@ -94,11 +92,25 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared actual Integer fixedFrom([Integer, Integer, Integer] date) {
+        checkDate(date);
         return fixed { 
             year = date[0]; 
             month = date[1]; 
             day = date[2]; 
         };
+    }
+
+    shared actual void checkDate([Integer, Integer, Integer] date) {
+        value monthConverted = monthOf(date[1]);
+        value maxMonthDays = monthConverted.numberOfDays(leapYear(date[0]));
+        if ( date[2] <= 0 || date[2] > maxMonthDays ) {
+            throw DateTimeException("Date for ``monthConverted.string`` should be between 1 and ``maxMonthDays`` and it was ``date[2]``");
+        }
+    }
+
+    doc "Milliseconds from unix date"
+    shared actual Integer millisFrom([Integer, Integer, Integer] date) {
+        return (fixedFrom(date) - fixedFrom(unixEpoch)) * milliseconds.perDay;
     }
     
     shared Integer newYear(Integer year){
@@ -140,8 +152,37 @@ shared object gregorian extends GregorianCalendar() {
         return dateFrom(date)[2];
     }
     
-    shared Integer weekdayFrom(Integer date) {
+    shared Integer dayOfWeekFrom(Integer date) {
         return mod(date, 7);
     }
     
+}
+
+shared object time {
+    shared void checkHour( Integer hour ) {
+        if ( hour < 0 || hour >= hours.perDay ) {
+            throw DateTimeException("Hour should be between 0 and 23 but it was ``hour``");
+        }
+    }
+    shared void checkMinute( Integer minute ) {
+        if ( minute < 0 || minute >= minutes.perHour ) {
+            throw DateTimeException("Minute should be between 0 and 59 but it was ``minute``");
+        }
+    }
+    shared void checkSecond( Integer second ) {
+        if ( second < 0 || second >= seconds.perMinute ) {
+            throw DateTimeException("Second should be between 0 and 59 but it was ``second``");
+        }
+    }
+    shared void checkMillisecond( Integer milli ) {
+        if ( milli < 0 || milli >= milliseconds.perSecond ) {
+            throw DateTimeException("Millisecond should be between 0 and 999 but it was ``milli``");
+        }
+    }
+    shared void checkTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0) {
+        checkHour(hour);
+        checkMinute(minute);
+        checkSecond(second);
+        checkMillisecond(milli);
+    }    
 }

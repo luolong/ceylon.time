@@ -1,6 +1,7 @@
 import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
-import ceylon.time.base { ReadableInstant, milliseconds, january }
+import ceylon.time.base { ReadableInstant, milliseconds }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
+import ceylon.time.chronology { gregorian, unixEpoch }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -27,8 +28,22 @@ shared class Instant(millis)
             return Instant(this.millis + other.millis);
         }
         case(is Period){
-            return nothing;
-            //return other.from(this);
+            value date = this.dateTime().plus(other);
+            // TODO: Waiting TimeZone + date.time.millisOfDay 
+            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) );
+        }
+    }
+
+    doc "Subtracts a period to this instant"
+    shared Instant minus(Duration|Period other){
+        switch(other)
+        case(is Duration){
+            return Instant(this.millis - other.millis);
+        }
+        case(is Period){
+            value date = this.dateTime().minus(other);
+            // TODO: Waiting TimeZone - date.time.millisOfDay
+            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) );
         }
     }
 
@@ -40,14 +55,12 @@ shared class Instant(millis)
     shared DateTime dateTime(
             doc "Time zone of the conversion.
                  If omitted the current/default time zone of the system will be used."
-            TimeZone? zone = null) {
+            TimeZone? zone = null ) {
         if (exists zone){
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
             return nothing;
         }
-        //TODO: Should we have this as field in gregorianCalendar?
-        value fixed = dateTimeImpl(1970, january, 1); 
-        return fixed.plusMilliseconds(millis);
+        return unixDateTime.plusMilliseconds(millis);
     }
 
     doc "Returns a Date value for this instant"
@@ -58,9 +71,7 @@ shared class Instant(millis)
         }
 
         value inDays = millis / milliseconds.perDay;
-        //TODO: Should we have this as field in gregorianCalendar?
-        value fixed = dateImpl(1970, january, 1); 
-        return fixed.plusDays(inDays);
+        return unixDate.plusDays(inDays);
     }
 
     doc "Returns a Time (time of day) value for this instant."
@@ -87,6 +98,16 @@ shared class Instant(millis)
     doc "Returns duration in milliseconds from other instant to this instant."
     shared Duration durationFrom(Instant other) {
         return Duration(this.millis - other.millis);
+    }
+
+    doc "Return the unix date instance"
+    DateTime unixDateTime {
+         return dateTimeImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
+    }
+
+    doc "Return the unix date instance"
+    Date unixDate {
+         return dateImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
     }
 
 }

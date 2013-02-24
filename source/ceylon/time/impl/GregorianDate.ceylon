@@ -39,7 +39,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual DayOfWeek dayOfWeek {
-        return weekdayOf(impl.weekdayFrom( dayOfEra ));
+        return weekdayOf(impl.dayOfWeekFrom( dayOfEra ));
     }
 
     shared actual GregorianDate plusDays(Integer days) {
@@ -55,9 +55,8 @@ shared class GregorianDate( Integer dayOfEra )
         }
 
         value o = month.add(months);
-        value d = min{day, o.month.numberOfDays(impl.leapYear(year + o.years))};
 
-        return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, d]) );
+        return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, day]) );
     }
 
     shared actual GregorianDate plusYears(Integer years) {
@@ -91,9 +90,8 @@ shared class GregorianDate( Integer dayOfEra )
         if ( day == this.day ) {
             return this;
         }
-
-        value lastValidDay = smallest(month.numberOfDays(leapYear), day);
-        return GregorianDate( dayOfEra - this.day + lastValidDay );
+        impl.checkDate([year,month.integer,day]);
+        return GregorianDate( dayOfEra - this.day + day);
     }
 
     shared actual GregorianDate withMonth(Month month) {
@@ -102,22 +100,23 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
-		value d = min{day, month.numberOfDays(impl.leapYear(year))};
-
-        return GregorianDate( impl.fixedFrom([year, newMonth.integer, d]) );
+        return GregorianDate( impl.fixedFrom([year, newMonth.integer, day]) );
     }
 
     shared actual GregorianDate withYear(Integer year) {
         if ( year == this.year ) {
             return this;
         }
-        value correction = ( day == 29 && leapYear) then 1 else 0;
 
-        return GregorianDate( impl.fixedFrom([year, month.integer, day - correction]) );
+        return GregorianDate( impl.fixedFrom([year, month.integer, day]) );
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
         return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
+    }
+
+    shared actual GregorianDate minus( ReadablePeriod amount ) {
+        return minusDays( amount.date.days ).minusMonths( amount.date.months ).minusYears( amount.date.years );
     }
 
     doc "Week of year calculations is UTC based"
@@ -127,15 +126,13 @@ shared class GregorianDate( Integer dayOfEra )
 
         function normalizeFirstWeek( Integer weekNumber ) {
             variable value result = weekNumber;
-            if ( weekNumber == 0 ) {
-                value jan1 = withDay(1).withMonth(january);
-                value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
-                if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
-                    if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
-                        result = 53;
-                    } else {
-                        result = 52;
-                    }
+            value jan1 = withDay(1).withMonth(january);
+            value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
+            if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
+                if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
+                    result = 53;
+                } else {
+                    result = 52;
                 }
             }
             return result;
@@ -143,12 +140,10 @@ shared class GregorianDate( Integer dayOfEra )
 
         function normalizeLastWeek( Integer weekNumber ) {
             variable value result = weekNumber;
-            if ( weekNumber == 53 ) {
-                value weekDay = adjustedMod(dayOfWeek.integer, 7); 
-                value totalDaysInYear = leapYear then 366 else 365;
-                if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
-                    result = 1;
-                }
+            value weekDay = adjustedMod(dayOfWeek.integer, 7); 
+            value totalDaysInYear = leapYear then 366 else 365;
+            if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
+                result = 1;
             }
             return result;
         }
@@ -172,14 +167,14 @@ shared class GregorianDate( Integer dayOfEra )
 
 doc "Returns a gregorian calendar date according to the specified year, month and date values"
 shared Date gregorianDate(year, month, date){
-        doc "Year number of the date"
-        Integer year;
+    doc "Year number of the date"
+    Integer year;
         
-        doc "Month of the year"
-        Integer|Month month; 
+    doc "Month of the year"
+    Integer|Month month; 
         
-        doc "Date of month"
-        Integer date;
-        
+    doc "Date of month"
+    Integer date;
+    
     return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, date]) );
 }

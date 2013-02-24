@@ -1,13 +1,23 @@
 import ceylon.test { assertEquals }
-import ceylon.time { now, Instant, fixedTime, Clock, date }
-import ceylon.time.base { february }
+import ceylon.time { now, Instant, fixedTime, Clock, date, Period }
+import ceylon.time.base { february, march, january }
 
 //Wed Feb 13 14:00:42.0057 BOT 2013
 Clock clock = fixedTime(1360778442057);
-Instant instant = now( clock );
+Instant feb_13_2013_14_00_42_0057 = now( clock );
 
-shared void testDate() {
-	assertEquals( instant.date(), date(2013, february, 13) );
+shared void testDate() => assertEquals( feb_13_2013_14_00_42_0057.date(), date(2013, february, 13) );
+
+shared void testPlusPeriod() {
+    value period = Period { years = 2; months = 1;};
+	value actual = feb_13_2013_14_00_42_0057.plus(period);
+	assertEquals(date(2015,march, 13), actual.date() );
+}
+
+shared void testMinusPeriod() {
+	value period = Period { years = 2; months = 1; days = 3;};
+	value actual = feb_13_2013_14_00_42_0057.minus(period);
+	assertEquals(date(2011,january, 10), actual.date() );
 }
 
 shared void testDateTime() {

@@ -1,3 +1,4 @@
+doc "Common properties of _year_ unit"
 shared object years {
     doc "The minimum supported year for instances of `Date`, -999,999,999."
     shared Integer minimum = -999_999_999;
@@ -6,6 +7,7 @@ shared object years {
     shared Integer maximum = 999_999_999;
 }
 
+doc "Common properties of _month_ unit"
 shared object months {
 
     doc "Ordered list of all months of Gregorian and Julian calendar system from January to December"
@@ -16,7 +18,7 @@ shared object months {
 
 }
 
-doc "Common properties of days"
+doc "Common properties of _day_ unit"
 shared object days {
 
     doc "Returns the number of days per year"
@@ -37,14 +39,6 @@ shared object days {
     doc "Number of days per week (7)"
     shared Integer perWeek = 7;
 
-    doc "The number of days in a 400 year cycle."
-    shared Integer perCycle = 146097;
-
-    doc "The number of days from year zero to year 1970.
-         There are five 400 year cycles from year zero to 2000.
-         There are 7 leap years from 1970 to 2000."
-    shared Integer toEpoch = (perCycle * 5) - (30 * 365 + 7);
-
     doc "Number of days in four years"
     shared Integer inFourYears = 1461;
 
@@ -54,15 +48,17 @@ shared object days {
     doc "Number of of days in four hundred years"
     shared Integer in400Years = 146097;
 
-    shared Integer daysFromMillis( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer millis = 0) {
+    doc "Number of days from the amount of time"
+    shared Integer daysFromTime(Integer hour = 0, Integer minute = 0, Integer second = 0, Integer millis = 0) {
         return millis / milliseconds.perDay +
                second / seconds.perDay +
                minute / minutes.perDay +
                hour / hours.perDay;
     }
+
 }
 
-doc "Common properties of _hour_ time units"
+doc "Common properties of _hour_ time unit"
 shared object hours {
 
     doc "number of hours per day"
@@ -70,7 +66,7 @@ shared object hours {
 
 }
 
-doc "Common properties of _minute_ time units"
+doc "Common properties of _minute_ time unit"
 shared object minutes {
 
     doc "Number of minutes per hour"
@@ -80,7 +76,7 @@ shared object minutes {
     shared Integer perDay { return  hours.perDay * minutes.perHour; }
 }
 
-doc "Properties of a second"
+doc "Common properties of _second_ time unit"
 shared object seconds {
 
     doc "Number of seconds per minute"
@@ -93,7 +89,7 @@ shared object seconds {
     shared Integer perDay { return hours.perDay * seconds.perHour; }
 }
 
-doc "Millisecond properties."
+doc "Common properties of _millisecond_ time unit"
 shared object milliseconds {
 
     doc "Number of milliseconds per second (1000)"

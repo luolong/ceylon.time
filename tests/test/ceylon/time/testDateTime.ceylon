@@ -1,5 +1,5 @@
 import ceylon.time { DateTime, dateTime }
-import ceylon.time.base { december, january, november, september, Month, DayOfWeek, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february }
+import ceylon.time.base { december, january, november, september, Month, DayOfWeek, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february, DateTimeException }
 import ceylon.test { assertEquals }
 
 DateTime data_1982_12_13_09_08_07_0050 = dateTime { year = 1982;  
@@ -117,6 +117,42 @@ shared void testMinusMilliseconds_DateTime() {
     value data_1982_12_13_9_8_4_100 = data_1982_12_13_09_08_07_0050.minusMilliseconds(50+2900);
     assertEquals( 100, data_1982_12_13_9_8_4_100.millis);
     assertEquals( 4, data_1982_12_13_9_8_4_100.seconds);
+}
+
+shared void testWithDay40_DateTime() {
+    try {
+        data_1982_12_13_09_08_07_0050.withDay(40);
+    } catch( DateTimeException e ) {
+        assertEquals("Date for december should be between 1 and 31 and it was 40", e.message);
+    }
+}
+
+shared void testWithDay0_DateTime() {
+    try {
+        data_1982_12_13_09_08_07_0050.withDay(0);
+    } catch( DateTimeException e ) {
+        assertEquals("Date for december should be between 1 and 31 and it was 0", e.message);
+    }
+}
+
+shared void testWithDayNegative_DateTime() {
+    try {
+        data_1982_12_13_09_08_07_0050.withDay(-10);
+    } catch( DateTimeException e ) {
+        assertEquals("Date for december should be between 1 and 31 and it was -10", e.message);
+    }
+}
+
+shared void testWithDay29FebNotLeap_DateTime() {
+    try {
+        dateTime(2011, february,1).withDay(29);
+    } catch( DateTimeException e ) {
+        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+    }
+}
+
+shared void testWithDay29FebLeap_DateTime() {
+    assertEquals( dateTime(2012, february,1).withDay(29), dateTime(2012, february, 29) );
 }
 
 shared void testPredecessor_DateTime() {
