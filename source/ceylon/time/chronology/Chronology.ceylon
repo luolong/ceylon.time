@@ -49,7 +49,7 @@ abstract shared class GregorianCalendar() of gregorian
                  & LeapYear<GregorianCalendar, [Integer, Integer, Integer]> {
 
     doc "Milliseconds elapsed from unix epoch"
-    shared formal Integer millisFrom([Integer, Integer, Integer] date);
+    shared formal Integer millisFromEpoch([Integer, Integer, Integer] date);
     
 }
 
@@ -97,7 +97,7 @@ shared object gregorian extends GregorianCalendar() {
     }
 
     doc "Milliseconds from unix date"
-    shared actual Integer millisFrom([Integer, Integer, Integer] date) {
+    shared actual Integer millisFromEpoch([Integer, Integer, Integer] date) {
         return (fixedFrom(date) - fixedFrom(unixEpoch)) * milliseconds.perDay;
     }
     

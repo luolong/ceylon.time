@@ -1,7 +1,7 @@
-import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
+import ceylon.time { dateTimeImpl=dateTime, timeImpl=time }
 import ceylon.time.base { ReadableInstant, milliseconds }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
-import ceylon.time.chronology { gregorian, unixEpoch }
+import ceylon.time.chronology { unixEpoch }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -29,8 +29,7 @@ shared class Instant(millis)
         }
         case(is Period){
             value date = this.dateTime().plus(other);
-            // TODO: Waiting TimeZone + date.time.millisOfDay 
-            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) );
+            return Instant(date.millisFromEpoch + date.time.millisOfDay);
         }
     }
 
@@ -42,8 +41,7 @@ shared class Instant(millis)
         }
         case(is Period){
             value date = this.dateTime().minus(other);
-            // TODO: Waiting TimeZone - date.time.millisOfDay
-            return Instant(gregorian.millisFrom([date.year, date.month.integer, date.day]) );
+            return Instant(date.millisFromEpoch + date.time.millisOfDay);
         }
     }
 
@@ -71,7 +69,7 @@ shared class Instant(millis)
         }
 
         value inDays = millis / milliseconds.perDay;
-        return unixDate.plusDays(inDays);
+        return unixDateTime.date.plusDays(inDays);
     }
 
     doc "Returns a Time (time of day) value for this instant."
@@ -103,11 +101,6 @@ shared class Instant(millis)
     doc "Return the unix date instance"
     DateTime unixDateTime {
          return dateTimeImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
-    }
-
-    doc "Return the unix date instance"
-    Date unixDate {
-         return dateImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
     }
 
 }
