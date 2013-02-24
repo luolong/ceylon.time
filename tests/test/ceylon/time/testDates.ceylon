@@ -1,4 +1,4 @@
-import ceylon.test { assertEquals, assertTrue, assertFalse }
+import ceylon.test { assertEquals, assertTrue, assertFalse, fail }
 import ceylon.time { date, Date, Period }
 import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month, DateTimeException }
 
@@ -85,6 +85,15 @@ shared void testDateMinusDays() {
     assertEquals( date( 2012, december, 9 ).minusDays( 10954 ), data_1982_12_13 );
 }
 
+shared void testDatePlusMonthsLessDaysException() {
+    try {
+        date(1982,december,31).plusMonths(2);
+        fail("Should throw exception...");
+    } catch ( DateTimeException e ) {
+        assertEquals("Date for february should be between 1 and 28 and it was 31", e.message);
+    }    
+}
+
 shared void testDatePlusMonths() {
     assertEquals( data_1982_12_13.plusMonths(0), data_1982_12_13 );
     assertEquals( data_1982_12_13.plusMonths(1), date( 1983, january, 13) );
@@ -92,7 +101,6 @@ shared void testDatePlusMonths() {
     assertEquals( data_1982_12_13.plusMonths(36), date( 1985, december, 13) );
 
     value data_2000_01_31 = date( 2000, january, 31 );
-    assertEquals( data_2000_01_31.plusMonths(1), date( 2000, february, 29) );
     assertEquals( data_2000_01_31.plusMonths(14), date( 2001, march, 31) );
 }
 
@@ -102,18 +110,40 @@ shared void testDateMinusMonths() {
     assertEquals( data_1982_12_13.minusMonths(12), date( 1981, december, 13) );
 }
 
+shared void testDatePlusMinusLessDaysException() {
+    try {
+        data_1982_12_13.plusMonths(2);
+    } catch ( DateTimeException e ) {
+        assertEquals("Date for february should be between 1 and 28 and it was 31", e.message);
+    }    
+}
+
 shared void testDatePlusYears() {
     assertEquals( data_1982_12_13.plusYears(0), data_1982_12_13 );
     assertEquals( data_1982_12_13.plusYears(18), date( 2000, december, 13) );
     assertEquals( data_1982_12_13.plusYears(30), date( 2012, december, 13) );
-    assertEquals( date(2012, february, 29).plusYears(1), date( 2013, february, 28) );
+}
+
+shared void testPlusYearsLessDaysException() {
+    try {
+        date(2012, february, 29).plusYears(1);
+    } catch( DateTimeException e ) {
+        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+    }
 }
 
 shared void testDateMinusYears() {
     value data_2000_01_31 = date( 2000, january, 31);
     assertEquals( data_2000_01_31.minusYears(1), date( 1999, january, 31) );
     assertEquals( data_1982_12_13.minusYears(10), date( 1972, december, 13) );
-    assertEquals( date(2012, february, 29).minusYears(1), date( 2011, february, 28) );
+}
+
+shared void testMinusYearsLessDaysException() {
+    try {
+        date(2012, february, 29).minusYears(1);
+    } catch( DateTimeException e ) {
+        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+    }
 }
 
 shared void testDatePlusWeeks() {
@@ -171,12 +201,18 @@ shared void testWithDay29FebLeap() {
 }    
 
 
+shared void testWithMonthLessDaysException() {
+    try {
+        date(2012, december, 31).withMonth(february);
+    } catch( DateTimeException e ) {
+        assertEquals( "Date for february should be between 1 and 29 and it was 31", e.message );
+    }
+}
+
 shared void testWithMonth() {
-    assertEquals( data_1982_12_13.withMonth(december), data_1982_12_13 );
-    assertEquals( data_1982_12_13.withMonth(january), date( 1982, january, 13) );
-    assertEquals( date(2012, december, 31).withMonth(february), date( 2012, february, 29) );
+    assertEquals( data_1982_12_13, data_1982_12_13.withMonth(december) );
+    assertEquals( date( 1982, january, 13), data_1982_12_13.withMonth(january) );
     assertTrue( data_1982_12_13.withMonth(january) <=> date( 1982, january, 13) == equal);
-    assertTrue( date(2012, december, 31).withMonth(february) <=> date( 2012, february, 29) == equal);
 }
 
 shared void testWithYear() {
