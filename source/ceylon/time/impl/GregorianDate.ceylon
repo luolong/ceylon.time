@@ -1,6 +1,6 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday, DateTimeException }
 import ceylon.time.chronology { impl=gregorian }
 import ceylon.time.math { adjustedMod }
 
@@ -91,9 +91,8 @@ shared class GregorianDate( Integer dayOfEra )
         if ( day == this.day ) {
             return this;
         }
-
-        value lastValidDay = smallest(month.numberOfDays(leapYear), day <= 0 then 1 else day);
-        return GregorianDate( dayOfEra - this.day + lastValidDay );
+        impl.checkDate([year,month.integer,day]);
+        return GregorianDate( dayOfEra - this.day + day);
     }
 
     shared actual GregorianDate withMonth(Month month) {
@@ -172,14 +171,14 @@ shared class GregorianDate( Integer dayOfEra )
 
 doc "Returns a gregorian calendar date according to the specified year, month and date values"
 shared Date gregorianDate(year, month, date){
-        doc "Year number of the date"
-        Integer year;
+    doc "Year number of the date"
+    Integer year;
         
-        doc "Month of the year"
-        Integer|Month month; 
+    doc "Month of the year"
+    Integer|Month month; 
         
-        doc "Date of month"
-        Integer date;
-        
+    doc "Date of month"
+    Integer date;
+    
     return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, date]) );
 }

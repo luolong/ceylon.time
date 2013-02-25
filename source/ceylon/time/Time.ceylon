@@ -1,5 +1,6 @@
 import ceylon.time.base { ReadableTime, TimeBehavior, h=hours, min=minutes, sec=seconds, ms=milliseconds }
 import ceylon.time.impl { TimeOfDay }
+import ceylon.time.chronology { timeCheck = time }
 
 doc "An abstraction representing time of day like _6pm_ or _8.30am_."
 shared interface Time
@@ -12,6 +13,8 @@ shared interface Time
 
 doc "Create new instance of [[Time]]"
 shared Time time(Integer hours = 0, Integer minutes=0, Integer seconds=0, Integer millis=0) {
+    timeCheck.checkTime( hours, minutes, seconds, millis );
+
     value hh = (hours == 0) then 0
           else (hours %  h.perDay) * ms.perHour;
     
