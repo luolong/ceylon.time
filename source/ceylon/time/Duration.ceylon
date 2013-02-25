@@ -6,5 +6,13 @@ shared class Duration(millis) satisfies ReadableDuration {
     doc "Number of milliseconds of this duration"
     shared actual Integer millis;
 
-    //TODO: Add some meaning here
+    shared Period period {
+        return Period { 
+            milliseconds = millis; 
+        }; 
+    }
+
+    shared actual String string {
+        return "``millis``ms";
+    }
 }

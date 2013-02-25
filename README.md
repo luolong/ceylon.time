@@ -2,6 +2,7 @@
 Ceylon Date/Time library
 ========================
 
+*Note on branch M5/master:* THis branch is the master branch for all development made to integrate ceylon.time with new language and tooling features from Ceylon language M5 development. You need the latest dev build of Ceylon M5 IDE (with Ceylon.test support)
 
 This is a draft proposal for a standard Date and Time library for Ceylon language.
 
@@ -13,13 +14,13 @@ This business needs orientation is also basis for omitting such features as leap
 
 Main data types are followig:
 - Instant
-- LocalDate, LocalTime, LocalDateTime
+- Date, Time, DateTime
 - ZoneDateTime
 
 Supporting data types:
 - TimeZone
-- Period, Duration
-- MonthOfYear, DayOfWeek
+- Period, Duration, Interval
+- MonthOfYear, Weekday
 - Clock
 - etc...
 

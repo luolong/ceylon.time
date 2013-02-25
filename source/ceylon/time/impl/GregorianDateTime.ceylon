@@ -1,6 +1,8 @@
 import ceylon.language { Integer }
 import ceylon.time { Date, Time, DateTime }
-import ceylon.time.base { DayOfWeek, ReadablePeriod, Month, milliseconds }
+import ceylon.time.base { ReadablePeriod, Month, milliseconds, daysOf=days, DayOfWeek }
+import ceylon.time.math { floorDiv, mod=floorMod }
+import ceylon.time.chronology { gregorian }
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDateTime( date, time ) 
@@ -18,8 +20,8 @@ shared class GregorianDateTime( date, time )
         return date.day;
     }
 
-    shared actual DayOfWeek weekday {
-        return date.weekday;
+    shared actual DayOfWeek dayOfWeek {
+        return date.dayOfWeek;
     }
 
     shared actual Integer dayOfYear {
@@ -73,12 +75,11 @@ shared class GregorianDateTime( date, time )
     shared actual Integer secondsOfDay {
         return time.secondsOfDay;
     }
-	
-    shared actual Integer distanceFrom(DateTime other) {
-        //TODO: What precision?
-        return bottom;
-    }
 
+    shared actual Integer millisFromEpoch {
+        return  gregorian.millisFromEpoch([year, month.integer, day]);
+    }
+	
     shared actual DateTime plusYears(Integer years) {
         return GregorianDateTime { date = date.plusYears(years); time = time; };
     }
@@ -204,6 +205,16 @@ shared class GregorianDateTime( date, time )
                 .plusMonths( amount.date.months )
                 .plusYears( amount.date.years );
     }
+
+    shared actual DateTime minus( ReadablePeriod amount ) {
+        return   minusMilliseconds(amount.time.milliseconds)
+                .minusSeconds( amount.time.seconds )
+                .minusMinutes( amount.time.minutes )
+                .minusHours( amount.time.hours )
+                .minusDays( amount.date.days )
+                .minusMonths( amount.date.months )
+                .minusYears( amount.date.years );
+    }
     
     shared actual Boolean equals( Object other ) {
         if (is GregorianDateTime other) {
@@ -216,17 +227,27 @@ shared class GregorianDateTime( date, time )
         return false;
     }
 
-    GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
+    shared actual String string {
+        return "``date.string`` ``time.string``";
+    }
 
-        Integer days = daysFromMillis { 
-            hours = hours; 
-            minutes = minutes; 
-            seconds = 
-            seconds; 
+    GregorianDateTime fromTime( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0, Integer signal = 1 ) {
+	
+        Integer days = daysOf.daysFromTime { 
+            hour = hours; 
+            minute = minutes; 
+            second = seconds; 
             millis = millis; 
         } * signal;
 
-        value restOfMillis =  restOfMillisPerDay {
+        Integer normalizedTimeInMillis( Integer hours = 0, Integer minutes = 0, Integer seconds = 0, Integer millis = 0) {
+            value totalMillis = hours * milliseconds.perHour 
+                                + minutes * milliseconds.perMinute 
+                                + seconds * milliseconds.perSecond + millis;
+            return totalMillis % milliseconds.perDay;
+        }
+
+        value restOfMillis =  normalizedTimeInMillis {
             hours = hours;
             minutes = minutes;
             seconds = seconds;
@@ -234,10 +255,9 @@ shared class GregorianDateTime( date, time )
         };
 
         Integer actualMillisOfDay = time.millisOfDay;
-        value math = CalendarMath();
         value totalMillis = restOfMillis * signal + actualMillisOfDay;
-        value totalDays = days + math.floorDiv(totalMillis, milliseconds.perDay);
-        value newMillis = math.floorMod(totalMillis, milliseconds.perDay);
+        value totalDays = days + floorDiv(totalMillis, milliseconds.perDay);
+        value newMillis = mod(totalMillis, milliseconds.perDay);
         
         Time newTime = (newMillis == actualMillisOfDay) then time else TimeOfDay(newMillis);
 

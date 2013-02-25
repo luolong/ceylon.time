@@ -1,30 +1,29 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { DayOfWeek, asDayOfWeek=dayOfWeek, ReadablePeriod, monthOf, Month, days, years }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday }
+import ceylon.time.chronology { impl=gregorian }
+import ceylon.time.math { adjustedMod }
+
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
       extends AbstractDate( dayOfEra ) {
 
     shared actual Integer year{
-        return math.yearFrom( dayOfEra );
+        return impl.yearFrom( dayOfEra );
     }
 
     shared actual Month month {
-        return math.monthFrom( dayOfEra );
+        return monthOf(impl.monthFrom( dayOfEra ));
     }
 
     shared actual Integer day {
-        return math.dayFrom( dayOfEra );
+        return impl.dayFrom( dayOfEra );
     }
 
-    shared actual Integer weekOfYear {
-        return bottom;
-    }
-
-    doc "True, if this date is a leap year according to gregorian clendar leap year rules."
+    doc "True, if this date is a leap year according to gregorian calendar leap year rules."
     shared actual Boolean leapYear {
-        return math.leapYear(year);
+        return impl.leapYear( year );
     }
 
     shared actual Integer dayOfYear {
@@ -36,11 +35,11 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual GregorianDate successor {
-        return plusDays(1);
+        return plusDays( 1 );
     }
 
-    shared actual DayOfWeek weekday {
-        return math.weekdayFrom( dayOfEra );
+    shared actual DayOfWeek dayOfWeek {
+        return weekdayOf(impl.dayOfWeekFrom( dayOfEra ));
     }
 
     shared actual GregorianDate plusDays(Integer days) {
@@ -50,20 +49,14 @@ shared class GregorianDate( Integer dayOfEra )
         return GregorianDate( dayOfEra + days );
     }
 
-    shared actual GregorianDate plusMonths(Integer monthsToAdd) {
-        if ( monthsToAdd == 0 ) {
+    shared actual GregorianDate plusMonths(Integer months) {
+        if ( months == 0 ) {
             return this;
         }
 
-        value monthCount = year * 12 + (month.integer - 1);
-        value calcMonths = monthCount + monthsToAdd;  // safe overflow
-        value newYear = math.floorDiv(calcMonths, 12);
-        value newMonth = monthOf(math.floorMod(calcMonths, 12) + 1);
-        value newDay = min({day, newMonth.numberOfDays(math.leapYear(newYear))});
-        return GregorianDate(math.dayOfEra(
-                newYear, 
-                newMonth.integer, 
-                newDay));
+        value o = month.add(months);
+
+        return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, day]) );
     }
 
     shared actual GregorianDate plusYears(Integer years) {
@@ -74,7 +67,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual GregorianDate plusWeeks(Integer weeks) {
-        return plusDays( weeks * 7 );
+        return plusDays( weeks * days.perWeek );
     }
 
     shared actual GregorianDate minusDays(Integer days) {
@@ -94,122 +87,94 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual GregorianDate withDay(Integer day) {
-        return bottom;
+        if ( day == this.day ) {
+            return this;
+        }
+        impl.checkDate([year,month.integer,day]);
+        return GregorianDate( dayOfEra - this.day + day);
     }
 
     shared actual GregorianDate withMonth(Month month) {
-        return bottom;
+        Month newMonth = monthOf(month);
+        if ( newMonth == this.month ) {
+            return this;
+        }
+
+        return GregorianDate( impl.fixedFrom([year, newMonth.integer, day]) );
     }
 
     shared actual GregorianDate withYear(Integer year) {
-        return bottom;
+        if ( year == this.year ) {
+            return this;
+        }
+
+        return GregorianDate( impl.fixedFrom([year, month.integer, day]) );
     }
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
         return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
     }
 
+    shared actual GregorianDate minus( ReadablePeriod amount ) {
+        return minusDays( amount.date.days ).minusMonths( amount.date.months ).minusYears( amount.date.years );
+    }
+
+    doc "Week of year calculations is UTC based"
+    shared actual Integer weekOfYear {
+        value weekFromYearBefore = 0;
+        value possibleNextYearWeek = 53;
+
+        function normalizeFirstWeek( Integer weekNumber ) {
+            variable value result = weekNumber;
+            value jan1 = withDay(1).withMonth(january);
+            value jan1WeekDay = jan1.dayOfWeek == sunday then 7 else jan1.dayOfWeek.integer; 
+            if ( ( dayOfYear <= ( 8 - jan1WeekDay ) ) && jan1WeekDay > 4 ) {
+                if ( jan1WeekDay == 5 || (jan1WeekDay == 6 && minusYears(1).leapYear)) {
+                    result = 53;
+                } else {
+                    result = 52;
+                }
+            }
+            return result;
+        }
+
+        function normalizeLastWeek( Integer weekNumber ) {
+            variable value result = weekNumber;
+            value weekDay = adjustedMod(dayOfWeek.integer, 7); 
+            value totalDaysInYear = leapYear then 366 else 365;
+            if (( totalDaysInYear - dayOfYear) < (4 - weekDay) ) {
+                result = 1;
+            }
+            return result;
+        }
+
+        value dayOfWeekNumber = adjustedMod(dayOfWeek.integer, 7);
+        variable value weekNumber = ( dayOfYear - dayOfWeekNumber + 10 ) / 7;
+
+        if ( weekNumber == weekFromYearBefore ) {
+            weekNumber = normalizeFirstWeek( weekNumber );
+        } else if ( weekNumber == possibleNextYearWeek ) {
+            weekNumber = normalizeLastWeek( weekNumber );
+        }
+
+        return weekNumber;
+    }
+
     shared actual String string {
-        return "" year "-" pad(month.integer) "-" pad(day) "";
+        return "``year``-``leftPad(month.integer)``-``leftPad(day)``";	
     }
 }
 
 doc "Returns a gregorian calendar date according to the specified year, month and date values"
 shared Date gregorianDate(year, month, date){
-        doc "Year number of the date"
-        Integer year;
+    doc "Year number of the date"
+    Integer year;
         
-        doc "Month of the year"
-        Integer|Month month; 
+    doc "Month of the year"
+    Integer|Month month; 
         
-        doc "Date of month"
-        Integer date;
-        
-    return GregorianDate( math.dayOfEra(year, monthOf(month).integer, date) );
-}
-
-doc "Calculate gregorian date values from the specified epoch value"
-class EopchToGregorian(Integer epochDay){
-    variable value zeroDay := epochDay + days.toEpoch;
-    zeroDay -= 60;  // adjust to 0000-03-01 so leap day is at end of four year cycle
-    variable value adjust := 0;
-    if (zeroDay < 0) {
-        // adjust negative years to positive for calculation
-        value adjustCycles = (zeroDay + 1) / days.perCycle - 1;
-        adjust := adjustCycles * 400;
-        zeroDay += -adjustCycles * days.perCycle;
-    }
-    variable value yearEst := (400 * zeroDay + 591) / days.perCycle;
-    variable value doyEst := zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
-    if (doyEst < 0) {
-        // fix estimate
-        yearEst--;
-        doyEst := zeroDay - (365 * yearEst + yearEst / 4 - yearEst / 100 + yearEst / 400);
-    }
-    yearEst += adjust;  // reset any negative year
-    value marchDoy0 = doyEst;
-
-    // convert march-based values back to january-based
-    value marchMonth0 = (marchDoy0 * 5 + 2) / 153;
-    yearEst += marchMonth0 / 10;
-
-    // check year now we are certain it is correct
-    assert( years.minimum <= yearEst );
-    assert( yearEst <= years.maximum );
-
-    shared Integer year = yearEst;
-    shared Integer month = (marchMonth0 + 2) % 12 + 1;
-    shared Integer day = marchDoy0 - (marchMonth0 * 306 + 5) / 10 + 1;
-}
-
-doc "Common math primitives for calculating gregorian date values"
-object math extends CalendarMath() {
-    doc "Calculates the day of era of the given gregorian date value." 
-    shared Integer dayOfEra(Integer yyyy, Integer mm, Integer dd){
-        value y = yyyy;
-        value m = mm;
-        variable value total := 365 * y;
-        if (y >= 0) {
-            total += (y + 3) / 4 - (y + 99) / 100 + (y + 399) / 400;
-        }
-        else {
-            total -= y / -4 - y / -100 + y / -400;
-        }
-        total += ((367 * m - 362) / 12);
-        total += dd - 1;
-        if (m > 2) {
-            total--;
-            if (leapYear(yyyy) == false) {
-                total--;
-            }
-        }
-        return total - days.toEpoch;
-    }
-
-    shared Integer yearFrom(Integer dayOfEra) {
-        return EopchToGregorian(dayOfEra).year;
-    }
-
-    shared Month monthFrom(Integer dayOfEra) {
-        return monthOf(EopchToGregorian(dayOfEra).month);
-    }
-
-    shared Integer dayFrom(Integer dayOfEra) {
-        return EopchToGregorian(dayOfEra).day;
-    }
-
-    shared DayOfWeek weekdayFrom(Integer dayOfEra) {
-        return asDayOfWeek( floorMod(dayOfEra + 4, 7) );
-    }
-
-    doc "Calculates if the given year is a leap year"
-    shared Boolean leapYear( Integer year ) {
-        if (year % 400 == 0) {
-            return true;
-        }
-        if (year % 100 == 0) {
-            return false;
-        }
-        return (year % 4 == 0);
-    }
+    doc "Date of month"
+    Integer date;
+    
+    return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, date]) );
 }

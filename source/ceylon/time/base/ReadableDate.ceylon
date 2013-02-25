@@ -2,11 +2,11 @@ import ceylon.time { Date, Time, DateTime }
 import ceylon.time.timezone { ZoneDateTime }
 
 doc "A common interface of all date like objects.
-
+     
      This interface is common to all data types that
      either partially or fully represent information 
      that can be interpreted as _date_."
-by ('Diego Coronel', 'Roland Tepp')
+by ("Diego Coronel", "Roland Tepp")
 see (Date, Time, DateTime, ZoneDateTime)
 shared interface ReadableDate {
 
@@ -20,7 +20,7 @@ shared interface ReadableDate {
     shared formal Integer day;
 
     doc "Day of the week."
-    shared formal DayOfWeek weekday;
+    shared formal DayOfWeek dayOfWeek;
 
     doc "Number of the week of the date"
     shared formal Integer weekOfYear;

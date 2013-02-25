@@ -3,17 +3,17 @@ shared abstract class DayOfWeek(integer)
        of monday | tuesday | wednesday | thursday | friday | saturday | sunday
        satisfies Ordinal<DayOfWeek> & Comparable<DayOfWeek> {
 
-    doc "Numeric value of the weekday"
+    doc "Numeric value of the DayOfWeek"
     shared Integer integer;
 
-    doc "Returns a day of week that comes specified number of days after this weekday"
+    doc "Returns a day of week that comes specified number of days after this DayOfWeek"
     shared DayOfWeek plusDays(Integer number){
         value wd = (integer + number) % 7;
         assert (exists dow = weekdays[wd]);
         return dow;
     }
 
-    doc "Returns a day of week that comes number of days before this weekday"
+    doc "Returns a day of week that comes number of days before this DayOfWeek"
     shared DayOfWeek minusDays(Integer number){
         return plusDays(-number);
     }
@@ -23,48 +23,35 @@ shared abstract class DayOfWeek(integer)
         return this.integer <=> other.integer;
     }
 
-    shared actual Integer distanceFrom(DayOfWeek other) {
-        if ( other == this ) {
-            return 0;
-        }
-        variable value cont := 0;
-        variable value next := this; 
-        while ( next != other ) {
-            cont++;
-            next++;
-        }
-        return cont;
-    }
-
 }
 
 doc "List of all available weekdays"
-shared DayOfWeek[] weekdays = { sunday, monday, tuesday, wednesday, thursday, friday, saturday };
+shared DayOfWeek[] weekdays = [ sunday, monday, tuesday, wednesday, thursday, friday, saturday ];
 
-shared DayOfWeek dayOfWeek(Integer|DayOfWeek weekday){
-    switch(weekday)
-    case (is DayOfWeek) { return weekday; }
+shared DayOfWeek dayOfWeek(Integer|DayOfWeek dayOfWeek){
+    switch(dayOfWeek)
+    case (is DayOfWeek) { return dayOfWeek; }
     case (is Integer) {
-        assert (0 <= weekday && weekday < 7);
-        assert (exists DayOfWeek dow = weekdays[weekday]);
+        assert (0 <= dayOfWeek && dayOfWeek < 7);
+        assert (exists DayOfWeek dow = weekdays[dayOfWeek]);
         return dow;
     }
 }
 
-doc "An exception that is thrown when parsing a weekday fails"
+doc "An exception that is thrown when parsing a DayOfWeek fails"
 shared class WeekdayParseError(String message)
        extends Exception(message) {}
 
-doc "Parses a string into a weekday"
-shared DayOfWeek parseDayOfWeek(String weekday){
-    value wd = weekday.lowercased;
+doc "Parses a string into a DayOfWeek"
+shared DayOfWeek parseWeekday(String dayOfWeek){
+    value wd = dayOfWeek.lowercased;
     for (dow in weekdays) {
         if (dow.string.lowercased == wd) {
             return dow;
         }
     }
 
-    throw WeekdayParseError("Unrecognized weekday: " weekday "." );
+    throw WeekdayParseError("Unrecognized DayOfWeek: ``dayOfWeek`` ." );
 }
 
 

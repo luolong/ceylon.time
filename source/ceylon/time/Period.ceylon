@@ -2,10 +2,11 @@ import ceylon.math.whole{Whole, wholeNumber}
 import ceylon.time.base {
     ReadablePeriod, PeriodBehavior, ReadableDatePeriod, ReadableTimePeriod, 
     min = minutes, sec = seconds, ms = milliseconds}
+import ceylon.time.impl { leftPad }
 
 doc "An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
      _minutes_, _seconds_ and _milliseconds_, such as '3 Months, 4 Days and 7 Hours'.
-
+     
      A period is a human-scale description of an amount of time.
      "
 shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
@@ -130,57 +131,36 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
 
     doc "Returns a copy of this period with the specified number of years added."
     shared actual Period plusYears(Integer years){
-        if (years == 0){
-            return this;
-        }
         return withYears( this.years + years );
     }
 
     doc "Returns a copy of this period with the specified number of months added."
     shared actual Period plusMonths(Integer months){
-        if (months == 0){
-            return this;
-        }
         return withMonths( this.months + months );
     }
 
     doc "Returns a copy of this period with the specified number of days added."
     shared actual Period plusDays(Integer days){
-        if (days == 0){
-            return this;
-        }
         return withDays( this.days + days );
     }
 
     doc "Returns a copy of this period with the specified number of hours added."
     shared actual Period plusHours(Integer hours){
-        if (hours == 0){
-            return this;
-        }
         return withHours( this.hours + hours );
     }
 
     doc "Returns a copy of this period with the specified number of minutes added."
     shared actual Period plusMinutes(Integer minutes){
-        if (minutes == 0){
-            return this;
-        }
         return withMinutes( this.minutes + minutes );
     }
 
     doc "Returns a copy of this period with the specified number of seconds added."
     shared actual Period plusSeconds(Integer seconds){
-        if (seconds == 0){
-            return this;
-        }
         return withSeconds( this.seconds + seconds );
     }
 
     doc "Returns a copy of this period with the specified number of nonoseconds added."
     shared actual Period plusMilliseconds(Integer milliseconds){
-        if (milliseconds == 0){
-            return this;
-        }
         return withMilliseconds( this.milliseconds + milliseconds );
     }
 
@@ -240,16 +220,12 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return this;
     }
 
-    //TODO: create an instant
-    //shared Instant from( Instant instant ) {
-    //}
-
     doc "Returns a copy of this period with all amounts normalized to the 
          standard ranges for date/time fields.
-
+         
          Two normalizations occur, one for years and months, and one for
-         hours, minutes, seconds and nanoseconds.
-
+         hours, minutes, seconds and milliseconds.
+         
          Days are not normalized, as a day may vary in length at daylight savings cutover.
          Neither is days normalized into months, as number of days per month varies from 
          month to another and depending on the leap year."
@@ -261,7 +237,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         value years = this.years + this.months / 12;
         value months = this.months % 12;
 
-        variable Whole total := wholeNumber(this.hours * sec.perHour)
+        variable Whole total = wholeNumber(this.hours * sec.perHour)
                               + wholeNumber(this.minutes * sec.perMinute)
                               + wholeNumber(this.seconds);
 
@@ -269,7 +245,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         total += wholeNumber(this.milliseconds) / wholeNumber(( ms.perSecond ));
 
         value seconds = ( total % wholeNumber(( sec.perMinute )) ).integer;
-        total := total / wholeNumber(( sec.perMinute ));
+        total = total / wholeNumber(( sec.perMinute ));
 
         value minutes = ( total % wholeNumber(min.perHour) ).integer;
         value hours = ( total / wholeNumber(min.perHour ) ).integer;
@@ -290,44 +266,32 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
             return "PT0S";
         } else {
             StringBuilder buf = StringBuilder();
-            buf.append('P');
+            buf.append("P");
             if (years != 0) {
-                buf.append(years.string).append('Y');
+                buf.append(years.string).append("Y");
             }
             if (months != 0) {
-                buf.append(months.string).append('M');
+                buf.append(months.string).append("M");
             }
             if (days != 0) {
-                buf.append(days.string).append('D');
+                buf.append(days.string).append("D");
             }
             if ( hours != 0 || minutes != 0 || seconds != 0 || milliseconds != 0 ) {
-                buf.append('T');
+                buf.append("T");
                 if (hours != 0) {
-                    buf.append(hours.string).append('H');
+                    buf.append(hours.string).append("H");
                 }
                 if (minutes != 0) {
-                    buf.append(minutes.string).append('M');
+                    buf.append(minutes.string).append("M");
                 }
-                //value secondPart = seconds;
-                //value milliPart = milliseconds;
-                //TODO: Ceylon does not have it, yet. Also waiting TimeZone Impl
-                //value secsMillisOr = secondPart | milliPart;
-                //if (secsNanosOr != 0) {  // if either non-zero
-                //    if ((secsNanosOr | Integer.MIN_VALUE) != 0) {  // if either less than zero
-                //        buf.append('-');
-                //        secondPart = Math.abs(secondPart);
-                //        nanoPart = Math.abs(nanoPart);
-                //    }
-                //    buf.append(secondPart);
-                //    int dotPos = buf.length();
-                //    nanoPart += 1000_000_000;
-                //    while (nanoPart % 10 == 0) {
-                //        nanoPart /= 10;
-                //    }
-                //    buf.append(nanoPart);
-                //    buf.setCharAt(dotPos, '.');
-                //    buf.append('S');
-                //}
+                if (seconds != 0 || milliseconds != 0) {
+                    buf.append(seconds.string);
+                    if (milliseconds != 0) {
+                        buf.append(".``leftPad(milliseconds,"000")``");
+                    }
+                    buf.append("S");
+                }
+                
             }
             return buf.string;
         }

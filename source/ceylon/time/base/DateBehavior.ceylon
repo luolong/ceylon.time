@@ -36,6 +36,9 @@ shared interface DateBehavior<Element> of Element
     doc "Returns a copy of this period with the specified number of days subtracted."
     shared formal Element minusDays(Integer days);
 
+    doc "Returns a copy of this period with the specified period added."
     shared formal Element plus( ReadablePeriod amount );
 
+    doc "Returns a copy of this period with the specified period subtracted."
+    shared formal Element minus( ReadablePeriod amount );
 }
