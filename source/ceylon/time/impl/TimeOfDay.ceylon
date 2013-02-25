@@ -156,21 +156,4 @@ shared class TimeOfDay(millisOfDay)
         return millisOfDayMinusHours - (minutes * ms.perMinute);
     }
 
-    Time normalizedTime( Integer hour, Integer minute, Integer second, Integer milli ) {
-        Integer newSofd = (hour * ms.perHour
-                     + minute * ms.perMinute
-                     + second * ms.perSecond 
-                     + milli ) % ms.perDay;
-
-        value actualMs = newSofd >= 0 then newSofd else ms.perDay + newSofd; 
-
-        Integer newHour = actualMs / ms.perHour;
-        
-        variable value rest = actualMs % ms.perHour;
-        Integer newMinute = rest / ms.perMinute;
-        rest = rest % ms.perMinute;
-        Integer newSecond = rest / ms.perSecond;
-        return time(newHour, newMinute, newSecond, rest % ms.perSecond);
-    }
-
 }

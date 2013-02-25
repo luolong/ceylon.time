@@ -1,7 +1,8 @@
-import ceylon.time { dateTimeImpl=dateTime, timeImpl=time }
+import ceylon.time { dateTimeImpl=dateTime }
 import ceylon.time.base { ReadableInstant, milliseconds }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
 import ceylon.time.chronology { unixEpoch }
+import ceylon.time.impl { normalizedTime }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -78,8 +79,7 @@ shared class Instant(millis)
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-
-        return timeImpl( 0, 0, 0, millis % milliseconds.perDay );
+        return normalizedTime( 0, 0, 0, millis % milliseconds.perDay );
     }
 
     doc "Returns ZoneDateTime value for this instant."
