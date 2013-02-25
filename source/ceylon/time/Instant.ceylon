@@ -28,8 +28,7 @@ shared class Instant(millis)
             return Instant(this.millis + other.millis);
         }
         case(is Period){
-            value date = this.dateTime().plus(other);
-            return Instant(date.millisFromEpoch + date.time.millisOfDay);
+            return instantFromPeriod( other, dateTime().plus );
         }
     }
 
@@ -40,9 +39,14 @@ shared class Instant(millis)
             return Instant(this.millis - other.millis);
         }
         case(is Period){
-            value date = this.dateTime().minus(other);
-            return Instant(date.millisFromEpoch + date.time.millisOfDay);
+            return instantFromPeriod( other, dateTime().minus );
         }
+    }
+
+    doc "Plus or Subtract a period to this instant"
+    Instant instantFromPeriod(Period other, DateTime plusOrSubtract( Period date )){
+        value date = plusOrSubtract(other);
+        return Instant(date.millisFromEpoch + date.time.millisOfDay);
     }
 
     shared actual Comparison compare(Instant other) {
