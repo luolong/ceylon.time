@@ -56,7 +56,7 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Returns standard extended ISO format of the time"
     shared actual String string {
-        return "``leftPad(hours)``:``leftPad(minutes)``:``leftPad(seconds)``.``leftPad(millis, "0000")``";
+        return "``leftPad(hours)``:``leftPad(minutes)``:``leftPad(seconds)``.``leftPad(millis, "000")``";
     }
 
     shared actual Time minusHours(Integer hours) {

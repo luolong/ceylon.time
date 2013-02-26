@@ -205,8 +205,8 @@ shared void testSuccessor_Time() {
 }
 
 shared void testString_Time() {
-    assertEquals( midnight.string, "00:00:00.0000");
-    assertEquals( time_14h_20m_07s_59ms.string, "14:20:07.0059");
+    assertEquals( midnight.string, "00:00:00.000");
+    assertEquals( time_14h_20m_07s_59ms.string, "14:20:07.059");
 }
 
 shared void assertTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0, Integer secondsOfDay = 0, Integer minutesOfDay = 0) {
