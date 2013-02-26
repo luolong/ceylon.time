@@ -80,6 +80,7 @@ shared Month monthOf(Integer|Month month){
     switch (month)
     case (is Month) { return month; }
     case (is Integer) {
+        "Invalid month, it should be xx,zz,yy"//TODO: How to use string template?
         assert ( january.integer <= month && month <= december.integer );
         assert ( exists m = months.all[month-1] );
         return m;

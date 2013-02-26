@@ -1,6 +1,6 @@
 import ceylon.time { DateTime, dateTime }
-import ceylon.time.base { december, january, november, september, Month, DayOfWeek, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february, DateTimeException }
-import ceylon.test { assertEquals }
+import ceylon.time.base { december, january, november, september, Month, DayOfWeek, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february }
+import ceylon.test { assertEquals, fail }
 
 DateTime data_1982_12_13_09_08_07_0050 = dateTime { year = 1982;  
                                                     month = december; 
@@ -122,7 +122,8 @@ shared void testMinusMilliseconds_DateTime() {
 shared void testWithDay40_DateTime() {
     try {
         data_1982_12_13_09_08_07_0050.withDay(40);
-    } catch( DateTimeException e ) {
+        fail("Should throw exception...");
+    } catch( AssertionException e ) {
         assertEquals("Date for december should be between 1 and 31 and it was 40", e.message);
     }
 }
@@ -130,7 +131,8 @@ shared void testWithDay40_DateTime() {
 shared void testWithDay0_DateTime() {
     try {
         data_1982_12_13_09_08_07_0050.withDay(0);
-    } catch( DateTimeException e ) {
+        fail("Should throw exception...");
+    } catch( AssertionException e ) {
         assertEquals("Date for december should be between 1 and 31 and it was 0", e.message);
     }
 }
@@ -138,7 +140,8 @@ shared void testWithDay0_DateTime() {
 shared void testWithDayNegative_DateTime() {
     try {
         data_1982_12_13_09_08_07_0050.withDay(-10);
-    } catch( DateTimeException e ) {
+        fail("Should throw exception...");
+    } catch( AssertionException e ) {
         assertEquals("Date for december should be between 1 and 31 and it was -10", e.message);
     }
 }
@@ -146,7 +149,8 @@ shared void testWithDayNegative_DateTime() {
 shared void testWithDay29FebNotLeap_DateTime() {
     try {
         dateTime(2011, february,1).withDay(29);
-    } catch( DateTimeException e ) {
+        fail("Should throw exception...");
+    } catch( AssertionException e ) {
         assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
     }
 }

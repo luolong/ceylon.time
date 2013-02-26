@@ -1,4 +1,4 @@
-import ceylon.time.base { days, milliseconds, monthOf, DateTimeException, hours, minutes, seconds }
+import ceylon.time.base { days, milliseconds, monthOf, DateTimeException, hours, minutes, seconds, years }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -110,11 +110,14 @@ shared object gregorian extends GregorianCalendar() {
     }
 
     shared void checkDate([Integer, Integer, Integer] date) {
+	    "Invalid year, it should be between XX and YY" //TODO: How to use string template here?
+	    assert( date[0] >= years.minimum && date[0] <= years.maximum );
+	
         value monthConverted = monthOf(date[1]);
         value maxMonthDays = monthConverted.numberOfDays(leapYear(date[0]));
-        if ( date[2] <= 0 || date[2] > maxMonthDays ) {
-            throw DateTimeException("Date for ``monthConverted.string`` should be between 1 and ``maxMonthDays`` and it was ``date[2]``");
-        }
+        
+        "Invalid date, it should be between ..." //TODO: How to use string template here?
+        assert( date[2] > 0 && date[2] <= maxMonthDays );
     }
     
     shared Integer newYear(Integer year){
@@ -162,26 +165,19 @@ shared object gregorian extends GregorianCalendar() {
     
 }
 
+//TODO: Each assert could be in respective object: years, minutes, seconds.. but where should be checkTime ?
 shared object time {
     shared void checkHour( Integer hour ) {
-        if ( hour < 0 || hour >= hours.perDay ) {
-            throw DateTimeException("Hour should be between 0 and 23 but it was ``hour``");
-        }
+        assert( hour >= 0 && hour < hours.perDay );
     }
     shared void checkMinute( Integer minute ) {
-        if ( minute < 0 || minute >= minutes.perHour ) {
-            throw DateTimeException("Minute should be between 0 and 59 but it was ``minute``");
-        }
+        assert( minute >= 0 && minute < minutes.perHour );
     }
     shared void checkSecond( Integer second ) {
-        if ( second < 0 || second >= seconds.perMinute ) {
-            throw DateTimeException("Second should be between 0 and 59 but it was ``second``");
-        }
+        assert( second >= 0 && second < seconds.perMinute );
     }
     shared void checkMillisecond( Integer milli ) {
-        if ( milli < 0 || milli >= milliseconds.perSecond ) {
-            throw DateTimeException("Millisecond should be between 0 and 999 but it was ``milli``");
-        }
+        assert( milli >= 0 && milli < milliseconds.perSecond );
     }
     shared void checkTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0) {
         checkHour(hour);
