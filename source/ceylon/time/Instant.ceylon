@@ -1,7 +1,7 @@
-import ceylon.time { dateTimeImpl=dateTime, timeImpl=time }
+import ceylon.time { dateTimeImpl=dateTime, timeImpl=time, dateImpl = date }
 import ceylon.time.base { ReadableInstant, milliseconds }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
-import ceylon.time.chronology { unixEpoch }
+import ceylon.time.chronology { epoch }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -28,7 +28,7 @@ shared class Instant(millis)
             return Instant(this.millis + other.millis);
         }
         case(is Period){
-            return instantFromPeriod( other, dateTime().plus );
+            return dateTime().plus(other).instant();
         }
     }
 
@@ -39,14 +39,8 @@ shared class Instant(millis)
             return Instant(this.millis - other.millis);
         }
         case(is Period){
-            return instantFromPeriod( other, dateTime().minus );
+            return dateTime().minus(other).instant();
         }
-    }
-
-    doc "Plus or Subtract a period to this instant"
-    Instant instantFromPeriod(Period other, DateTime plusOrSubtract( Period date )){
-        value date = plusOrSubtract(other);
-        return Instant(date.millisFromEpoch + date.time.millisOfDay);
     }
 
     shared actual Comparison compare(Instant other) {
@@ -62,7 +56,7 @@ shared class Instant(millis)
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
             return nothing;
         }
-        return unixDateTime.plusMilliseconds(millis);
+        return  dateTimeImpl(epoch.date[0],epoch.date[1],epoch.date[2]).plusMilliseconds(millis);
     }
 
     doc "Returns a Date value for this instant"
@@ -73,7 +67,7 @@ shared class Instant(millis)
         }
 
         value inDays = millis / milliseconds.perDay;
-        return unixDateTime.date.plusDays(inDays);
+        return dateImpl(*epoch.date).plusDays(inDays);
     }
 
     doc "Returns a Time (time of day) value for this instant."
@@ -100,11 +94,6 @@ shared class Instant(millis)
     doc "Returns duration in milliseconds from other instant to this instant."
     shared Duration durationFrom(Instant other) {
         return Duration(this.millis - other.millis);
-    }
-
-    doc "Return the unix date instance"
-    DateTime unixDateTime {
-         return dateTimeImpl(unixEpoch[0], unixEpoch[1], unixEpoch[2]);
     }
 
 }

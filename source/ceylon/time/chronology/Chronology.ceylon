@@ -9,8 +9,23 @@ shared Integer rd( Integer t ) {
     return t - epoch;
 }
 
-doc "Represents unix date"
-shared [Integer,Integer,Integer] unixEpoch = [1970,1,1];
+shared object epoch {
+
+    shared [Integer, Integer, Integer] date = [1970, 1, 1];
+
+    shared Integer rataDie = gregorian.fixedFrom(date);
+
+    "Return day of era from time"
+    shared Integer dateFromTime( Integer time ) {
+        return (time/milliseconds.perDay) + rataDie;
+    }
+
+    "Return milliseconds elapsed from 1970-01-01 00:00:00"
+    shared Integer timeFromDate( Integer dayOfEra ) {
+        return (dayOfEra - rataDie) * milliseconds.perDay;
+    }
+
+}
 
 doc "Generic base interface of a _calendar system_.
      Chronology serves as a computational backend to 
@@ -47,9 +62,6 @@ doc "Base class for a gregorian calendar chronology."
 abstract shared class GregorianCalendar() of gregorian
          satisfies Chronology<[Integer, Integer, Integer]>
                  & LeapYear<GregorianCalendar, [Integer, Integer, Integer]> {
-
-    doc "Milliseconds elapsed from unix epoch"
-    shared formal Integer millisFromEpoch([Integer, Integer, Integer] date);
     
 }
 
@@ -94,11 +106,6 @@ shared object gregorian extends GregorianCalendar() {
             month = date[1]; 
             day = date[2]; 
         };
-    }
-
-    doc "Milliseconds from unix date"
-    shared actual Integer millisFromEpoch([Integer, Integer, Integer] date) {
-        return (fixedFrom(date) - fixedFrom(unixEpoch)) * milliseconds.perDay;
     }
     
     shared Integer newYear(Integer year){
