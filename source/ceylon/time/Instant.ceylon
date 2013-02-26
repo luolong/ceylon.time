@@ -1,6 +1,7 @@
-import ceylon.time { dateImpl=date, dateTimeImpl=dateTime, timeImpl=time }
-import ceylon.time.base { ReadableInstant, milliseconds, january }
+import ceylon.time { dateTimeImpl=dateTime, timeImpl=time, dateImpl = date }
+import ceylon.time.base { ReadableInstant, milliseconds }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
+import ceylon.time.chronology { epoch }
 
 doc "Obtains the current instant from the system clock."
 shared Instant now(Clock? clock = null) {
@@ -27,8 +28,18 @@ shared class Instant(millis)
             return Instant(this.millis + other.millis);
         }
         case(is Period){
-            return nothing;
-            //return other.from(this);
+            return dateTime().plus(other).instant();
+        }
+    }
+
+    doc "Subtracts a period to this instant"
+    shared Instant minus(Duration|Period other){
+        switch(other)
+        case(is Duration){
+            return Instant(this.millis - other.millis);
+        }
+        case(is Period){
+            return dateTime().minus(other).instant();
         }
     }
 
@@ -40,14 +51,12 @@ shared class Instant(millis)
     shared DateTime dateTime(
             doc "Time zone of the conversion.
                  If omitted the current/default time zone of the system will be used."
-            TimeZone? zone = null) {
+            TimeZone? zone = null ) {
         if (exists zone){
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
             return nothing;
         }
-        //TODO: Should we have this as field in gregorianCalendar?
-        value fixed = dateTimeImpl(1970, january, 1); 
-        return fixed.plusMilliseconds(millis);
+        return  dateTimeImpl(epoch.date[0],epoch.date[1],epoch.date[2]).plusMilliseconds(millis);
     }
 
     doc "Returns a Date value for this instant"
@@ -58,9 +67,7 @@ shared class Instant(millis)
         }
 
         value inDays = millis / milliseconds.perDay;
-        //TODO: Should we have this as field in gregorianCalendar?
-        value fixed = dateImpl(1970, january, 1); 
-        return fixed.plusDays(inDays);
+        return dateImpl(*epoch.date).plusDays(inDays);
     }
 
     doc "Returns a Time (time of day) value for this instant."

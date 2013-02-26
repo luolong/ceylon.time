@@ -39,7 +39,7 @@ shared class GregorianDate( Integer dayOfEra )
     }
 
     shared actual DayOfWeek dayOfWeek {
-        return weekdayOf(impl.weekdayFrom( dayOfEra ));
+        return weekdayOf(impl.dayOfWeekFrom( dayOfEra ));
     }
 
     shared actual GregorianDate plusDays(Integer days) {
@@ -118,6 +118,10 @@ shared class GregorianDate( Integer dayOfEra )
 
     shared actual GregorianDate plus( ReadablePeriod amount ) {
         return plusDays( amount.date.days ).plusMonths( amount.date.months ).plusYears( amount.date.years );
+    }
+
+    shared actual GregorianDate minus( ReadablePeriod amount ) {
+        return minusDays( amount.date.days ).minusMonths( amount.date.months ).minusYears( amount.date.years );
     }
 
     doc "Week of year calculations is UTC based"
