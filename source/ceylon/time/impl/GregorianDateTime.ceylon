@@ -1,7 +1,9 @@
 import ceylon.language { Integer }
-import ceylon.time { Date, Time, DateTime }
+import ceylon.time { Date, Time, DateTime, Instant }
 import ceylon.time.base { ReadablePeriod, Month, ms=milliseconds, daysOf=days, DayOfWeek }
+import ceylon.time.chronology { epoch }
 import ceylon.time.math { floorDiv, floorMod }
+import ceylon.time.timezone { TimeZone }
 
 doc "Default implementation of a gregorian calendar"
 shared class GregorianDateTime( date, time ) 
@@ -192,13 +194,27 @@ shared class GregorianDateTime( date, time )
         return plusDays(1);    }
 
     shared actual DateTime plus( ReadablePeriod amount ) {
-        return plusMilliseconds(amount.milliseconds)
-              .plusSeconds( amount.seconds )
-              .plusMinutes( amount.minutes )
-              .plusHours( amount.hours )
-              .plusDays( amount.days )
+        return plusYears( amount.years )
               .plusMonths( amount.months )
-              .plusYears( amount.years );
+              .plusDays( amount.days )
+              .plusHours( amount.hours )
+              .plusMinutes( amount.minutes )
+              .plusSeconds( amount.seconds )
+              .plusMilliseconds(amount.milliseconds);
+    }
+
+    shared actual DateTime minus( ReadablePeriod amount ) {
+        return minusYears( amount.years )
+              .minusMonths( amount.months )
+              .minusDays( amount.days )
+              .minusHours( amount.hours )
+              .minusMinutes( amount.minutes )
+              .minusSeconds( amount.seconds )
+              .minusMilliseconds(amount.milliseconds);
+    }
+
+    shared actual Instant instant( TimeZone? timeZone ) {
+        return Instant(epoch.timeFromDate(dayOfEra) + millisOfDay);
     }
 
     shared actual Boolean equals( Object other ) {

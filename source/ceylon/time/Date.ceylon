@@ -1,4 +1,4 @@
-import ceylon.time.base { ReadableDate, Month, monthOf, DateBehavior }
+import ceylon.time.base { ReadableDate, Month, monthOf, DateBehavior, ReadableDatePeriod }
 import ceylon.time.chronology { gregorian }
 import ceylon.time.impl { gregorianDate, julianDate }
 import ceylon.time.timezone { TimeZone }
@@ -10,7 +10,15 @@ doc "An interface for date objects in the ISO-8601 calendar system.
      day-of-year, day-of-week and week-of-year."
 shared interface Date
        satisfies ReadableDate & DateBehavior<Date>
-               & Ordinal<Date> & Comparable<Date> { }
+               & Ordinal<Date> & Comparable<Date> {
+     
+    doc "Returns a copy of this period with the specified period added."
+    shared formal Date plus( ReadableDatePeriod period );
+
+    doc "Returns a copy of this period with the specified period subtracted."
+    shared formal Date minus( ReadableDatePeriod period );
+
+}
 
 doc "Returns current date according to the provided system clock and time zone."
 shared Date today(Clock clock = systemTime, TimeZone? zone = null){

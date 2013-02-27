@@ -1,6 +1,6 @@
 import ceylon.language { Integer }
 import ceylon.time { Date }
-import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, ReadablePeriod, monthOf, Month, days, january, sunday }
+import ceylon.time.base { DayOfWeek, weekdayOf=dayOfWeek, monthOf, Month, days, january, sunday, ReadableDatePeriod }
 import ceylon.time.chronology { impl=gregorian }
 import ceylon.time.math { adjustedMod }
 
@@ -9,38 +9,22 @@ doc "Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
       extends AbstractDate( dayOfEra ) {
 
-    shared actual Integer year{
-        return impl.yearFrom( dayOfEra );
-    }
+    shared actual Integer year => impl.yearFrom( dayOfEra );
 
-    shared actual Month month {
-        return monthOf(impl.monthFrom( dayOfEra ));
-    }
+    shared actual Month month => monthOf(impl.monthFrom( dayOfEra ));
 
-    shared actual Integer day {
-        return impl.dayFrom( dayOfEra );
-    }
+    shared actual Integer day => impl.dayFrom( dayOfEra );
 
     doc "True, if this date is a leap year according to gregorian calendar leap year rules."
-    shared actual Boolean leapYear {
-        return impl.leapYear( year );
-    }
+    shared actual Boolean leapYear => impl.leapYear( year );
 
-    shared actual Integer dayOfYear {
-        return month.fisrtDayOfYear( leapYear ) + day - 1;
-    }
+    shared actual Integer dayOfYear => month.fisrtDayOfYear( leapYear ) + day - 1;
 
-    shared actual GregorianDate predecessor {
-        return minusDays( 1 );
-    }
+    shared actual GregorianDate predecessor => minusDays( 1 );
 
-    shared actual GregorianDate successor {
-        return plusDays( 1 );
-    }
+    shared actual GregorianDate successor => plusDays( 1 );
 
-    shared actual DayOfWeek dayOfWeek {
-        return weekdayOf(impl.weekdayFrom( dayOfEra ));
-    }
+    shared actual DayOfWeek dayOfWeek => weekdayOf(impl.dayOfWeekFrom( dayOfEra ));
 
     shared actual GregorianDate plusDays(Integer days) {
         if ( days == 0 ) {
@@ -48,6 +32,8 @@ shared class GregorianDate( Integer dayOfEra )
         }
         return GregorianDate( dayOfEra + days );
     }
+
+    shared actual GregorianDate plusWeeks(Integer weeks) => plusDays( weeks * days.perWeek );
 
     shared actual GregorianDate plusMonths(Integer months) {
         if ( months == 0 ) {
@@ -67,25 +53,13 @@ shared class GregorianDate( Integer dayOfEra )
         return withYear( year + years );
     }
 
-    shared actual GregorianDate plusWeeks(Integer weeks) {
-        return plusDays( weeks * days.perWeek );
-    }
+    shared actual GregorianDate minusDays(Integer days)  => plusDays(-days);
 
-    shared actual GregorianDate minusDays(Integer days) {
-        return plusDays(-days);
-    }
+    shared actual GregorianDate minusWeeks(Integer weeks) => plusWeeks( -weeks );
 
-    shared actual GregorianDate minusWeeks(Integer weeks) {
-        return plusWeeks( -weeks );
-    }
+    shared actual GregorianDate minusMonths(Integer months) => plusMonths(-months);
 
-    shared actual GregorianDate minusMonths(Integer months) {
-        return plusMonths(-months);
-    }
-
-    shared actual GregorianDate minusYears(Integer years) {
-        return plusYears(-years);
-    }
+    shared actual GregorianDate minusYears(Integer years) => plusYears(-years);
 
     shared actual GregorianDate withDay(Integer day) {
         if ( day == this.day ) {
@@ -102,8 +76,7 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
-		value d = min{day, month.numberOfDays(impl.leapYear(year))};
-
+        value d = min{day, month.numberOfDays(impl.leapYear(year))};
         return GregorianDate( impl.fixedFrom([year, newMonth.integer, d]) );
     }
 
@@ -116,8 +89,16 @@ shared class GregorianDate( Integer dayOfEra )
         return GregorianDate( impl.fixedFrom([year, month.integer, day - correction]) );
     }
 
-    shared actual GregorianDate plus( ReadablePeriod amount ) {
-        return plusDays( amount.dateOnly.days ).plusMonths( amount.dateOnly.months ).plusYears( amount.dateOnly.years );
+    shared actual GregorianDate plus( ReadableDatePeriod amount ) {
+        return plusYears( amount.years )
+              .plusMonths( amount.months )
+              .plusDays( amount.days );
+    }
+
+    shared actual GregorianDate minus( ReadableDatePeriod amount ) {
+        return minusYears( amount.years )
+              .minusMonths( amount.months )
+              .minusDays( amount.days );
     }
 
     doc "Week of year calculations is UTC based"

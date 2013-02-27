@@ -24,19 +24,14 @@ doc "Common properties of days"
 shared object days {
 
     doc "Returns the number of days per year"
-    shared Integer perYear(Boolean leapYear=false){
-        return leapYear then 366 else 365;
-    }
+    shared Integer perYear(Boolean leapYear=false) => leapYear then 366 else 365;
 
     doc "Returns the number of days per month"
-    shared Integer perMonth(Month month, Boolean leapYear=false){
-        return month.numberOfDays(leapYear);
-    }
+    shared Integer perMonth(Month month, Boolean leapYear=false) => month.numberOfDays(leapYear);
+
 
     doc "Returns the number of days from the start of the year to the first of the month"
-    shared Integer toMonth(Month month, Boolean leapYear=false){
-        return month.fisrtDayOfYear(leapYear) - 1;
-    }
+    shared Integer toMonth(Month month, Boolean leapYear=false) => month.fisrtDayOfYear(leapYear) - 1;
 
     doc "Number of days per week (7)"
     shared Integer perWeek = 7;
@@ -47,7 +42,7 @@ shared object days {
     doc "The number of days from year zero to year 1970.
          There are five 400 year cycles from year zero to 2000.
          There are 7 leap years from 1970 to 2000."
-    shared Integer toEpoch = (perCycle * 5) - (30 * 365 + 7);
+    shared Integer toEpoch => (perCycle * 5) - (30 * 365 + 7);
 
     doc "Number of days in four years"
     shared Integer inFourYears = 1461;
@@ -55,12 +50,18 @@ shared object days {
     doc "Number of of per century (100 years)"
     shared Integer perCentury = 36524;
 
-    doc "Number of of days in four centuries (400 years)"
-    shared Integer perFourCenturies = 146097;
+    shared Integer perFourCenturies => perCycle;
 
-    shared Integer fromMillis( Integer millis = 0) {
-        return floorDiv(millis, milliseconds.perDay);
+    shared Integer fromMillis( Integer millis = 0) => floorDiv(millis, milliseconds.perDay);
+
+    doc "Number of days from the amount of time"
+    shared Integer daysFromTime(Integer hour = 0, Integer minute = 0, Integer second = 0, Integer millis = 0) {
+        return millis / milliseconds.perDay +
+               second / seconds.perDay +
+               minute / minutes.perDay +
+               hour / hours.perDay;
     }
+
 }
 
 doc "Common properties of _hour_ time units"
@@ -78,7 +79,7 @@ shared object minutes {
     shared Integer perHour = 60;
 
     doc "Number of minutes per day"
-    shared Integer perDay { return  hours.perDay * minutes.perHour; }
+    shared Integer perDay => hours.perDay * minutes.perHour;
 }
 
 doc "Properties of a second"
@@ -88,10 +89,10 @@ shared object seconds {
     shared Integer perMinute = 60;
 
     doc "Number of seconds per hour"
-    shared Integer perHour { return minutes.perHour * seconds.perMinute; }
+    shared Integer perHour => minutes.perHour * seconds.perMinute;
 
     doc "Number of seconds per day"
-    shared Integer perDay { return hours.perDay * seconds.perHour; }
+    shared Integer perDay => hours.perDay * seconds.perHour;
 }
 
 doc "Millisecond properties."
@@ -101,11 +102,11 @@ shared object milliseconds {
     shared Integer perSecond = 1000;
 
     doc "Milliseconds per minute (60000)"
-    shared Integer perMinute { return seconds.perMinute * milliseconds.perSecond; }
+    shared Integer perMinute => seconds.perMinute * milliseconds.perSecond;
 
     doc "Number of milliseconds per hour"
-    shared Integer perHour { return minutes.perHour * milliseconds.perMinute; }
+    shared Integer perHour => minutes.perHour * milliseconds.perMinute;
 
     doc "Number of milliseconds per day"
-    shared Integer perDay { return  hours.perDay * milliseconds.perHour; }
+    shared Integer perDay =>  hours.perDay * milliseconds.perHour;
 }

@@ -1,5 +1,6 @@
 import ceylon.time { Time, time }
-import ceylon.time.base { ms=milliseconds, sec=seconds, min=minutes, h=hours }
+import ceylon.time.base { ms=milliseconds, sec=seconds, min=minutes, h=hours, ReadableTimePeriod }
+import ceylon.time.math { floorMod }
 
 doc "Extremely simple implementation of Time interface, representing an 
      abstraction of a _time of day_ such as 10am or 3.20pm."
@@ -127,6 +128,30 @@ shared class TimeOfDay(millisOfDay)
         Integer newMinute = (newSofd / sec.perMinute) % min.perHour;
         Integer newSecond = newSofd % sec.perMinute;
         return time(newHour, newMinute, newSecond, millis);
+    }
+
+    shared actual Time plus(ReadableTimePeriod period){
+        value totalMillis = millisOfDay
+                          + period.milliseconds
+                          + period.seconds * ms.perSecond
+                          + period.minutes * ms.perMinute
+                          + period.hours * ms.perHour;
+
+        value time = floorMod(totalMillis, ms.perDay);
+        return (time == this.millisOfDay) 
+               then this else TimeOfDay(time);
+    }
+
+    shared actual Time minus(ReadableTimePeriod period) {
+        value totalMillis = millisOfDay
+                          - period.milliseconds
+                          - period.seconds * ms.perSecond
+                          - period.minutes * ms.perMinute
+                          - period.hours * ms.perHour;
+
+        value time = floorMod(totalMillis, ms.perDay);
+        return (time == this.millisOfDay) 
+               then this else TimeOfDay(time);
     }
 
     shared actual Time withHours(Integer hours) {

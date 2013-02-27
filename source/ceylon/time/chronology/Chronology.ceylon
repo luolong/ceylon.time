@@ -1,4 +1,4 @@
-import ceylon.time.base { days }
+import ceylon.time.base { days, milliseconds }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -7,6 +7,24 @@ doc "Converts _Rata Die_ day number to a fixed date value.
 shared Integer rd( Integer t ) {
     value epoch = 0; // origin of all calculations
     return t - epoch;
+}
+
+shared object epoch {
+
+    shared [Integer, Integer, Integer] date = [1970, 1, 1];
+
+    shared Integer rataDie = gregorian.fixedFrom(date);
+
+    "Return day of era from time"
+    shared Integer dateFromTime( Integer time ) {
+        return (time/milliseconds.perDay) + rataDie;
+    }
+
+    "Return milliseconds elapsed from 1970-01-01 00:00:00"
+    shared Integer timeFromDate( Integer dayOfEra ) {
+        return (dayOfEra - rataDie) * milliseconds.perDay;
+    }
+
 }
 
 doc "Generic base interface of a _calendar system_.
@@ -18,13 +36,14 @@ shared interface Chronology<Fields>
     doc "Epoch is the offset of the _fixed date_ day number that defines 
          the beginning of the calendar."
     shared formal Integer epoch;
-    
+
     doc "Converts date tuple of this calendar system to an equivalent _fixed date_
          representation of the "
     shared formal Integer fixedFrom(Fields date);
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
     shared formal Fields dateFrom(Integer fixed);
+    
 }
 
 doc "An interface for calendar system that defines leap year rules.
@@ -39,20 +58,6 @@ shared interface LeapYear<Self, Fields> of Self
     
 }
 
-shared object fixed satisfies Chronology<[Integer]> {
-    
-    shared actual Integer epoch = rd(1);
-    
-    shared actual Integer fixedFrom([Integer] date) {
-        return date[0];
-    }
-    
-    shared actual [Integer] dateFrom(Integer fixed) {
-        return [fixed];
-    }
-    
-}
-
 doc "Base class for a gregorian calendar chronology."
 abstract shared class GregorianCalendar() of gregorian
          satisfies Chronology<[Integer, Integer, Integer]>
@@ -60,6 +65,8 @@ abstract shared class GregorianCalendar() of gregorian
     
 }
 
+doc "Represents the implementation of all calculations for
+     the rules based on Gregorian Calendar"
 shared object gregorian extends GregorianCalendar() {
     
     doc "Epoch of the gregorian calendar"
@@ -140,7 +147,7 @@ shared object gregorian extends GregorianCalendar() {
         return dateFrom(date)[2];
     }
     
-    shared Integer weekdayFrom(Integer date) {
+    shared Integer dayOfWeekFrom(Integer date) {
         return mod(date, 7);
     }
     

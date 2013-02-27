@@ -1,4 +1,4 @@
-import ceylon.time.base { ReadableTime, TimeBehavior, h=hours, min=minutes, sec=seconds, ms=milliseconds }
+import ceylon.time.base { ReadableTime, TimeBehavior, h=hours, min=minutes, sec=seconds, ms=milliseconds, ReadableTimePeriod }
 import ceylon.time.impl { TimeOfDay }
 import ceylon.time.math { mod=floorMod }
 
@@ -9,6 +9,9 @@ shared interface Time
                 & Comparable<Time>
                 & Ordinal<Time> {
 
+    shared formal Time plus(ReadableTimePeriod period);
+
+    shared formal Time minus(ReadableTimePeriod period);
 }
 
 doc "Create new instance of [[Time]]"

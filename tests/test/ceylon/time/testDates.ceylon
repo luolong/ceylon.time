@@ -146,7 +146,7 @@ shared void testOrdinal() {
     }
 }
 
-shared void testPlus() {
+shared void testPlusPeriod_Date() {
     value period_0001_02_03 = Period {
         years = 1;
         months = 2;
@@ -156,6 +156,18 @@ shared void testPlus() {
     assertEquals( newDataAmount.year, 1984 );
     assertEquals( newDataAmount.month, february );
     assertEquals( newDataAmount.day, 16 );
+}
+
+shared void testMinusPeriod_Date() {
+    value period_0001_02_03 = Period {
+        years = 1;
+        months = 2;
+        days = 3;
+    };
+    value newDataAmount = data_1982_12_13.minus( period_0001_02_03 );
+    assertEquals( newDataAmount.year, 1981 );
+    assertEquals( newDataAmount.month, october );
+    assertEquals( newDataAmount.day, 10 );
 }
 
 shared void testPredecessor() {
