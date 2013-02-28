@@ -1,6 +1,6 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse, fail }
 import ceylon.time { date, Date, Period }
-import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month }
+import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month, years }
 
 // Constants
 Boolean leapYear = true;
@@ -36,6 +36,24 @@ shared void test_invalid_date_feb_29() {
         fail("It should throw exception...");
     } catch ( AssertionException e ) {
         assertTrue(e.message.contains("Invalid date"));
+    }
+}
+
+shared void test_invalid_date_maximum_year() {
+    try {
+        date(years.maximum+1,february,29);
+        fail("It should throw exception...");
+    } catch ( AssertionException e ) {
+        assertTrue(e.message.contains("Invalid year"));
+    }
+}
+
+shared void test_invalid_date_minimum_year() {
+    try {
+        date(years.minimum-1,february,29);
+        fail("It should throw exception...");
+    } catch ( AssertionException e ) {
+        assertTrue(e.message.contains("Invalid year"));
     }
 }
 
