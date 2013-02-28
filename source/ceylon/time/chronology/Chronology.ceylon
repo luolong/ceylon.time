@@ -1,4 +1,4 @@
-import ceylon.time.base { days, milliseconds, monthOf, hours, minutes, seconds, years }
+import ceylon.time.base { days, milliseconds, monthOf, years }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -43,6 +43,9 @@ shared interface Chronology<Fields>
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
     shared formal Fields dateFrom(Integer fixed);
+
+    doc "Validate the given date"
+    shared formal void validateDate( Fields date );
     
 }
 
@@ -101,7 +104,6 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared actual Integer fixedFrom([Integer, Integer, Integer] date) {
-        checkDate(date);
         return fixed { 
             year = date[0]; 
             month = date[1]; 
@@ -109,14 +111,14 @@ shared object gregorian extends GregorianCalendar() {
         };
     }
 
-    shared void checkDate([Integer, Integer, Integer] date) {
-	    "Invalid year, it should be between XX and YY" //TODO: How to use string template here?
+    shared actual void validateDate([Integer, Integer, Integer] date) {
+	    "Invalid year"
 	    assert( date[0] >= years.minimum && date[0] <= years.maximum );
 	
         value monthConverted = monthOf(date[1]);
         value maxMonthDays = monthConverted.numberOfDays(leapYear(date[0]));
         
-        "Invalid date, it should be between ..." //TODO: How to use string template here?
+        "Invalid date"
         assert( date[2] > 0 && date[2] <= maxMonthDays );
     }
     

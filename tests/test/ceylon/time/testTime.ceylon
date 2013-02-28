@@ -1,4 +1,4 @@
-import ceylon.test { assertEquals, fail }
+import ceylon.test { assertEquals, fail, assertTrue }
 import ceylon.time { time, Time }
 import ceylon.time.base { seconds, minutes }
 
@@ -109,7 +109,7 @@ shared void testWithHours30() {
         midnight.withHours( 30 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Hour should be between 0 and 23 but it was 30", e.message);
+        assertTrue(e.message.contains("Hours should be between 0 and 23"));
     }
 }
 
@@ -118,7 +118,7 @@ shared void testWithHoursNegative() {
         midnight.withHours( -1 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Hour should be between 0 and 23 but it was -1", e.message);
+        assertTrue(e.message.contains("Hours should be between 0 and 23"));
     }
 }
 
@@ -132,7 +132,7 @@ shared void testWithMinutesNegative() {
         midnight.withMinutes( -1 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Minute should be between 0 and 59 but it was -1", e.message);
+        assertTrue(e.message.contains("Minutes should be between 0 and 59"));
     }
 }
 
@@ -141,7 +141,7 @@ shared void testWithMinutes60() {
         midnight.withMinutes( 60 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Minute should be between 0 and 59 but it was 60", e.message);
+        assertTrue(e.message.contains("Minutes should be between 0 and 59"));
     }
 }
 
@@ -155,7 +155,7 @@ shared void testWithSecondsNegative() {
         midnight.withSeconds( -1 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Second should be between 0 and 59 but it was -1", e.message);
+        assertTrue(e.message.contains("Seconds should be between 0 and 59"));
     }
 }
 
@@ -164,7 +164,7 @@ shared void testWithSeconds60() {
         midnight.withSeconds( 60 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Second should be between 0 and 59 but it was 60", e.message);
+        assertTrue(e.message.contains("Seconds should be between 0 and 59"));
     }
 }
 
@@ -178,7 +178,7 @@ shared void testWithMillisecondsNegative() {
         midnight.withMilliseconds( -1 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Millisecond should be between 0 and 999 but it was -1", e.message);
+        assertTrue(e.message.contains("Milliseconds should be between 0 and 59"));
     }
 }
 
@@ -187,7 +187,7 @@ shared void testWithMilliseconds1000() {
         midnight.withMilliseconds( 1000 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Millisecond should be between 0 and 999 but it was 1000", e.message);
+        assertTrue(e.message.contains("Milliseconds should be between 0 and 59"));
     }
 }
 

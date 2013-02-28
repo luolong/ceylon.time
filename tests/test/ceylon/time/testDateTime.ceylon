@@ -1,6 +1,6 @@
 import ceylon.time { DateTime, dateTime }
 import ceylon.time.base { december, january, november, september, Month, DayOfWeek, sunday, july, wednesday, monday, october, tuesday, friday, saturday, february }
-import ceylon.test { assertEquals, fail }
+import ceylon.test { assertEquals, fail, assertTrue }
 
 DateTime data_1982_12_13_09_08_07_0050 = dateTime { year = 1982;  
                                                     month = december; 
@@ -124,7 +124,7 @@ shared void testWithDay40_DateTime() {
         data_1982_12_13_09_08_07_0050.withDay(40);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for december should be between 1 and 31 and it was 40", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -133,7 +133,7 @@ shared void testWithDay0_DateTime() {
         data_1982_12_13_09_08_07_0050.withDay(0);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for december should be between 1 and 31 and it was 0", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -142,7 +142,7 @@ shared void testWithDayNegative_DateTime() {
         data_1982_12_13_09_08_07_0050.withDay(-10);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for december should be between 1 and 31 and it was -10", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -151,7 +151,7 @@ shared void testWithDay29FebNotLeap_DateTime() {
         dateTime(2011, february,1).withDay(29);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 

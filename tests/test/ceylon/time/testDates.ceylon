@@ -26,7 +26,7 @@ shared void test_invalid_date_jan_0() {
         date(2013,january,0);
         fail("It should throw exception...");
     } catch ( AssertionException e ) {
-        assertEquals("Date for january should be between 1 and 31 and it was 0", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -35,7 +35,7 @@ shared void test_invalid_date_feb_29() {
         date(2013,february,29);
         fail("It should throw exception...");
     } catch ( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -92,7 +92,7 @@ shared void testDatePlusMonthsLessDaysException() {
         date(1982,december,31).plusMonths(2);
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 31", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }    
 }
 
@@ -114,10 +114,10 @@ shared void testDateMinusMonths() {
 
 shared void testDatePlusMinusLessDaysException() {
     try {
-        data_1982_12_13.plusMonths(2);
+        date(1982,december,31).plusMonths(2);
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 31", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }    
 }
 
@@ -132,7 +132,7 @@ shared void testPlusYearsLessDaysException() {
         date(2012, february, 29).plusYears(1);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -147,7 +147,7 @@ shared void testMinusYearsLessDaysException() {
         date(2012, february, 29).minusYears(1);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -174,7 +174,7 @@ shared void testWithDay40() {
         data_1982_12_13.withDay(40);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for december should be between 1 and 31 and it was 40", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -183,7 +183,7 @@ shared void testWithDay0() {
         data_1982_12_13.withDay(0);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for december should be between 1 and 31 and it was 0", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -192,7 +192,7 @@ shared void testWithDayNegative() {
         data_1982_12_13.withDay(-10);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for december should be between 1 and 31 and it was -10", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -201,7 +201,7 @@ shared void testWithDay29FebNotLeap() {
         date(2011, february,1).withDay(29);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals("Date for february should be between 1 and 28 and it was 29", e.message);
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 
@@ -215,7 +215,7 @@ shared void testWithMonthLessDaysException() {
         date(2012, december, 31).withMonth(february);
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertEquals( "Date for february should be between 1 and 29 and it was 31", e.message );
+        assertTrue(e.message.contains("Invalid date"));
     }
 }
 

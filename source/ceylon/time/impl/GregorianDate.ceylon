@@ -55,8 +55,10 @@ shared class GregorianDate( Integer dayOfEra )
         }
 
         value o = month.add(months);
+        value newYear = year + o.years;
 
-        return GregorianDate( impl.fixedFrom([year + o.years, o.month.integer, day]) );
+        impl.validateDate([newYear, o.month.integer,day]);
+        return GregorianDate( impl.fixedFrom([newYear, o.month.integer, day]) );
     }
 
     shared actual GregorianDate plusYears(Integer years) {
@@ -90,7 +92,7 @@ shared class GregorianDate( Integer dayOfEra )
         if ( day == this.day ) {
             return this;
         }
-        impl.checkDate([year,month.integer,day]);
+        impl.validateDate([year,month.integer,day]);
         return GregorianDate( dayOfEra - this.day + day);
     }
 
@@ -100,6 +102,7 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
+        impl.validateDate([year,newMonth.integer,day]);
         return GregorianDate( impl.fixedFrom([year, newMonth.integer, day]) );
     }
 
@@ -108,6 +111,7 @@ shared class GregorianDate( Integer dayOfEra )
             return this;
         }
 
+        impl.validateDate([year,month.integer,day]);
         return GregorianDate( impl.fixedFrom([year, month.integer, day]) );
     }
 
@@ -176,5 +180,6 @@ shared Date gregorianDate(year, month, date){
     doc "Date of month"
     Integer date;
     
+    impl.validateDate([year, monthOf(month).integer, date]);
     return GregorianDate( impl.fixedFrom([year, monthOf(month).integer, date]) );
 }

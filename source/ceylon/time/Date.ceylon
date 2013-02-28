@@ -27,6 +27,7 @@ shared Date date(Integer year, Integer|Month month, Integer date){
     //if (year > 1582 || (year == 1582 && m <= march)){
     //	return JulianDate()
     //}
+
     return gregorianDate(year, m, date);
 }
 
