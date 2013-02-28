@@ -1,6 +1,5 @@
 import ceylon.time { Time, time }
 import ceylon.time.base { ms=milliseconds, sec=seconds, h=hours }
-import ceylon.time.chronology { timeCheck = time }
 
 doc "Extremely simple implementation of Time interface, representing an 
      abstraction of a _time of day_ such as 10am or 3.20pm."
@@ -112,7 +111,6 @@ shared class TimeOfDay(millisOfDay)
         if (this.hours == hours) {
             return this;
         }
-        timeCheck.checkHour(hours);
         return time(hours, minutes, seconds, millis);
     }
 
@@ -121,7 +119,6 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        timeCheck.checkMinute(minutes);
         return time(hours, minutes, seconds, millis);
     }
     shared actual Time withSeconds(Integer seconds) {
@@ -129,7 +126,6 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        timeCheck.checkSecond(seconds);
         return time(hours, minutes, seconds, millis );
     }
     shared actual Time withMilliseconds(Integer milliseconds) {
@@ -137,7 +133,6 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        timeCheck.checkMillisecond(milliseconds);
         return time(hours, minutes, seconds, milliseconds);
     }
 

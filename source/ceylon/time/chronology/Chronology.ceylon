@@ -1,4 +1,4 @@
-import ceylon.time.base { days, milliseconds, monthOf, DateTimeException, hours, minutes, seconds, years }
+import ceylon.time.base { days, milliseconds, monthOf, hours, minutes, seconds, years }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -163,26 +163,4 @@ shared object gregorian extends GregorianCalendar() {
         return mod(date, 7);
     }
     
-}
-
-//TODO: Each assert could be in respective object: years, minutes, seconds.. but where should be checkTime ?
-shared object time {
-    shared void checkHour( Integer hour ) {
-        assert( hour >= 0 && hour < hours.perDay );
-    }
-    shared void checkMinute( Integer minute ) {
-        assert( minute >= 0 && minute < minutes.perHour );
-    }
-    shared void checkSecond( Integer second ) {
-        assert( second >= 0 && second < seconds.perMinute );
-    }
-    shared void checkMillisecond( Integer milli ) {
-        assert( milli >= 0 && milli < milliseconds.perSecond );
-    }
-    shared void checkTime( Integer hour = 0, Integer minute = 0, Integer second = 0, Integer milli = 0) {
-        checkHour(hour);
-        checkMinute(minute);
-        checkSecond(second);
-        checkMillisecond(milli);
-    }    
 }
