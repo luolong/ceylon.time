@@ -32,19 +32,16 @@ shared abstract class Month(integer)
     }
 
     doc "Compares ordinal numbers of two instances of `Month`"
-    shared actual Comparison compare(Month other) {
-        return integer.compare(other.integer);
-    }
+    shared actual Comparison compare(Month other)
+        => integer.compare(other.integer);
 
     doc "Returns month of year that comes specified number of months after this month."
-    shared Month plusMonths(Integer number) {
-        return number == 0 then this else add(number).month;
-    }
+    shared Month plusMonths(Integer number)
+        => (number == 0) then this else add(number).month;
 
     doc "Returns month of year that comes specified number of months before this month."
-    shared Month minusMonths(Integer number) {
-        return number == 0 then this else add(-number).month;
-    }
+    shared Month minusMonths(Integer number) 
+        => (number == 0) then this else add(-number).month;
 
     doc "A result of adding or subtracting a month to another mont"
     shared class Overflow(month, years){
@@ -59,7 +56,8 @@ shared abstract class Month(integer)
          as new month value and."
     shared Overflow add(Integer numberOfMonths){
         value next = (integer - 1 + numberOfMonths);
-        assert (exists month = months.all[mod(next, 12)]);
+        value nextMonth = mod(next, months.perYear);
+        assert (exists month = months.all[nextMonth]);
         
         Integer years = fdiv(next, 12);
         return Overflow(month, years); 

@@ -1,6 +1,6 @@
 
 import ceylon.math.whole { Whole, one, zero, wholeNumber }
-import ceylon.time { now, Instant }
+import ceylon.time { now, Instant, date }
 
 doc "An example program using ceylon.time"
 void run(){
@@ -26,6 +26,10 @@ void run(){
     
     print("Pi calculation started on ``startDate`` at ``startTime`` (UTC)");
     
+    print("Minimum date is ``date(-24660873952897, 12, 25)``");
+    print("Maximum date is ``date(24660873952898, 1, 7)``");
+    print("Minimum Instant is ``Instant(-9007199254740991).dateTime()``");
+    print("Maximum Instant is ``Instant(9007199254740991).dateTime()``");
 }
 
 Whole two = wholeNumber(2);

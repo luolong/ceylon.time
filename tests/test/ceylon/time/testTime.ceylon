@@ -2,7 +2,7 @@ import ceylon.test { assertEquals }
 import ceylon.time { time, Time }
 import ceylon.time.base { seconds, minutes }
 
-Time midnight = time();
+Time midnight = time(0, 0, 0, 0);
 
 Time time_14h_20m_07s_59ms = time {
     hours = 14;
@@ -54,7 +54,7 @@ shared void test_00_00_0_0000() => assertTime(0,0,0,0, 0, 0);
 shared void test_23_59_59_999() => assertTime(23,59,59,999, 86399, 1439);
 
 shared void testPlusHours() {
-    assertEquals( midnight.plusHours(15), time( 15 ) );
+    assertEquals( midnight.plusHours(15), time( 15, 0, 0, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.plusHours(20), time( 10, 20, 7, 59 ) );
     assertEquals( time_14h_20m_07s_59ms.plusHours(13), time( 3, 20, 7, 59 ) );
     assertEquals( time_14h_20m_07s_59ms.plusHours(7), time( 21, 20, 7, 59 ) );

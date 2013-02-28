@@ -1,23 +1,24 @@
 
 doc "Returns the largest integer less than or equal to _x_"
 shared Integer floor( Float x ) {
-    value i = x.integer;
-    if (i.negative){
-        return i - 1;
+    if (x.fractionalPart != 0.0 && x.negative){
+        return x.integer - 1;
     }
+    value i = x.integer;
     return i;
 }
 
 doc "Returns floored division of the two integers"
-shared Integer floorDiv(Integer x, Integer y) => floor(x.float / y.float);
+shared Integer floorDiv(Integer x, Integer y)
+    => floor(x.float / y.float);
 
 doc "Returns nearest integer to x"
 shared Integer round( Float f ) => floor( f + 0.5);
 
 doc "Returns the floor remainder (modulus) of the two integers.
      
-        value moduli = [for (x in 4..-4) mod(x, 4)] 
-        assert( moduli == [0, 3, 2, 1, 0, 3, 2, 1, 0] );
+         value moduli = [for (x in 4..-4) mod(x, 4)] 
+         assert( moduli == [0, 3, 2, 1, 0, 3, 2, 1, 0] );
      "
 shared Integer floorMod(Integer x, Integer y) {
     Float fx = x.float;

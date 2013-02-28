@@ -54,14 +54,6 @@ shared object days {
 
     shared Integer fromMillis( Integer millis = 0) => floorDiv(millis, milliseconds.perDay);
 
-    doc "Number of days from the amount of time"
-    shared Integer daysFromTime(Integer hour = 0, Integer minute = 0, Integer second = 0, Integer millis = 0) {
-        return millis / milliseconds.perDay +
-               second / seconds.perDay +
-               minute / minutes.perDay +
-               hour / hours.perDay;
-    }
-
 }
 
 doc "Common properties of _hour_ time units"
