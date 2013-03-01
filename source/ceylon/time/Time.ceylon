@@ -15,27 +15,31 @@ shared interface Time
 }
 
 doc "Create new instance of [[Time]]"
-shared Time time(Integer? hours = null, Integer? minutes=null, Integer? seconds=null, Integer? millis=null) {
-    if (exists hours, exists minutes, exists seconds, exists millis) {
-        value hh = (hours == 0) then 0
-              else mod(hours,  h.perDay) * ms.perHour;
+shared Time time(Integer hours = 0, Integer minutes=0, Integer seconds=0, Integer millis=0) {
+
+    doc "Hours should be between 0 and 23"
+    assert( hours >= 0 && hours < h.perDay );
+
+    doc "Minutes should be between 0 and 59"
+    assert( minutes >= 0 && minutes < min.perHour );
+
+    doc "Seconds should be between 0 and 59"
+    assert( seconds >= 0 && seconds < sec.perMinute );
+
+    doc "Milliseconds should be between 0 and 59"
+    assert( millis >= 0 && millis < ms.perSecond );
+
+    value hh = (hours == 0) then 0
+          else mod(hours,  h.perDay) * ms.perHour;
+       
+    value mm = (minutes == 0) then 0
+          else mod(minutes, min.perHour) * ms.perMinute;
         
-        value mm = (minutes == 0) then 0
-              else mod(minutes, min.perHour) * ms.perMinute;
+    value ss = (seconds == 0) then 0
+          else mod(seconds, sec.perMinute) * ms.perSecond;
         
-        value ss = (seconds == 0) then 0
-              else mod(seconds, sec.perMinute) * ms.perSecond;
+    value totalMillis = hh + mm + ss + millis;
         
-        value totalMillis = hh + mm + ss + millis;
-        return TimeOfDay( (totalMillis >= 0 ) then totalMillis
-                else ( ( ms.perDay ) + totalMillis ) );
-    }
-    
-    value _now = now().time();
-    return time {
-        hours = hours else _now.hours;
-        minutes = minutes else _now.minutes;
-        seconds = seconds else _now.seconds;
-        millis = millis else _now.millis;
-    };
+    return TimeOfDay( (totalMillis >= 0 ) then totalMillis
+                                          else ( ( ms.perDay ) + totalMillis ) );
 }
