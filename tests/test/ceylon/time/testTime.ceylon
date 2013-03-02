@@ -2,7 +2,7 @@ import ceylon.test { assertEquals, fail, assertTrue }
 import ceylon.time { time, Time }
 import ceylon.time.base { seconds, minutes }
 
-Time midnight = time(0, 0, 0, 0);
+Time midnight = time(0, 0);
 
 Time time_14h_20m_07s_59ms = time {
     hours = 14;
@@ -65,7 +65,7 @@ shared void testPlusHours() {
 }
 
 shared void testMinusHours() {
-    assertEquals( midnight.minusHours(15), time( 9 ) );
+    assertEquals( midnight.minusHours(15), time( 9, 0 ) );
     assertEquals( time_14h_20m_07s_59ms.minusHours(20), time( 18, 20, 7, 59 ) );
 
     assertEquals( time( 9, 0, 0, 0 ).minusHours(28), time( 5, 0, 0, 0 ) );
@@ -178,7 +178,7 @@ shared void testWithMillisecondsNegative() {
         midnight.withMilliseconds( -1 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertTrue(e.message.contains("Milliseconds should be between 0 and 59"));
+        assertTrue(e.message.contains("Milliseconds should be between 0 and 999"));
     }
 }
 
@@ -187,7 +187,7 @@ shared void testWithMilliseconds1000() {
         midnight.withMilliseconds( 1000 );
         fail("Should throw exception...");
     } catch( AssertionException e ) {
-        assertTrue(e.message.contains("Milliseconds should be between 0 and 59"));
+        assertTrue(e.message.contains("Milliseconds should be between 0 and 999"));
     }
 }
 

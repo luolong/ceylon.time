@@ -12,11 +12,11 @@ shared interface Date
        satisfies ReadableDate & DateBehavior<Date>
                & Ordinal<Date> & Comparable<Date> {
      
-    doc "Returns a copy of this period with the specified period added."
     shared formal Date plus( ReadableDatePeriod period );
 
-    doc "Returns a copy of this period with the specified period subtracted."
     shared formal Date minus( ReadableDatePeriod period );
+
+    shared formal DateTime at( Integer hours, Integer minutes, Integer seconds = 0, Integer milliseconds = 0);
 
 }
 

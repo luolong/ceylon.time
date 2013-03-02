@@ -1,5 +1,5 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse, fail }
-import ceylon.time { date, Date, Period }
+import ceylon.time { date, Date, Period, dateTime }
 import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month, years }
 
 // Constants
@@ -292,6 +292,51 @@ shared void testSuccessor() {
 shared void testString() {
     assertEquals( data_1982_12_13.string, "1982-12-13" );
     assertEquals( date(2012, january, 1 ).string, "2012-01-01" );
+}
+
+shared void testAt() {
+    assertAt(2013, january, 1, 10, 20, 15, 999);
+    assertAt(2012, february, 29, 9, 10, 30, 0);
+}
+
+shared void testAtInvalidHour() {
+    try {
+        data_1982_12_13.at(-10, 0);
+        fail("Should throw exception...");
+    } catch ( AssertionException e ) {
+        assertTrue(e.message.contains("Hours should be between 0 and 23"));
+    }
+}
+
+shared void testAtInvalidMinute() {
+    try {
+        data_1982_12_13.at(10, 60);
+        fail("Should throw exception...");
+    } catch ( AssertionException e ) {
+        assertTrue(e.message.contains("Minutes should be between 0 and 59"));
+    }
+}
+
+shared void testAtInvalidSecond() {
+    try {
+        data_1982_12_13.at(10, 59, -1);
+        fail("Should throw exception...");
+    } catch ( AssertionException e ) {
+        assertTrue(e.message.contains("Seconds should be between 0 and 59"));
+    }
+}
+
+shared void testAtInvalidMillis() {
+    try {
+        data_1982_12_13.at(10, 59, 59, 1000);
+        fail("Should throw exception...");
+    } catch ( AssertionException e ) {
+        assertTrue(e.message.contains("Milliseconds should be between 0 and 999"));
+    }
+}
+
+void assertAt(Integer year, Month month, Integer day, Integer h, Integer min, Integer sec, Integer ms ) {
+    assertEquals( dateTime(year, month, day, h, min, sec, ms) , date(year, month, day).at(h, min, sec, ms));
 }
 
 // Asserts that what we put in, we get back from the Date object
