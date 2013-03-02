@@ -1,6 +1,6 @@
 import ceylon.time.math { floorDiv }
 
-doc "Common properties and limits on months"
+doc "Common properties of _year_ unit"
 shared object years {
     doc "The minimum supported year for instances of `Date`, -999,999,999."
     shared Integer minimum = -999_999_999;
@@ -20,10 +20,11 @@ shared object months {
 
 }
 
-doc "Common properties of days"
+doc "Common properties of _day_ unit"
 shared object days {
 
     doc "Returns the number of days per year"
+     doc "Returns the number of days per year"
     shared Integer perYear(Boolean leapYear=false) => leapYear then 366 else 365;
 
     doc "Returns the number of days per month"
@@ -56,7 +57,7 @@ shared object days {
 
 }
 
-doc "Common properties of _hour_ time units"
+doc "Common properties of _hour_ time unit"
 shared object hours {
 
     doc "number of hours per day"
@@ -64,7 +65,7 @@ shared object hours {
 
 }
 
-doc "Common properties of _minute_ time units"
+doc "Common properties of _minute_ time unit"
 shared object minutes {
 
     doc "Number of minutes per hour"
@@ -74,7 +75,7 @@ shared object minutes {
     shared Integer perDay => hours.perDay * minutes.perHour;
 }
 
-doc "Properties of a second"
+doc "Common properties of _second_ time unit"
 shared object seconds {
 
     doc "Number of seconds per minute"
@@ -87,7 +88,7 @@ shared object seconds {
     shared Integer perDay => hours.perDay * seconds.perHour;
 }
 
-doc "Millisecond properties."
+doc "Common properties of _millisecond_ time unit"
 shared object milliseconds {
 
     doc "Number of milliseconds per second (1000)"

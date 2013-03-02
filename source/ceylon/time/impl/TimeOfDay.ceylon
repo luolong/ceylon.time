@@ -1,5 +1,5 @@
 import ceylon.time { Time, time }
-import ceylon.time.base { ms=milliseconds, sec=seconds, min=minutes, h=hours, ReadableTimePeriod }
+import ceylon.time.base { ms=milliseconds, sec=seconds, h=hours, ReadableTimePeriod }
 import ceylon.time.math { floorMod }
 
 doc "Extremely simple implementation of Time interface, representing an 
@@ -56,23 +56,23 @@ shared class TimeOfDay(millisOfDay)
 
     doc "Returns standard extended ISO format of the time"
     shared actual String string {
-        return "``leftPad(hours)``:``leftPad(minutes)``:``leftPad(seconds)``.``leftPad(millis, "0000")``";
+        return "``leftPad(hours)``:``leftPad(minutes)``:``leftPad(seconds)``.``leftPad(millis, "000")``";
     }
 
     shared actual Time minusHours(Integer hours) {
-        return plusHours(-(hours % h.perDay));
+        return plusHours(-hours);
     }
 
     shared actual Time minusMilliseconds(Integer milliseconds) {
-        return plusMilliseconds( -( milliseconds % ms.perDay ) );
+        return plusMilliseconds(-milliseconds);
     }
 
     shared actual Time minusMinutes(Integer minutes) {
-        return plusMinutes(-(minutes % min.perDay ));
+        return plusMinutes(-minutes);
     }
 
     shared actual Time minusSeconds(Integer seconds) {
-        return plusSeconds(-(seconds % sec.perDay));
+        return plusSeconds(-seconds);
     }
 
     shared actual Time plusHours(Integer hours) {
@@ -89,25 +89,15 @@ shared class TimeOfDay(millisOfDay)
         if ( milliseconds == 0 ) {
             return this;
         }
-        return time( hours, minutes, seconds, this.millis + milliseconds );
+
+        return TimeOfDay(floorMod(millisOfDay + milliseconds, ms.perDay));
     }
 
     shared actual Time plusMinutes(Integer minutes) {
         if (minutes == 0) {
             return this;
         }
-
-        Integer minutesPerHour = min.perHour;
-        Integer minutesPerDay = min.perDay;
-
-        Integer minutesOfDay = hours * minutesPerHour + this.minutes;
-        Integer newMinutesOfDay = ((minutes % minutesPerDay) + minutesOfDay + minutesPerDay) % minutesPerDay;
-        if (minutesOfDay == newMinutesOfDay) {
-            return this;
-        }
-        Integer newHour = newMinutesOfDay / minutesPerHour;
-        Integer newMinute = newMinutesOfDay % minutesPerHour;
-        return time(newHour, newMinute, seconds, millis);
+        return TimeOfDay(floorMod(millisOfDay + ( minutes * ms.perMinute ), ms.perDay));
     }
 
     shared actual Time plusSeconds(Integer seconds) {
@@ -115,19 +105,7 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        Integer sofd = hours * sec.perHour
-                     + minutes * sec.perMinute
-                     + this.seconds;
-
-        Integer newSofd = ((seconds % sec.perDay) + sofd + sec.perDay) % sec.perDay;
-        if (sofd == newSofd) {
-            return this;
-        }
-
-        Integer newHour = newSofd / sec.perHour;
-        Integer newMinute = (newSofd / sec.perMinute) % min.perHour;
-        Integer newSecond = newSofd % sec.perMinute;
-        return time(newHour, newMinute, newSecond, millis);
+        return TimeOfDay(floorMod(millisOfDay + (seconds * ms.perSecond), ms.perDay));
     }
 
     shared actual Time plus(ReadableTimePeriod period){
@@ -158,9 +136,6 @@ shared class TimeOfDay(millisOfDay)
         if (this.hours == hours) {
             return this;
         }
-
-        doc "valid values are from 0 until 23" 
-        assert( 0 <= hours && hours < h.perDay );
         return time(hours, minutes, seconds, millis);
     }
 
@@ -169,8 +144,6 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        doc "valid values are from 0 until 59"
-        assert( 0 <= minutes && minutes < min.perHour );
         return time(hours, minutes, seconds, millis);
     }
     shared actual Time withSeconds(Integer seconds) {
@@ -178,8 +151,6 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        doc "valid values are from 0 until 59"
-        assert(0 <= seconds && seconds < sec.perMinute);
         return time(hours, minutes, seconds, millis );
     }
     shared actual Time withMilliseconds(Integer milliseconds) {
@@ -187,8 +158,6 @@ shared class TimeOfDay(millisOfDay)
             return this;
         }
 
-        doc "valid values are from 0 until 999"
-        assert(0 <= milliseconds && milliseconds < ms.perSecond);
         return time(hours, minutes, seconds, milliseconds);
     }
 

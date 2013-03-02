@@ -100,7 +100,6 @@ shared class Instant(millis)
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-
         return TimeOfDay( mod(millis, ms.perDay) );
     }
 
