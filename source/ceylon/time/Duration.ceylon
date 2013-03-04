@@ -6,7 +6,7 @@ shared class Duration(millis) satisfies ReadableDuration {
     doc "Number of milliseconds of this duration"
     shared actual Integer millis;
 
-    doc "Return a period based on the number of milliseconds"
+    doc "Returns this duration as a period of milliseconds"
     shared Period period {
         return Period { 
             milliseconds = millis; 

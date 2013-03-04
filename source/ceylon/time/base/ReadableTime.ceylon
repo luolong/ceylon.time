@@ -1,30 +1,30 @@
 import ceylon.time { Time, DateTime }
 import ceylon.time.timezone { ZoneDateTime }
 
-doc "Common interface to represent time of day."
+"Common interface capable of representing _time of day_."
 by ("Diego Coronel", "Roland Tepp")
 see (Time, DateTime, ZoneDateTime)
 shared interface ReadableTime {
 
-    doc "Number of full hours"
+    "Hour of day"
     shared formal Integer hours;
 
-    doc "Number of minutes"
+    "Number of minutes since last full hour"
     shared formal Integer minutes;
 
-    doc "Number of seconds"
+    "Number of seconds since last minute"
     shared formal Integer seconds;
 
-    doc "Number of milliseconds"
+    "Number of milliseconds since last second"
     shared formal Integer millis;
 
-    doc "Number of minutes"
+    "Number of minutes since the beginning of the day"
     shared formal Integer minutesOfDay;
 
-    doc "Number of seconds"
+    "Number of seconds since the beginning of the day"
     shared formal Integer secondsOfDay;
 
-    doc "Number of milliseconds"
+    "Number of milliseconds since the beginning of the day"
     shared formal Integer millisOfDay;
 
 }

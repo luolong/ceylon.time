@@ -1,4 +1,4 @@
-import ceylon.time.base { ReadableDate, Month, monthOf, DateBehavior, ReadableDatePeriod }
+import ceylon.time.base { ReadableDate, Month, monthOf, DateBehavior, ReadableDatePeriod, ReadableTime }
 import ceylon.time.chronology { gregorian }
 import ceylon.time.impl { gregorianDate, julianDate }
 import ceylon.time.timezone { TimeZone }
@@ -12,11 +12,14 @@ shared interface Date
        satisfies ReadableDate & DateBehavior<Date>
                & Ordinal<Date> & Comparable<Date> {
      
+    doc "Adds a specified period to this date."
     shared formal Date plus( ReadableDatePeriod period );
 
+    doc "Subtracts a specified period to this date."
     shared formal Date minus( ReadableDatePeriod period );
 
-    shared formal DateTime at( Integer hours, Integer minutes, Integer seconds = 0, Integer milliseconds = 0);
+    doc "Returns new DateTime value based on this date and a specified time"
+    shared formal DateTime at( Time time );
 
 }
 

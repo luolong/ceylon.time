@@ -1,113 +1,95 @@
 import ceylon.time { Time, time }
-import ceylon.time.base { ms=milliseconds, sec=seconds, h=hours, ReadableTimePeriod }
+import ceylon.time.base { ms=milliseconds, sec=seconds, ReadableTimePeriod }
 import ceylon.time.math { floorMod }
 
-doc "Extremely simple implementation of Time interface, representing an 
-     abstraction of a _time of day_ such as 10am or 3.20pm."
+"Basic implementation of [[Time]] interface, representing an abstract 
+ _time of day_ such as _10am_ or _3.20pm_."
 shared class TimeOfDay(millisOfDay) 
        satisfies Time {
 
-    doc "Number of milliseconds since last midnight"
+    "Number of milliseconds since last midnight"
     shared actual Integer millisOfDay;
 
-    doc "Number of milliseconds since last full second"
-    shared actual Integer millis {
-        return millisOfDayMinusHoursMinutes - (seconds * ms.perSecond);
-    }
+    "Number of full hours elapsed since last midnight."
+    shared actual Integer hours => millisOfDay / ms.perHour;
 
-    doc "Number of seconds since last midnight"
-    shared actual Integer secondsOfDay {
-        return millisOfDay / ms.perSecond;
-    }
+    "Number of minutes since last full hour."
+    shared actual Integer minutes => floorMod(millisOfDay, ms.perHour) / ms.perMinute;
 
-    shared actual Integer seconds {
-        return millisOfDayMinusHoursMinutes / ms.perSecond;
-    }
+    "Number of seconds since last minute."
+    shared actual Integer seconds => floorMod(millisOfDay, ms.perMinute) / ms.perSecond;
 
-    doc "Number of minutes since last midnight"
-    shared actual Integer minutesOfDay {
-        return secondsOfDay / sec.perMinute;
-    }
+    "Number of milliseconds since last full second"
+    shared actual Integer millis => floorMod(millisOfDay, ms.perSecond);
 
-    doc "Number of minutes since last full hour."
-    shared actual Integer minutes {
-        return millisOfDayMinusHours / ms.perMinute;
-    }
+    "Number of seconds since last midnight"
+    shared actual Integer secondsOfDay => millisOfDay / ms.perSecond;
 
-    doc "Number of full hours elapsed since last midnight."
-    shared actual Integer hours {
-        return millisOfDay / ms.perHour;
-    }
+    "Number of minutes since last midnight"
+    shared actual Integer minutesOfDay => secondsOfDay / sec.perMinute;
 
-    doc "Compare two instants of time"
+    "Compare two instances of _time of day_"
     shared actual Comparison compare(Time other) {
         return millisOfDay <=> other.millisOfDay;
     }
 
-    doc "Previous second"
-    shared actual Time predecessor {
-        return minusSeconds(1);
-    }
+    "Previous second"
+    shared actual Time predecessor
+        //TODO: Is this really right?
+        => minusSeconds(1);
 
-    doc "Next second"
-    shared actual Time successor {
-        return plusSeconds(1);
-    }
+    "Next second"
+    shared actual Time successor
+        //TODO: Is this really right?
+        => plusSeconds(1);
 
-    doc "Returns standard extended ISO format of the time"
+    "Returns ISO 8601 formatted String representation of this _time of day_."
     shared actual String string {
         return "``leftPad(hours)``:``leftPad(minutes)``:``leftPad(seconds)``.``leftPad(millis, "000")``";
     }
 
-    shared actual Time minusHours(Integer hours) {
-        return plusHours(-hours);
-    }
+    "Adds specified number of hours to this time of day 
+     and returns the result as new time of day."
+    shared actual Time plusHours(Integer hours) => plusMilliseconds( hours * ms.perHour );
 
-    shared actual Time minusMilliseconds(Integer milliseconds) {
-        return plusMilliseconds(-milliseconds);
-    }
+    "Subtracts specified number of hours from this time of day 
+     and returns the resul as new time of day."
+    shared actual Time minusHours(Integer hours) => minusMilliseconds( hours * ms.perHour );
 
-    shared actual Time minusMinutes(Integer minutes) {
-        return plusMinutes(-minutes);
-    }
+    "Adds specified number of minutes to this time of day 
+     and returns the result as new  time of day."
+    shared actual Time plusMinutes(Integer minutes) => plusMilliseconds( minutes * ms.perMinute );
 
-    shared actual Time minusSeconds(Integer seconds) {
-        return plusSeconds(-seconds);
-    }
+    "Subtracts specified number of minutes from this time of day 
+     and returns the result as new  time of day."
+    shared actual Time minusMinutes(Integer minutes) => minusMilliseconds( minutes * ms.perMinute );
 
-    shared actual Time plusHours(Integer hours) {
-        if (hours == 0) {
-            return this;
-        }
+    "Adds specified number of seconds to this time of day
+     and returns the result as new time of day."
+    shared actual Time plusSeconds(Integer seconds) => plusMilliseconds( seconds * ms.perSecond );
 
-        Integer hoursPerDay = h.perDay;
-        Integer newHour = ((hours % hoursPerDay) + this.hours + hoursPerDay) % hoursPerDay;
-        return time(newHour, minutes, seconds, millis);
-    }
+    "Subtracts specified number of seconds from this time of day
+     and returns the result as new time of day."
+    shared actual Time minusSeconds(Integer seconds) => minusMilliseconds( seconds * ms.perSecond );
 
+    "Adds specified number of milliseconds to this time of day
+     and returns the result as new time of day."
     shared actual Time plusMilliseconds(Integer milliseconds) {
-        if ( milliseconds == 0 ) {
+        if (milliseconds == 0) {
             return this;
         }
 
-        return TimeOfDay(floorMod(millisOfDay + milliseconds, ms.perDay));
+        value newMillisOfDay = floorMod(millisOfDay + milliseconds, ms.perDay);
+        return newMillisOfDay == this.millisOfDay
+               then this else TimeOfDay(newMillisOfDay);
     }
 
-    shared actual Time plusMinutes(Integer minutes) {
-        if (minutes == 0) {
-            return this;
-        }
-        return TimeOfDay(floorMod(millisOfDay + ( minutes * ms.perMinute ), ms.perDay));
-    }
+    "Subtracts specified number of milliseconds from this time of day
+     and returns the result as new time of day."
+    shared actual Time minusMilliseconds(Integer milliseconds) => plusMilliseconds( -milliseconds );
 
-    shared actual Time plusSeconds(Integer seconds) {
-        if (seconds == 0) {
-            return this;
-        }
-
-        return TimeOfDay(floorMod(millisOfDay + (seconds * ms.perSecond), ms.perDay));
-    }
-
+    "Adds specified time period to this time of day 
+     and returns the result as new time of day."
     shared actual Time plus(ReadableTimePeriod period){
         value totalMillis = millisOfDay
                           + period.milliseconds
@@ -120,6 +102,8 @@ shared class TimeOfDay(millisOfDay)
                then this else TimeOfDay(time);
     }
 
+    "Subtracts specified time period from this time of day 
+     and returns the result as new time of day."
     shared actual Time minus(ReadableTimePeriod period) {
         value totalMillis = millisOfDay
                           - period.milliseconds
@@ -166,14 +150,6 @@ shared class TimeOfDay(millisOfDay)
             return millisOfDay == other.millisOfDay;
         }
         return false;
-    }
-
-    Integer millisOfDayMinusHours {
-        return millisOfDay - ( hours * ms.perHour );
-    }
-
-    Integer millisOfDayMinusHoursMinutes {
-        return millisOfDayMinusHours - (minutes * ms.perMinute);
     }
 
 }

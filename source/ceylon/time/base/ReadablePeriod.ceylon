@@ -1,43 +1,46 @@
-doc "A generic representation of Period"
+"A Period of time represented as number of _years_, _months_, _days_, 
+ _hours_, _minutes_, _seconds_ and/or _milliseconds_."
 shared interface ReadablePeriod 
        satisfies ReadableDatePeriod 
                & ReadableTimePeriod {
 
-    doc "Returns a copy of this period containing only the date period fields."
+    "Returns a truncated view of this period that only contains number of 
+     _years_, _months_ and _days_."
     shared formal ReadableDatePeriod dateOnly;
 
-    doc "Returns a copy of this period containing only the time period fields."
+    "Returns a truncated view of this period that only contains number of 
+     _hours_, _minutes_, _seconds_ and _milliseconds_."
     shared formal ReadableTimePeriod timeOnly;
 
 }
 
-doc "A representation of period data that decribes a period of _days_, _months_ and _years_."
+"A period of _days_, _months_ and _years_."
 shared interface ReadableDatePeriod {
 
-    doc "The number of years."
+    "The number of years."
     shared formal Integer years;
 
-    doc "The number of months"
+    "The number of months."
     shared formal Integer months;
 
-    doc "The number of days"
+    "The number of days."
     shared formal Integer days;
 
 }
 
-doc "A representation of period data that describes a period of time."
+"A period of time (_hours_, _minutes_, _seconds_ and _milliseconds_)."
 shared interface ReadableTimePeriod {
 
-    doc "The number of hours"
+    "The number of hours"
     shared formal Integer hours;
 
-    doc "The number of minutes"
+    "The number of minutes"
     shared formal Integer minutes;
 
-    doc "The number of seconds"
+    "The number of seconds"
     shared formal Integer seconds;
 
-    doc "The number of milliseconds"
+    "The number of milliseconds"
     shared formal Integer milliseconds;
 
 }

@@ -1,7 +1,7 @@
 import ceylon.language { Integer }
 import ceylon.time { Date, Time, DateTime, Instant }
 import ceylon.time.base { ReadablePeriod, Month, ms=milliseconds, daysOf=days, DayOfWeek }
-import ceylon.time.chronology { epoch }
+import ceylon.time.chronology { unixTime }
 import ceylon.time.math { floorDiv, floorMod }
 import ceylon.time.timezone { TimeZone }
 
@@ -214,7 +214,10 @@ shared class GregorianDateTime( date, time )
     }
 
     shared actual Instant instant( TimeZone? timeZone ) {
-        return Instant(epoch.timeFromDate(dayOfEra) + millisOfDay);
+        if (exists timeZone) {
+            return nothing;
+        }
+        return Instant(unixTime.timeFromFixed(dayOfEra) + millisOfDay);
     }
 
     shared actual Boolean equals( Object other ) {
@@ -223,8 +226,10 @@ shared class GregorianDateTime( date, time )
                 return true;
             }
 
-            return day.equals(other.day) && time.equals(other.time);
+            return day == other.day 
+                && time == other.time;
         }
+        
         return false;
     }
 

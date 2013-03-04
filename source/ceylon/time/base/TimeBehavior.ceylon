@@ -1,40 +1,43 @@
+
+"Common behavior for the types that represent time."
 shared interface TimeBehavior<Element> of Element
        given Element satisfies ReadableTime {
 
-    doc "Returns a copy of this period with the specified amount of hours."
+    "Returns a copy of this period with the specified amount of hours.
+     Result must be a valid time of day."
     shared formal Element withHours(Integer hours);
 
-    doc "Returns a copy of this period with the specified amount of minutes."
+    "Returns a copy of this period with the specified amount of minutes."
     shared formal Element withMinutes(Integer minutes);
 
-    doc "Returns a copy of this period with the specified amount of seconds."
+    "Returns a copy of this period with the specified amount of seconds."
     shared formal Element withSeconds(Integer seconds);
 
-    doc "Returns a copy of this period with the specified amount of nanos."
+    "Returns a copy of this period with the specified amount of nanos."
     shared formal Element withMilliseconds(Integer milliseconds);
 
-    doc "Returns a copy of this period with the specified number of hours added."
+    "Returns a copy of this period with the specified number of hours added."
     shared formal Element plusHours(Integer hours);
 
-    doc "Returns a copy of this period with the specified number of minutes added."
+    "Returns a copy of this period with the specified number of minutes added."
     shared formal Element plusMinutes(Integer minutes);
 
-    doc "Returns a copy of this period with the specified number of seconds added."
+    "Returns a copy of this period with the specified number of seconds added."
     shared formal Element plusSeconds(Integer seconds);
 
-    doc "Returns a copy of this period with the specified number of nonoseconds added."
+    "Returns a copy of this period with the specified number of nonoseconds added."
     shared formal Element plusMilliseconds(Integer milliseconds);
 
-    doc "Returns a copy of this period with the specified number of hours subtracted."
+    "Returns a copy of this period with the specified number of hours subtracted."
     shared formal Element minusHours(Integer hours);
 
-    doc "Returns a copy of this period with the specified number of minutes subtracted."
+    "Returns a copy of this period with the specified number of minutes subtracted."
     shared formal Element minusMinutes(Integer minutes);
 
-    doc "Returns a copy of this period with the specified number of seconds subtracted."
+    "Returns a copy of this period with the specified number of seconds subtracted."
     shared formal Element minusSeconds(Integer seconds);
 
-    doc "Returns a copy of this period with the specified number of nonoseconds subtracted."
+    "Returns a copy of this period with the specified number of nonoseconds subtracted."
     shared formal Element minusMilliseconds(Integer milliseconds);
 
 }

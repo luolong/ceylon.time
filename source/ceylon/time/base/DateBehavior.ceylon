@@ -1,39 +1,39 @@
 
-doc "Common behavior for date types"
+"Common behavior for date types"
 shared interface DateBehavior<Element> of Element 
        given Element satisfies ReadableDate {
 
-    doc "Returns a copy of this period with the specified year."
+    "Returns a copy of this period with the specified year."
     shared formal Element withYear(Integer year);
 
-    doc "Returns a copy of this period with the specified month of year."
+    "Returns a copy of this period with the specified month of year."
     shared formal Element withMonth(Month month);
 
-    doc "Returns a copy of this period with the specified amount of days."
+    "Returns a copy of this period with the specified amount of days."
     shared formal Element withDay(Integer dayOfMonth);
 
-    doc "Returns a copy of this period with the specified number of years added."
+    "Returns a copy of this period with the specified number of years added."
     shared formal Element plusYears(Integer years);
 
-    doc "Returns a copy of this period with the specified number of months added."
+    "Returns a copy of this period with the specified number of months added."
     shared formal Element plusMonths(Integer months);
 
-    doc "Returns a copy of this period with the specified number of weeks added."
+    "Returns a copy of this period with the specified number of weeks added."
     shared formal Element plusWeeks(Integer weeks);
 
-    doc "Returns a copy of this period with the specified number of days added."
+    "Returns a copy of this period with the specified number of days added."
     shared formal Element plusDays(Integer days);
 
-    doc "Returns a copy of this period with the specified number of years subtracted."
+    "Returns a copy of this period with the specified number of years subtracted."
     shared formal Element minusYears(Integer years);
 
-    doc "Returns a copy of this period with the specified number of months subtracted."
+    "Returns a copy of this period with the specified number of months subtracted."
     shared formal Element minusMonths(Integer months);
 
-    doc "Returns a copy of this period with the specified number of weeks subtracted."
+    "Returns a copy of this period with the specified number of weeks subtracted."
     shared formal Element minusWeeks(Integer weeks);
 
-    doc "Returns a copy of this period with the specified number of days subtracted."
+    "Returns a copy of this period with the specified number of days subtracted."
     shared formal Element minusDays(Integer days);
 
 }

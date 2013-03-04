@@ -1,5 +1,4 @@
-doc "Common interface that represents Date and Time."
-shared interface ReadableDateTime
-       satisfies ReadableDate & ReadableTime {
 
-}
+"Common interface that can represent particulat time of day on a specific date."
+shared interface ReadableDateTime
+       satisfies ReadableDate & ReadableTime { }

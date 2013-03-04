@@ -3,39 +3,39 @@ import ceylon.time.base {
     min = minutes, sec = seconds, ms = milliseconds}
 import ceylon.time.impl { leftPad }
 
-doc "An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
-     _minutes_, _seconds_ and _milliseconds_, such as '3 Months, 4 Days and 7 Hours'.
-     
-     A period is a human-scale description of an amount of time.
-     "
+"An immutable period consisting of the ISO-8601 _years_, _months_, _days_, _hours_,
+ _minutes_, _seconds_ and _milliseconds_, such as '3 Months, 4 Days and 7 Hours'.
+ 
+ A period is a human-scale description of an amount of time.
+ "
 shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, milliseconds=0)
        satisfies ReadablePeriod & ReadableTimePeriod & ReadableDatePeriod
                & PeriodBehavior<Period>
                & Comparable<Period> 
                & Summable<Period> {
 
-    doc "The number of years."
+    "The number of years."
     shared actual Integer years;
 
-    doc "The number of months"
+    "The number of months"
     shared actual Integer months;
 
-    doc "The number of days"
+    "The number of days"
     shared actual Integer days;
 
-    doc "The number of hours"
+    "The number of hours"
     shared actual Integer hours;
 
-    doc "The number of minutes"
+    "The number of minutes"
     shared actual Integer minutes;
 
-    doc "The number of seconds"
+    "The number of seconds"
     shared actual Integer seconds;
 
-    doc "The number of milliseconds"
+    "The number of milliseconds"
     shared actual Integer milliseconds;
 
-    doc "Checks if this period is equal to another period."
+    "Checks if this period is equal to another period."
     shared actual Boolean equals(Object that){
         if (is Period that) {
             if (this === that){
@@ -54,7 +54,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return false;
     }
 
-    doc "compare this period to the _other_ period."
+    "compare this period to the _other_ period."
     shared actual Comparison compare(Period other) {
         Period norm1 = this.normalized();
         Period norm2 = other.normalized();
@@ -68,12 +68,12 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
             else   norm1.milliseconds <=> norm2.milliseconds ) ) ) ) );
     }
 
-    doc "Checks if this period is zero-length."
+    "Checks if this period is zero-length."
     shared Boolean isZero(){
         return this == zero;
     }
 
-    doc "Returns a copy of this period with the specified amount of years."
+    "Returns a copy of this period with the specified amount of years."
     shared actual Period withYears(Integer years){
         if (years == this.years){
             return this;
@@ -81,7 +81,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified amount of months."
+    "Returns a copy of this period with the specified amount of months."
     shared actual Period withMonths(Integer months){
         if (months == this.months){
             return this;
@@ -89,7 +89,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified amount of days."
+    "Returns a copy of this period with the specified amount of days."
     shared actual Period withDays(Integer days){
         if (days == this.days){
             return this;
@@ -97,7 +97,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified amount of hours."
+    "Returns a copy of this period with the specified amount of hours."
     shared actual Period withHours(Integer hours){
         if (hours == this.hours){
             return this;
@@ -105,7 +105,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified amount of minutes."
+    "Returns a copy of this period with the specified amount of minutes."
     shared actual Period withMinutes(Integer minutes){
         if (minutes == this.minutes){
             return this;
@@ -113,7 +113,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified amount of seconds."
+    "Returns a copy of this period with the specified amount of seconds."
     shared actual Period withSeconds(Integer seconds){
         if (seconds == this.seconds){
             return this;
@@ -121,7 +121,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified amount of nanos."
+    "Returns a copy of this period with the specified amount of nanos."
     shared actual Period withMilliseconds(Integer milliseconds){
         if (milliseconds == this.milliseconds){
             return this;
@@ -129,77 +129,77 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         return Period(years, months, days, hours, minutes, seconds, milliseconds);
     }
 
-    doc "Returns a copy of this period with the specified number of years added."
+    "Returns a copy of this period with the specified number of years added."
     shared actual Period plusYears(Integer years){
         return withYears( this.years + years );
     }
 
-    doc "Returns a copy of this period with the specified number of months added."
+    "Returns a copy of this period with the specified number of months added."
     shared actual Period plusMonths(Integer months){
         return withMonths( this.months + months );
     }
 
-    doc "Returns a copy of this period with the specified number of days added."
+    "Returns a copy of this period with the specified number of days added."
     shared actual Period plusDays(Integer days){
         return withDays( this.days + days );
     }
 
-    doc "Returns a copy of this period with the specified number of hours added."
+    "Returns a copy of this period with the specified number of hours added."
     shared actual Period plusHours(Integer hours){
         return withHours( this.hours + hours );
     }
 
-    doc "Returns a copy of this period with the specified number of minutes added."
+    "Returns a copy of this period with the specified number of minutes added."
     shared actual Period plusMinutes(Integer minutes){
         return withMinutes( this.minutes + minutes );
     }
 
-    doc "Returns a copy of this period with the specified number of seconds added."
+    "Returns a copy of this period with the specified number of seconds added."
     shared actual Period plusSeconds(Integer seconds){
         return withSeconds( this.seconds + seconds );
     }
 
-    doc "Returns a copy of this period with the specified number of nonoseconds added."
+    "Returns a copy of this period with the specified number of nonoseconds added."
     shared actual Period plusMilliseconds(Integer milliseconds){
         return withMilliseconds( this.milliseconds + milliseconds );
     }
 
-    doc "Returns a copy of this period with the specified number of years subtracted."
+    "Returns a copy of this period with the specified number of years subtracted."
     shared actual Period minusYears(Integer years){
         return plusYears( - years );
     }
 
-    doc "Returns a copy of this period with the specified number of months subtracted."
+    "Returns a copy of this period with the specified number of months subtracted."
     shared actual Period minusMonths(Integer months){
         return plusMonths( - months );
     }
 
-    doc "Returns a copy of this period with the specified number of days subtracted."
+    "Returns a copy of this period with the specified number of days subtracted."
     shared actual Period minusDays(Integer days){
         return plusDays( - days );
     }
 
-    doc "Returns a copy of this period with the specified number of hours subtracted."
+    "Returns a copy of this period with the specified number of hours subtracted."
     shared actual Period minusHours(Integer hours){
         return plusHours( - hours );
     }
 
-    doc "Returns a copy of this period with the specified number of minutes subtracted."
+    "Returns a copy of this period with the specified number of minutes subtracted."
     shared actual Period minusMinutes(Integer minutes){
         return plusMinutes( - minutes );
     }
 
-    doc "Returns a copy of this period with the specified number of seconds subtracted."
+    "Returns a copy of this period with the specified number of seconds subtracted."
     shared actual Period minusSeconds(Integer seconds){
         return plusSeconds( - seconds );
     }
 
-    doc "Returns a copy of this period with the specified number of nonoseconds subtracted."
+    "Returns a copy of this period with the specified number of nonoseconds subtracted."
     shared actual Period minusMilliseconds(Integer milliseconds){
         return plusMilliseconds( - milliseconds );
     }
 
-    doc "Returns a new period that is a sum of the two periods."
+    "Returns a new period that is a sum of the two periods."
     shared actual Period plus(Period other) {
         return Period {
             years = this.years + other.years;
@@ -212,25 +212,25 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         };
     }
 
-    doc "Returns a date only view of this period."
+    "Returns a date only view of this period."
     shared actual ReadableDatePeriod dateOnly {
         return this;
     }
 
-    doc "Returns a time only view of this period."
+    "Returns a time only view of this period."
     shared actual ReadableTimePeriod timeOnly {
         return this;
     }
 
-    doc "Returns a copy of this period with all amounts normalized to the 
-         standard ranges for date/time fields.
-         
-         Two normalizations occur, one for years and months, and one for
-         hours, minutes, seconds and milliseconds.
-         
-         Days are not normalized, as a day may vary in length at daylight savings cutover.
-         Neither is days normalized into months, as number of days per month varies from 
-         month to another and depending on the leap year."
+    "Returns a copy of this period with all amounts normalized to the 
+     standard ranges for date/time fields.
+     
+     Two normalizations occur, one for years and months, and one for
+     hours, minutes, seconds and milliseconds.
+     
+     Days are not normalized, as a day may vary in length at daylight savings cutover.
+     Neither is days normalized into months, as number of days per month varies from 
+     month to another and depending on the leap year."
     shared actual Period normalized(){
         if (this == zero) {
             return zero;
@@ -263,7 +263,7 @@ shared class Period(years=0, months=0, days=0, hours=0, minutes=0, seconds=0, mi
         };
     }
 
-    doc "Returns the ISO 8601 formatted string for this period"
+    "Returns the ISO 8601 formatted string for this period"
     shared actual String string {
         if (this == zero) {
             return "PT0S";

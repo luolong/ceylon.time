@@ -1,4 +1,4 @@
-import ceylon.time.base { days, milliseconds, monthOf, years }
+import ceylon.time.base { days, ms=milliseconds }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -9,22 +9,27 @@ shared Integer rd( Integer t ) {
     return t - epoch;
 }
 
-shared object epoch {
+shared object unixTime {
 
-    shared [Integer, Integer, Integer] date = [1970, 1, 1];
+    doc "Fixed date value of the _Unix time_ epoch (1970-01-01)"
+    shared Integer epoch = gregorian.fixedFrom([1970, 1, 1]);
 
-    shared Integer rataDie = gregorian.fixedFrom(date);
+    doc ""
+    shared Integer epochTime = epoch * ms.perDay;
 
-    "Return day of era from time"
-    shared Integer dateFromTime( Integer time ) {
-        return (time/milliseconds.perDay) + rataDie;
+    doc "Returns a _fixed date_ from the _unix time_ value."
+    shared Integer fixedFromTime(Integer time) {
+        return fdiv(time, ms.perDay) + epoch;
     }
 
     "Return milliseconds elapsed from 1970-01-01 00:00:00"
-    shared Integer timeFromDate( Integer dayOfEra ) {
-        return (dayOfEra - rataDie) * milliseconds.perDay;
+    shared Integer timeFromFixed( Integer date ) {
+        return (date - epoch) * ms.perDay;
     }
 
+    shared Integer timeOfDay( Integer time ) {
+        return mod(time, ms.perDay);
+    }
 }
 
 doc "Generic base interface of a _calendar system_.
@@ -39,13 +44,13 @@ shared interface Chronology<Fields>
 
     doc "Converts date tuple of this calendar system to an equivalent _fixed date_
          representation of the "
-    shared formal Integer fixedFrom(Fields date);
+    shared formal Integer fixedFrom( Fields date );
     
     doc "Converts a _fixed day_ number to a calendar date tuple"
-    shared formal Fields dateFrom(Integer fixed);
+    shared formal Fields dateFrom( Integer fixed );
 
     doc "Validate the given date"
-    shared formal void validateDate( Fields date );
+    shared formal void checkDate( Fields date );
     
 }
 
@@ -104,32 +109,25 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared actual Integer fixedFrom([Integer, Integer, Integer] date) {
-        return fixed { 
-            year = date[0]; 
-            month = date[1]; 
-            day = date[2]; 
-        };
-    }
-
-    shared actual void validateDate([Integer, Integer, Integer] date) {
-	    "Invalid year"
-	    assert( date[0] >= years.minimum && date[0] <= years.maximum );
-	
-        value monthConverted = monthOf(date[1]);
-        value maxMonthDays = monthConverted.numberOfDays(leapYear(date[0]));
-        
-        "Invalid date"
-        assert( date[2] > 0 && date[2] <= maxMonthDays );
+        return unflatten(fixed)(date);
     }
     
+    shared actual void checkDate([Integer, Integer, Integer] date) {
+        "Invalid date value"
+        assert( date == dateFrom( fixedFrom(date) ) );
+    }
+    
+    doc "Returns fixed date value of the first day of the gregorian year."
     shared Integer newYear(Integer year){
         return fixed(year, january, 1);
     }
     
+    doc "Returns fixed date value of the last day of the gregorian year."
     shared Integer yearEnd(Integer year){
         return fixed(year, december, 31);
     }
     
+    doc "Returns a gregorian year number of the fixed date value."
     shared Integer yearFrom(Integer fixed) {
         value d0 = fixed - epoch;
         value n400 = fdiv(d0, days.perFourCenturies);
@@ -143,6 +141,7 @@ shared object gregorian extends GregorianCalendar() {
         return (n100 == 4 || n1 == 4) then year else year + 1;
     }
     
+    doc "Converts the fixed date value to an equivalent gregorian date"
     shared actual [Integer, Integer, Integer] dateFrom(Integer date) {
         value year = yearFrom(date);
         value priorDays = date - newYear(year);
@@ -153,14 +152,17 @@ shared object gregorian extends GregorianCalendar() {
         return [year, month, day];
     }
     
+    doc "Retunrs the month number of the gregorian calendar from the fixed date value."
     shared Integer monthFrom(Integer date){
         return dateFrom(date)[1];
     }
     
+    doc "Returns day of month value of the fixed date value."
     shared Integer dayFrom(Integer date){
         return dateFrom(date)[2];
     }
     
+    doc "Returns _day of week_ value for the specified fixed date value."
     shared Integer dayOfWeekFrom(Integer date) {
         return mod(date, 7);
     }

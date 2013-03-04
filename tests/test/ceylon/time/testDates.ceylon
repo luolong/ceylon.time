@@ -1,5 +1,5 @@
 import ceylon.test { assertEquals, assertTrue, assertFalse, fail }
-import ceylon.time { date, Date, Period, dateTime }
+import ceylon.time { date, Date, Period, dateTime, time }
 import ceylon.time.base { december, monday, january, november, february, april, tuesday, october, sunday, wednesday, september, july, march, friday, saturday, DayOfWeek, Month, years }
 
 // Constants
@@ -301,7 +301,7 @@ shared void testAt() {
 
 shared void testAtInvalidHour() {
     try {
-        data_1982_12_13.at(-10, 0);
+        data_1982_12_13.at( time(-10, 0) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
         assertTrue(e.message.contains("Hours should be between 0 and 23"));
@@ -310,7 +310,7 @@ shared void testAtInvalidHour() {
 
 shared void testAtInvalidMinute() {
     try {
-        data_1982_12_13.at(10, 60);
+        data_1982_12_13.at( time(10, 60) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
         assertTrue(e.message.contains("Minutes should be between 0 and 59"));
@@ -319,7 +319,7 @@ shared void testAtInvalidMinute() {
 
 shared void testAtInvalidSecond() {
     try {
-        data_1982_12_13.at(10, 59, -1);
+        data_1982_12_13.at( time(10, 59, -1) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
         assertTrue(e.message.contains("Seconds should be between 0 and 59"));
@@ -328,7 +328,7 @@ shared void testAtInvalidSecond() {
 
 shared void testAtInvalidMillis() {
     try {
-        data_1982_12_13.at(10, 59, 59, 1000);
+        data_1982_12_13.at( time(10, 59, 59, 1000) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
         assertTrue(e.message.contains("Milliseconds should be between 0 and 999"));
@@ -336,7 +336,7 @@ shared void testAtInvalidMillis() {
 }
 
 void assertAt(Integer year, Month month, Integer day, Integer h, Integer min, Integer sec, Integer ms ) {
-    assertEquals( dateTime(year, month, day, h, min, sec, ms) , date(year, month, day).at(h, min, sec, ms));
+    assertEquals( dateTime(year, month, day, h, min, sec, ms) , date(year, month, day).at( time(h, min, sec, ms) ));
 }
 
 // Asserts that what we put in, we get back from the Date object

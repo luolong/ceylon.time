@@ -1,8 +1,6 @@
-import ceylon.time { dateImpl=date, dateTimeImpl=dateTime }
-import ceylon.time.base { ReadableInstant, ms=milliseconds }
-import ceylon.time.chronology { epoch }
-import ceylon.time.impl { TimeOfDay }
-import ceylon.time.math { mod=floorMod }
+import ceylon.time.base { ReadableInstant }
+import ceylon.time.chronology { unixTime }
+import ceylon.time.impl { TimeOfDay, GregorianDateTime, GregorianDate }
 import ceylon.time.timezone { TimeZone, ZoneDateTime }
 
 doc "Obtains the current instant from the system clock."
@@ -20,7 +18,8 @@ doc "A specific instant of time on a continuous time-scale.
 shared class Instant(millis) 
     satisfies ReadableInstant & Comparable<Instant> {
 
-    doc "Internal value of an instant as a number of milliseconds since january 1st 1970 UTC"
+    doc "Internal value of an instant as a number of milliseconds since 
+         1970-01-01T00:00:00.000Z."
     shared actual Integer millis;
 
     doc "Adds a period to this instant"
@@ -57,14 +56,15 @@ shared class Instant(millis)
                  If omitted, the current/default time zone of the system will be used.
                  
                  **Note:** Since time zone support is not implemented yet, this method 
-                 will return dateTime according to the of the UTC-0 instead of using local 
+                 will return dateTime according to the of the UTC instead of using local 
                  time zone."
             TimeZone? zone = null) {
         if (exists zone) {
             //TODO: get [[DateTime]] for this [[Instant]] in the specified time zone. 
             return nothing;
         }
-        return  dateTimeImpl(epoch.date[0],epoch.date[1],epoch.date[2]).plusMilliseconds(millis);
+        
+        return  GregorianDateTime( date(), time() );
     }
 
     doc "Returns this instant as a [[Date]] value"
@@ -74,7 +74,7 @@ shared class Instant(millis)
                  If omitted the current/default time zone of the system will be used.
                  
                  **Note:** Since time zone support is not implemented yet, this method 
-                 will return date according to the of the UTC-0 instead of using local 
+                 will return date according to the of the UTC instead of using local 
                  time zone."
             TimeZone? zone = null) {
         if (exists zone) {
@@ -82,8 +82,7 @@ shared class Instant(millis)
             return nothing;
         }
 
-        value inDays = millis / ms.perDay;
-        return dateImpl(*epoch.date).plusDays(inDays);
+        return GregorianDate(unixTime.fixedFromTime(millis));
     }
 
     doc "Returns _time of day_ for this instant"
@@ -100,7 +99,7 @@ shared class Instant(millis)
             //TODO: get [[Time]] of this [[Instant]] in the specified time zone.
             return nothing;
         }
-        return TimeOfDay( mod(millis, ms.perDay) );
+        return TimeOfDay( unixTime.timeOfDay(millis) );
     }
 
     doc "Returns ZoneDateTime value for this instant."
