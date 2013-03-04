@@ -304,7 +304,7 @@ shared void testAtInvalidHour() {
         data_1982_12_13.at( time(-10, 0) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
-        assertTrue(e.message.contains("Hours should be between 0 and 23"));
+        assertTrue(e.message.contains("Hours value should be between 0 and 23"));
     }
 }
 
@@ -313,7 +313,7 @@ shared void testAtInvalidMinute() {
         data_1982_12_13.at( time(10, 60) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
-        assertTrue(e.message.contains("Minutes should be between 0 and 59"));
+        assertTrue(e.message.contains("Minutes value should be between 0 and 59"));
     }
 }
 
@@ -322,7 +322,7 @@ shared void testAtInvalidSecond() {
         data_1982_12_13.at( time(10, 59, -1) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
-        assertTrue(e.message.contains("Seconds should be between 0 and 59"));
+        assertTrue(e.message.contains("Seconds value should be between 0 and 59"));
     }
 }
 
@@ -331,7 +331,7 @@ shared void testAtInvalidMillis() {
         data_1982_12_13.at( time(10, 59, 59, 1000) );
         fail("Should throw exception...");
     } catch ( AssertionException e ) {
-        assertTrue(e.message.contains("Milliseconds should be between 0 and 999"));
+        assertTrue(e.message.contains("Milliseconds value should be between 0 and 999"));
     }
 }
 

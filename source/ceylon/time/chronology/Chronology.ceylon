@@ -1,4 +1,4 @@
-import ceylon.time.base { days, ms=milliseconds }
+import ceylon.time.base { days, ms=milliseconds, years }
 import ceylon.time.math { floor, fdiv=floorDiv, mod=floorMod }
 
 doc "Converts _Rata Die_ day number to a fixed date value.
@@ -113,6 +113,9 @@ shared object gregorian extends GregorianCalendar() {
     }
     
     shared actual void checkDate([Integer, Integer, Integer] date) {
+        "Invalid year value"
+        assert(years.minimum <= date[0] && date[0] <= years.maximum);
+        
         "Invalid date value"
         assert( date == dateFrom( fixedFrom(date) ) );
     }

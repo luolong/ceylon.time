@@ -5,7 +5,7 @@ import ceylon.time.chronology { impl=gregorian }
 import ceylon.time.math { adjustedMod }
 
 
-doc "Default implementation of a gregorian calendar"
+"Default implementation of a gregorian calendar"
 shared class GregorianDate( Integer dayOfEra ) 
       extends AbstractDate( dayOfEra ) {
 
@@ -213,15 +213,15 @@ shared class GregorianDate( Integer dayOfEra )
     }
 }
 
-doc "Returns a gregorian calendar date according to the specified year, month and date values"
+"Returns a gregorian calendar date according to the specified year, month and date values"
 shared Date gregorianDate(year, month, day){
-        doc "Year number of the date"
+        "Year number of the date"
         Integer year;
         
-        doc "Month of the year"
+        "Month of the year"
         Integer|Month month; 
         
-        doc "Day of month"
+        "Day of month"
         Integer day;
  
     impl.checkDate([year, monthOf(month).integer, day]);       
